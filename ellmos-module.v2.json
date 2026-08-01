@@ -1,0 +1,19 @@
+{
+  "schema": "ellmos.module.v2",
+  "id": "ellmos-voice-io",
+  "display_name": "ellmos-voice-io",
+  "kind": "runtime",
+  "category": "runtime",
+  "version": "0.1.0",
+  "status": "development",
+  "visibility": "private",
+  "description": "LLM-neutral local speech input, speech output, and wake-word primitives.",
+  "provides": ["voice.stt.file", "voice.tts.file", "voice.tts.speak", "voice.wakeword.local"],
+  "requires": [],
+  "optional": ["engine.whisper", "engine.vosk", "engine.pyttsx3", "engine.piper", "engine.openwakeword"],
+  "surfaces": ["library", "cli", "skill"],
+  "entrypoints": {"cli": "ellmos-voice-io status", "library": "ellmos_voice_io.VoiceIO", "skill": "SKILL.md"},
+  "boundaries": {"data": "caller-defined", "network": "none-by-default", "storage": "none", "microphone": "explicit-caller-action"},
+  "update": {"method": "pip", "command": "pip install --upgrade ellmos-voice-io"},
+  "provenance": {"source": "BACH Voice Service", "license": "MIT", "extraction_date": "2026-08-01"}
+}
