@@ -8,11 +8,10 @@ version = "0.1.0"
 description = "Local-first speech input, speech output, and wake-word helpers for LLM systems."
 readme = "README.md"
 requires-python = ">=3.10"
-license = { file = "LICENSE" }
+license = "MIT"
 authors = [{ name = "ELLMOS AI" }]
 classifiers = [
   "Development Status :: 3 - Alpha",
-  "License :: OSI Approved :: MIT License",
   "Operating System :: OS Independent",
   "Programming Language :: Python :: 3",
 ]

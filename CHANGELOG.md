@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Modernized PEP 621 license metadata to avoid current setuptools deprecation warnings.
+
 ## 0.1.0 - 2026-08-01
 
 - Initial independent extraction of the BACH Voice Service core.
