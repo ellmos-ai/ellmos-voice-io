@@ -18,6 +18,12 @@ It intentionally does not replace audio workstations such as KlangpultLight or
 USBPodcastStudio. Their recording, editing, streaming, and transcript workflows remain
 application-specific consumers of this narrower capability.
 
+## Development status
+
+The current development gates and next verifiable work are tracked in
+[`ROADMAP.md`](ROADMAP.md). The manifest is still `development`/`private`; no
+package publish or external release is implied by the installation examples.
+
 ## Install
 
 ```bash

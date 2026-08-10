@@ -18,6 +18,13 @@ Das Modul ersetzt bewusst keine Audio-Workstations wie KlangpultLight oder
 USBPodcastStudio. Deren Aufnahme-, Schnitt-, Streaming- und Transkript-Workflows bleiben
 anwendungsspezifische Konsumenten dieser engeren Fähigkeit.
 
+## Entwicklungsstatus
+
+Die aktuellen Gatter und die nächsten prüfbaren Schritte stehen in
+[`ROADMAP.md`](ROADMAP.md). Das Manifest steht weiterhin auf
+`development`/`private`; aus den Installationsbeispielen folgt keine
+Paketveröffentlichung oder externe Freigabe.
+
 ## Installation
 
 ```bash
