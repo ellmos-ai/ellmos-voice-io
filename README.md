@@ -53,6 +53,17 @@ TextToSpeech(engine="pyttsx3").speak_to_file(text, "reply.wav")
 - Microphone access happens only when the caller invokes `WakeWordListener.listen()`.
 - Never treat the `status` result as a permission or deployment check.
 
+### Wake-word lifecycle
+
+`WakeWordListener.listen(on_wake, stop_event)` is synchronous and caller-owned:
+
+- a pre-set stop event returns without opening the microphone;
+- every audio chunk with a prediction at or above the threshold invokes the callback once,
+  so repeated qualifying chunks produce repeated callbacks and debouncing remains a caller
+  policy;
+- a stop event is checked before every read; callback, model, stream, and read exceptions
+  propagate after the stream is stopped/closed and the PyAudio instance is terminated.
+
 ## Provenance
 
 This module rescues the generic, MIT-licensed core of BACH's former Voice Service:
