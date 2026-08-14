@@ -10,3 +10,4 @@ build/
 *.mp3
 *.ogg
 .env
+_reports/internal-business/
