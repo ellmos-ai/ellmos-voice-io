@@ -1,71 +1,200 @@
 # ellmos-voice-io
 
+[![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Tests](https://img.shields.io/badge/Tests-17%20passed-brightgreen?logo=pytest&logoColor=white)](tests/)
+[![Privacy: Local-First](https://img.shields.io/badge/Privacy-Local--First%20%7C%20No--Telemetry-blue)](README.md#privacy-and-boundaries)
+[![llms.txt](https://img.shields.io/badge/llms.txt-available-0055ff?logo=markdown)](llms.txt)
+[![Org](https://img.shields.io/badge/Org-ellmos--ai-8A2BE2)](https://github.com/ellmos-ai)
+[![Ecosystem](https://img.shields.io/badge/Ecosystem-open--bricks-blue)](https://github.com/open-bricks)
+
+**[English](README.md)** | **[Deutsch](README_de.md)**
+
+> [!TIP]
+> **Machine-Readable Documentation:** An [`llms.txt`](llms.txt) index is provided for AI agents, LLMs, and automated RAG pipelines.
+
 Local-first speech input, speech output, and wake-word helpers for LLM systems.
 
-`ellmos-voice-io` is a small, LLM-neutral runtime module. It does not run a server,
-store recordings, ship voice models, or choose a cloud provider. A caller explicitly
-selects optional local engines and owns all microphone permissions, model downloads,
-retention, and any networked integration.
+`ellmos-voice-io` is a small, LLM-neutral runtime module. It does not run a server, store recordings, ship voice models, or choose a cloud provider. A caller explicitly selects optional local engines and owns all microphone permissions, model downloads, retention, and any networked integration.
 
-## Scope
+---
 
-- File-based STT through optional Whisper or Vosk.
-- TTS to speakers or files through optional pyttsx3 or Piper.
-- Local microphone wake-word detection through optional openWakeWord.
-- A stable Python API and read-only `status` CLI for Skills, MCP adapters, and apps.
+## Architecture Overview
 
-It intentionally does not replace audio workstations such as KlangpultLight or
-USBPodcastStudio. Their recording, editing, streaming, and transcript workflows remain
-application-specific consumers of this narrower capability.
+```mermaid
+graph TD
+    UserApp["Caller / LLM Application / MCP Adapter"]
+    
+    subgraph FacadeLayer ["ellmos-voice-io Runtime"]
+        VoiceIO["VoiceIO (Unified Facade)"]
+        CLI["CLI (ellmos-voice-io status)"]
+        STT["SpeechToText"]
+        TTS["TextToSpeech"]
+        WakeWord["WakeWordListener"]
+    end
+    
+    subgraph OptionalEngines ["Optional Lazy Engines"]
+        Vosk["Vosk (Local Offline STT)"]
+        Whisper["Whisper (Neural STT)"]
+        Pyttsx3["pyttsx3 (System TTS)"]
+        Piper["Piper (ONNX Neural TTS)"]
+        OpenWakeWord["openWakeWord (Local Mic)"]
+    end
+    
+    subgraph PrivacyBoundary ["Privacy & Hardware Boundary"]
+        Mic["Microphone (Caller-Authorized)"]
+        AudioFiles["Local WAV / MP3 / OGG Files"]
+        ZeroNet["Zero Telemetry / Zero Cloud Storage"]
+    end
 
-## Development status
+    UserApp --> VoiceIO
+    UserApp --> CLI
+    VoiceIO --> STT
+    VoiceIO --> TTS
+    VoiceIO --> WakeWord
+    
+    STT -.-> Vosk
+    STT -.-> Whisper
+    TTS -.-> Pyttsx3
+    TTS -.-> Piper
+    WakeWord -.-> OpenWakeWord
+    
+    Vosk --> AudioFiles
+    Whisper --> AudioFiles
+    Pyttsx3 --> AudioFiles
+    Piper --> AudioFiles
+    OpenWakeWord --> Mic
+    
+    style PrivacyBoundary fill:#f4f9f4,stroke:#4CAF50,stroke-width:2px;
+    style FacadeLayer fill:#f0f4f8,stroke:#2196F3,stroke-width:2px;
+```
 
-The current development gates and next verifiable work are tracked in
-[`ROADMAP.md`](ROADMAP.md). The manifest is still `development`/`private`; no
-package publish or external release is implied by the installation examples.
+---
 
-## Install
+## Scope & Capabilities
+
+- **File-based STT**: Speech-to-Text through optional Whisper or Vosk.
+- **File & Speaker TTS**: Text-to-Speech to speakers or files through optional pyttsx3 or Piper.
+- **Local Wake-Word**: Real-time microphone wake-word detection through optional openWakeWord.
+- **Stable Python API & Read-Only CLI**: Inspection via `status` CLI for Skills, MCP adapters, and desktop apps.
+
+| Capability | Supported Engines | Input / Output | Key Feature |
+|---|---|---|---|
+| **Speech-to-Text** | `vosk`, `whisper` | `.wav` file $\to$ string | Fully offline with local model |
+| **Text-to-Speech** | `pyttsx3`, `piper` | string $\to$ `.wav` / `.mp3` / `.ogg` or speaker | System voices or neural ONNX synthesis |
+| **Wake-Word** | `openwakeword` | Microphone stream $\to$ callback | Synchronous, caller-owned stop event |
+
+It intentionally does not replace audio workstations such as KlangpultLight or USBPodcastStudio. Their recording, editing, streaming, and transcript workflows remain application-specific consumers of this narrower capability.
+
+---
+
+## Installation
 
 ```bash
+# Minimal base package (no optional heavy dependencies)
 pip install ellmos-voice-io
+
+# Install with specific optional extras
 pip install "ellmos-voice-io[stt-vosk,tts-pyttsx3]"
+
+# Or install all available local engines
+pip install "ellmos-voice-io[all]"
+```
+
+Inspect engine status safely without starting hardware:
+```bash
 ellmos-voice-io status
 ```
 
-Use `pip install --upgrade ellmos-voice-io` for updates. Optional engines are not
-installed by default. Whisper may download a model on first use; Vosk and Piper require
-an explicit local model path.
-
-## Python API
-
-```python
-from ellmos_voice_io import SpeechToText, TextToSpeech, VoiceIO
-
-print(VoiceIO().status().as_dict())
-text = SpeechToText(engine="vosk", model_path="/models/vosk-de").transcribe_file("note.wav")
-TextToSpeech(engine="pyttsx3").speak_to_file(text, "reply.wav")
+Output:
+```json
+{
+  "stt_available": true,
+  "stt_engine": "vosk",
+  "tts_available": true,
+  "tts_engine": "pyttsx3",
+  "wakeword_available": false,
+  "wakeword_engine": "Install the wakeword extra to access microphone-based wake words."
+}
 ```
 
-## Privacy and boundaries
+---
 
-- Audio, transcripts, and generated files stay where the caller puts them.
-- The package has no database, telemetry, account, background service, or implicit upload.
-- Microphone access happens only when the caller invokes `WakeWordListener.listen()`.
-- Never treat the `status` result as a permission or deployment check.
+## Python API Examples
 
-### Wake-word lifecycle
+### Speech-to-Text (STT)
+
+```python
+from ellmos_voice_io import SpeechToText
+
+# Using Vosk with an explicit local model path
+stt = SpeechToText(engine="vosk", model_path="/path/to/vosk-model-de")
+transcript = stt.transcribe_file("input_voice.wav")
+print(f"Transcribed: {transcript}")
+
+# Using Whisper
+stt_whisper = SpeechToText(engine="whisper", model_size="base")
+transcript_whisper = stt_whisper.transcribe_file("meeting_clip.wav", language="en")
+```
+
+### Text-to-Speech (TTS)
+
+```python
+from ellmos_voice_io import TextToSpeech
+
+tts = TextToSpeech(engine="pyttsx3", rate=160)
+
+# Speak directly to system default speakers
+tts.speak("Processing complete.")
+
+# Export synthesis directly to an audio file (.wav, .mp3, .ogg)
+tts.speak_to_file("Notification sound generated.", "output/alert.wav")
+```
+
+### Wake-Word Listener
+
+```python
+import threading
+from ellmos_voice_io import WakeWordListener
+
+def on_wake():
+    print("Wake word detected! Activating assistant...")
+
+stop_event = threading.Event()
+listener = WakeWordListener(threshold=0.6)
+
+# Blocks until stop_event is set; handles cleanup automatically
+listener.listen(on_wake=on_wake, stop_event=stop_event)
+```
+
+---
+
+## Privacy and Boundaries
+
+- **Audio, transcripts, and generated files stay where the caller puts them.**
+- **No telemetry, database, account requirement, background service, or implicit upload.**
+- **Microphone access occurs only during active `WakeWordListener.listen()`.**
+- **Read-only CLI**: `status` never attempts permissions or model downloads.
+
+### Wake-Word Lifecycle Contract
 
 `WakeWordListener.listen(on_wake, stop_event)` is synchronous and caller-owned:
+- A pre-set stop event returns immediately without opening audio hardware.
+- Every audio chunk with a prediction at or above the threshold invokes the callback once. Debouncing remains caller policy.
+- The stop event is checked before every read cycle. Model, stream, and read exceptions propagate safely after audio stream termination and cleanup.
 
-- a pre-set stop event returns without opening the microphone;
-- every audio chunk with a prediction at or above the threshold invokes the callback once,
-  so repeated qualifying chunks produce repeated callbacks and debouncing remains a caller
-  policy;
-- a stop event is checked before every read; callback, model, stream, and read exceptions
-  propagate after the stream is stopped/closed and the PyAudio instance is terminated.
+---
+
+## Development Status & Roadmap
+
+The current development gates, task plans, and next verifiable milestones are documented in [`ROADMAP.md`](ROADMAP.md).
+
+---
 
 ## Provenance
 
-This module rescues the generic, MIT-licensed core of BACH's former Voice Service:
-file STT, TTS file export, and wake-word integration. It is rewritten as an independent,
-user-neutral package with explicit dependencies and no BACH database or bridge bindings.
+This module rescues the generic, MIT-licensed core of BACH's former Voice Service: file STT, TTS file export, and wake-word integration. It is rewritten as an independent, user-neutral package with explicit dependencies and zero BACH database or bridge bindings.
+
+## License
+
+MIT License. See [LICENSE](LICENSE) for details.

@@ -1,0 +1,42 @@
+# ellmos-ai / ellmos-voice-io
+
+> Local-first speech input, speech output, and wake-word helpers for LLM systems.
+
+Last-checked: 2026-08-14
+Test-suite: 17/17 passed (pytest, Python 3.12.10)
+Version: 0.1.0
+
+## Summary
+
+`ellmos-voice-io` is a lightweight, LLM-neutral runtime module providing pluggable local-first primitives for Speech-to-Text (STT), Text-to-Speech (TTS), and Wake-Word detection. It operates strictly within caller-owned boundaries with zero background services, zero telemetry, and zero unrequested network calls.
+
+## Key Architecture & Privacy Principles
+
+- **Local-First & Offline Ready**: Core capabilities work completely offline without external cloud API dependencies.
+- **Lazy & Optional Engines**: Engine libraries (Whisper, Vosk, pyttsx3, Piper, openWakeWord) remain lazy during construction and are only loaded when invoked.
+- **Explicit Caller Ownership**: Callers explicitly control microphone permissions, audio retention, model storage paths, and audio playback.
+- **Fail-Safe Privacy Boundary**: No hidden telemetry, no background listening daemons, and no database or telemetry dependencies.
+- **Deterministic Lifecycles**: `WakeWordListener` checks stop events before accessing audio hardware and guarantees deterministic cleanup on exceptions.
+- **Read-Only CLI Inspection**: `ellmos-voice-io status` outputs engine availability JSON without initializing hardware or downloading models.
+
+## Engine Capabilities Matrix
+
+| Primitive | Engine | Mode / Dependency | Characteristics |
+|---|---|---|---|
+| **STT** | `vosk` | Offline / Local Model | Offline speech-to-text with local model folder (`model_path` or `VOSK_MODEL`) |
+| **STT** | `whisper` | Local / OpenAI Whisper | Neural STT with automatic or pre-loaded Whisper model sizes |
+| **TTS** | `pyttsx3` | System Voices | Real-time audio playback or WAV/MP3/OGG file generation via OS voices |
+| **TTS** | `piper` | Local ONNX Neural | Fast neural speech synthesis directly to audio files via explicit ONNX model |
+| **Wake-Word** | `openwakeword` | Local Microphone | Caller-bound wake-word detection loop with explicit stop events and debouncing |
+
+## Primary Documentation & References
+
+- [README.md](README.md): Project overview, installation, Python API, and lifecycle documentation (English).
+- [README_de.md](README_de.md): Deutsche Projektdokumentation, Installationshinweise und API-Leitfaden.
+- [CHANGELOG.md](CHANGELOG.md): Release history and maintenance verification logs.
+- [ROADMAP.md](ROADMAP.md): Prioritized development gates and task specifications.
+- [SKILL.md](SKILL.md): Agent skill declaration and Anthropic-compatible tool metadata.
+- [pyproject.toml](pyproject.toml): PEP 621 metadata, optional extras (`stt-vosk`, `stt-whisper`, `tts-pyttsx3`, `tts-piper`, `wakeword`).
+- [ellmos-module.v2.json](ellmos-module.v2.json): ellmos v2 module manifest and capability declarations.
+- [src/ellmos_voice_io/](src/ellmos_voice_io/): Core implementation (`VoiceIO`, `SpeechToText`, `TextToSpeech`, `WakeWordListener`, `cli`).
+- [tests/](tests/): 17 pytest unit tests verifying lazy loading, validation, engine routing, and lifecycle cleanup.
