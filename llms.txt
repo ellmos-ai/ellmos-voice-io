@@ -2,8 +2,8 @@
 
 > Local-first speech input, speech output, and wake-word helpers for LLM systems.
 
-Last-checked: 2026-08-14
-Test-suite: 17/17 passed (pytest, Python 3.12.10)
+Last-checked: 2026-08-16
+Test-suite: 20/20 passed (pytest, Python 3.12.10)
 Version: 0.1.0
 
 ## Summary
@@ -39,4 +39,4 @@ Version: 0.1.0
 - [pyproject.toml](pyproject.toml): PEP 621 metadata, optional extras (`stt-vosk`, `stt-whisper`, `tts-pyttsx3`, `tts-piper`, `wakeword`).
 - [ellmos-module.v2.json](ellmos-module.v2.json): ellmos v2 module manifest and capability declarations.
 - [src/ellmos_voice_io/](src/ellmos_voice_io/): Core implementation (`VoiceIO`, `SpeechToText`, `TextToSpeech`, `WakeWordListener`, `cli`).
-- [tests/](tests/): 17 pytest unit tests verifying lazy loading, validation, engine routing, and lifecycle cleanup.
+- [tests/](tests/): 20 pytest unit tests verifying lazy loading, validation, engine routing, metadata parity, and lifecycle cleanup.

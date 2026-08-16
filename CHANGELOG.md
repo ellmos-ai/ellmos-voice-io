@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.2] - 2026-08-16
+
+- Technical hygiene and linter standardization (Pfad A):
+  - Integrated `[tool.ruff]` and `[tool.ruff.lint]` configuration in `pyproject.toml` (`target-version = "py310"`, `line-length = 120`, `E402`/`E501` ignore).
+  - Added automated metadata & manifest contract test suite `tests/test_metadata.py` (verifying version parity across `pyproject.toml`, `ellmos-module.v2.json`, and `__init__.__version__`, required fields, and module exports).
+  - Synchronized test badges and last-checked timestamps in `README.md`, `README_de.md`, and `llms.txt` (20/20 passed in 0.14s).
+  - Verified static hygiene (`ruff check .` 0 errors, `python -m compileall` 0 errors).
+
 ## [0.1.1] - 2026-08-14
 
 - Discoverability, documentation, and SEO enhancements:
