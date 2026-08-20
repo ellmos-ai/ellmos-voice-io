@@ -2,9 +2,9 @@
 
 > Local-first speech input, speech output, and wake-word helpers for LLM systems.
 
-Last-checked: 2026-08-16
-Test-suite: 20/20 passed (pytest, Python 3.12.10)
-Version: 0.1.0
+Last-checked: 2026-08-20
+Test-suite: 24/24 passed (pytest, Python 3.12.10)
+Version: 0.1.2
 
 ## Summary
 
@@ -33,10 +33,35 @@ Version: 0.1.0
 
 - [README.md](README.md): Project overview, installation, Python API, and lifecycle documentation (English).
 - [README_de.md](README_de.md): Deutsche Projektdokumentation, Installationshinweise und API-Leitfaden.
+- [SECURITY.md](SECURITY.md): Security policy, local-first invariants, and vulnerability reporting.
 - [CHANGELOG.md](CHANGELOG.md): Release history and maintenance verification logs.
 - [ROADMAP.md](ROADMAP.md): Prioritized development gates and task specifications.
 - [SKILL.md](SKILL.md): Agent skill declaration and Anthropic-compatible tool metadata.
 - [pyproject.toml](pyproject.toml): PEP 621 metadata, optional extras (`stt-vosk`, `stt-whisper`, `tts-pyttsx3`, `tts-piper`, `wakeword`).
 - [ellmos-module.v2.json](ellmos-module.v2.json): ellmos v2 module manifest and capability declarations.
 - [src/ellmos_voice_io/](src/ellmos_voice_io/): Core implementation (`VoiceIO`, `SpeechToText`, `TextToSpeech`, `WakeWordListener`, `cli`).
-- [tests/](tests/): 20 pytest unit tests verifying lazy loading, validation, engine routing, metadata parity, and lifecycle cleanup.
+- [tests/](tests/): 24 pytest unit tests verifying lazy loading, validation, engine routing, metadata parity, ecosystem integrity, and lifecycle cleanup.
+
+## Ecosystem & Sibling Tools
+
+- [ellmos-core](https://github.com/ellmos-ai/ellmos-core): Modular AI runtime, task dispatching & agent state substrate
+- [ellmos-scheduler](https://github.com/ellmos-ai/ellmos-scheduler): Local cron, interval & scheduled task execution engine
+- [clutch](https://github.com/ellmos-ai/clutch): Adaptive multi-model LLM router & agent execution gear
+- [coma](https://github.com/ellmos-ai/coma): Single-binary multi-agent orchestrator & execution coordinator
+- [gardener](https://github.com/ellmos-ai/gardener): Local-first autonomous session and context memory engine
+- [prompt-evidence-collector](https://github.com/ellmos-ai/prompt-evidence-collector): Audit-ready LLM interaction capture & cryptographic evidence store
+- [lock-master](https://github.com/ellmos-ai/lock-master): Multi-agent file locking and concurrency control protocol
+- [ticket-master](https://github.com/ellmos-ai/ticket-master): Autonomous ticket routing and task dispatching triage console
+- [ellmos-controlcenter-mcp](https://github.com/ellmos-ai/ellmos-controlcenter-mcp): MCP runtime supervision, skill routing & tool bundle discovery
+- [ellmos-filecommander-mcp](https://github.com/ellmos-ai/ellmos-filecommander-mcp): MCP file management, safe delete & archive operations server
+- [ellmos-codecommander-mcp](https://github.com/ellmos-ai/ellmos-codecommander-mcp): MCP code analysis, AST transformations & format server
+- [ellmos-clatcher-mcp](https://github.com/ellmos-ai/ellmos-clatcher-mcp): MCP clipboard & scratchpad manager with dry-run safety
+- [n8n-manager-mcp](https://github.com/ellmos-ai/n8n-manager-mcp): MCP n8n workflow management, execution monitoring & node introspection
+- [skills](https://github.com/ellmos-ai/skills): Multi-agent canonical capability library & agent catalog
+- [usb-podcast-studio](https://github.com/entertain-and-more/usb-podcast-studio): Desktop audio workstation, soundboard & recording suite (Klangpult)
+- [companion-for-agy](https://github.com/ellmos-ai/companion-for-agy): Terminal companion & PTY wrapper for Google Antigravity
+- [safe-start-for-codex](https://github.com/dev-bricks/safe-start-for-codex): Safe starter and permission isolator for Codex CLI sessions
+- [automizer-for-claude-desktop](https://github.com/dev-bricks/automizer-for-claude-desktop): Scheduled task automation manager for Claude Desktop
+- [DevCenter](https://github.com/dev-bricks/DevCenter): Developer control plane, repository dashboard & environment manager
+- [CodeBox](https://github.com/dev-bricks/CodeBox): Polyglot code snippet manager & developer workbench
+- [open-bricks](https://github.com/open-bricks): Umbrella catalog for open-source bricks, tools, and libraries

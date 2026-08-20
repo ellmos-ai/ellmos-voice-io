@@ -4,7 +4,7 @@
   "display_name": "ellmos-voice-io",
   "kind": "runtime",
   "category": "runtime",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "status": "development",
   "visibility": "private",
   "description": "LLM-neutral local speech input, speech output, and wake-word primitives.",

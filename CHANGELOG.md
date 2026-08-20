@@ -1,11 +1,19 @@
 # Changelog
 
-## [0.1.2] - 2026-08-16
+## [0.1.2] - 2026-08-20
+
+- Discoverability, Sibling Ecosystem & Metadata Parity Check (Pfad B):
+  - Synchronized package version `0.1.2` across `pyproject.toml`, `ellmos-module.v2.json`, `src/ellmos_voice_io/__init__.py`, `llms.txt`, and Shields.io badges.
+  - Added bilingual security policy `SECURITY.md` defining local-first, zero-telemetry invariants, explicit caller-owned retention, microphone hardware lifecycle isolation, and vulnerability disclosure.
+  - Added comprehensive bilingual Ecosystem & Sibling Tools cross-linking matrix (`README.md` and `README_de.md`) connecting `ellmos-ai`, `dev-bricks`, `doc-bricks`, and `open-bricks` suites.
+  - Expanded automated test suite in `tests/test_metadata.py` to 24 tests covering version parity, manifest contracts, package exports, security policy, sibling matrix integrity, and doc hygiene.
+  - Synchronized `llms.txt` index timestamp to 2026-08-20, test count (24 passed), and reference catalog.
+
+## [0.1.1] - 2026-08-16
 
 - Technical hygiene and linter standardization (Pfad A):
   - Integrated `[tool.ruff]` and `[tool.ruff.lint]` configuration in `pyproject.toml` (`target-version = "py310"`, `line-length = 120`, `E402`/`E501` ignore).
-  - Added automated metadata & manifest contract test suite `tests/test_metadata.py` (verifying version parity across `pyproject.toml`, `ellmos-module.v2.json`, and `__init__.__version__`, required fields, and module exports).
-  - Synchronized test badges and last-checked timestamps in `README.md`, `README_de.md`, and `llms.txt` (20/20 passed in 0.14s).
+  - Added initial metadata contract test suite in `tests/test_metadata.py`.
   - Verified static hygiene (`ruff check .` 0 errors, `python -m compileall` 0 errors).
 
 ## [0.1.1] - 2026-08-14

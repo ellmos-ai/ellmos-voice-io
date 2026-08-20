@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+import re
 import tomllib
 
 import ellmos_voice_io
@@ -9,6 +10,9 @@ def test_version_parity():
     root = Path(__file__).resolve().parent.parent
     pyproject_path = root / "pyproject.toml"
     module_v2_path = root / "ellmos-module.v2.json"
+    llms_path = root / "llms.txt"
+    readme_en_path = root / "README.md"
+    readme_de_path = root / "README_de.md"
 
     with pyproject_path.open("rb") as f:
         pyproject_data = tomllib.load(f)
@@ -20,6 +24,14 @@ def test_version_parity():
 
     assert ellmos_voice_io.__version__ == pyproject_version
     assert ellmos_voice_io.__version__ == module_v2_version
+
+    llms_txt = llms_path.read_text(encoding="utf-8")
+    assert f"Version: {pyproject_version}" in llms_txt
+
+    readme_en = readme_en_path.read_text(encoding="utf-8")
+    readme_de = readme_de_path.read_text(encoding="utf-8")
+    assert f"Version-{pyproject_version}" in readme_en
+    assert f"Version-{pyproject_version}" in readme_de
 
 
 def test_module_v2_contract():
@@ -43,3 +55,68 @@ def test_package_exports():
     for export_name in expected_exports:
         assert hasattr(ellmos_voice_io, export_name)
         assert export_name in ellmos_voice_io.__all__
+
+
+def test_security_policy_contract():
+    root = Path(__file__).resolve().parent.parent
+    security_file = root / "SECURITY.md"
+    assert security_file.is_file(), "SECURITY.md must be present in repository root"
+
+    content = security_file.read_text(encoding="utf-8")
+    assert "Local-First" in content
+    assert "Microphone Lifecycle" in content or "Mikrofon-Lebenszyklus" in content
+    assert "security@ellmos.ai" in content
+    assert "0.1.x" in content
+
+
+def test_sibling_ecosystem_matrix():
+    root = Path(__file__).resolve().parent.parent
+    readme_en = (root / "README.md").read_text(encoding="utf-8")
+    readme_de = (root / "README_de.md").read_text(encoding="utf-8")
+
+    key_siblings = [
+        "ellmos-core",
+        "ellmos-scheduler",
+        "clutch",
+        "coma",
+        "gardener",
+        "prompt-evidence-collector",
+        "lock-master",
+        "ticket-master",
+        "ellmos-controlcenter-mcp",
+        "usb-podcast-studio",
+        "companion-for-agy",
+        "safe-start-for-codex",
+        "DevCenter",
+        "open-bricks",
+    ]
+
+    for tool in key_siblings:
+        assert tool in readme_en, f"Missing sibling tool {tool} in README.md"
+        assert tool in readme_de, f"Missing sibling tool {tool} in README_de.md"
+
+
+def test_llms_txt_integrity():
+    root = Path(__file__).resolve().parent.parent
+    llms_file = root / "llms.txt"
+    assert llms_file.is_file()
+
+    content = llms_file.read_text(encoding="utf-8")
+    assert "Last-checked: 2026-08-20" in content
+    assert re.search(r"Test-suite:\s*\d+/\d+\s*passed", content) is not None
+    assert "SECURITY.md" in content
+    assert "README.md" in content
+    assert "README_de.md" in content
+
+
+def test_documentation_hygiene():
+    root = Path(__file__).resolve().parent.parent
+    doc_files = [root / "README.md", root / "README_de.md", root / "llms.txt", root / "SECURITY.md", root / "CHANGELOG.md"]
+
+    for doc in doc_files:
+        if not doc.is_file():
+            continue
+        text = doc.read_text(encoding="utf-8")
+        assert "file:///" not in text, f"Found file:/// URI scheme in {doc.name}"
+        assert "C:\\Users\\" not in text and "C:/Users/" not in text, f"Found private user path in {doc.name}"
+
