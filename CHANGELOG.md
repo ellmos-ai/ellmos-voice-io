@@ -23,6 +23,9 @@
   Python 3.10 to the Windows/macOS/Linux matrix, supplied the `tomllib`
   compatibility dependency for that minimum version, and added regressions
   for the declared support range and movable workflow action references.
+- Added the shared MODULES pre-release status contract and its exact minimum
+  ignore set; the common Final Gate Check now passes 10/10 while external
+  publication remains owner-locked.
 
 ## [0.1.2] - 2026-08-20
 

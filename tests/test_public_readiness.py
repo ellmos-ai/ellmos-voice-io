@@ -12,10 +12,15 @@ def test_public_control_files_are_present():
         "CONTRIBUTING.md",
         "RELEASE_GATE.md",
         "THIRD_PARTY_LICENSES.md",
+        "TODO.md",
         "docs/ai-act-note.md",
     }
     missing = sorted(path for path in required if not (ROOT / path).is_file())
     assert not missing, f"missing public-readiness files: {missing}"
+
+    ignore_lines = set((ROOT / ".gitignore").read_text(encoding="utf-8").splitlines())
+    minimum_ignores = {"__pycache__/", "*.pyc", ".env", "*.db", ".venv/", ".idea/", ".vscode/", "data/"}
+    assert minimum_ignores <= ignore_lines
 
 
 def test_skill_version_matches_package_version():
