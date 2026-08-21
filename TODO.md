@@ -1,7 +1,9 @@
 # Pre-Release TODO: ellmos-voice-io
 
-**Audit date:** 2026-08-21  
-**Target repository:** `ellmos-ai/ellmos-voice-io`  
+**Audit date:** 2026-08-21
+
+**Target repository:** `ellmos-ai/ellmos-voice-io`
+
 **Scope:** private public-readiness preparation; no release authorization
 
 ## Blockers
