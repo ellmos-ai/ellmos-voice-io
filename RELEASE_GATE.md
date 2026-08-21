@@ -48,8 +48,8 @@ checked-in sdist normalizer. Both copies were byte-identical:
 
 | Artifact | SHA-256 |
 |---|---|
-| `ellmos_voice_io-0.2.0-py3-none-any.whl` | `2f9f7f1d9687b4eedea307fda725b5e09e953880a5574a03f075ee9cdd9daef0` |
-| `ellmos_voice_io-0.2.0.tar.gz` | `9fa05f208dd2fa17f3333167a8842b0a91579fe8a252c0436168231b4ae9c155` |
+| `ellmos_voice_io-0.2.0-py3-none-any.whl` | `3e2048823ea0fe15db5629d4d04edb272ea44c66b6f0f7f8f8ff3fde9119aad0` |
+| `ellmos_voice_io-0.2.0.tar.gz` | `ae4d6b24b1acc0906b6c5c5af3b0d87f157f099a9f1366b86f54cd7dd507cdf3` |
 
 Twine accepted all four artifacts. A clean environment installed the wheel
 without optional dependencies, imported version `0.2.0`, and ran the read-only

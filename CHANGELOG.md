@@ -19,9 +19,10 @@
   Whisper download path is represented as optional network access, unpublished
   package metadata is not advertised as an installable registry release, and
   unsupported manifest fields were removed.
-- Pinned GitHub Actions to immutable commit SHAs, added Python 3.10 to the
-  Windows/macOS/Linux matrix, and added regressions for the declared support
-  range and movable workflow action references.
+- Pinned the current Node-24 GitHub Actions to immutable commit SHAs, added
+  Python 3.10 to the Windows/macOS/Linux matrix, supplied the `tomllib`
+  compatibility dependency for that minimum version, and added regressions
+  for the declared support range and movable workflow action references.
 
 ## [0.1.2] - 2026-08-20
 

@@ -42,6 +42,7 @@ dev = [
   "build>=1.2",
   "pytest>=8",
   "ruff>=0.8",
+  "tomli>=2; python_version < '3.11'",
   "twine>=5",
 ]
 

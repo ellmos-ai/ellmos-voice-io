@@ -1,7 +1,11 @@
 import json
 from pathlib import Path
 import re
-import tomllib
+
+try:
+    import tomllib
+except ModuleNotFoundError:  # Python 3.10
+    import tomli as tomllib
 
 import ellmos_voice_io
 
