@@ -6,8 +6,12 @@ __pycache__/
 dist/
 build/
 *.egg-info/
+*.whl
+.tox/
+htmlcov/
 *.wav
 *.mp3
 *.ogg
 .env
+LOCK*.txt
 _reports/internal-business/

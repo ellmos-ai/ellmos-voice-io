@@ -48,6 +48,34 @@ def test_module_v2_contract():
     assert "entrypoints" in data
     assert data["entrypoints"]["cli"] == "ellmos-voice-io status"
     assert data["entrypoints"]["library"] == "ellmos_voice_io.VoiceIO"
+    assert data["package"] is None
+    assert data["boundaries"]["network"] == "optional"
+
+    allowed_keys = {
+        "schema",
+        "id",
+        "display_name",
+        "version",
+        "category",
+        "kind",
+        "status",
+        "visibility",
+        "description",
+        "package",
+        "entrypoints",
+        "provides",
+        "requires",
+        "optional",
+        "conflicts",
+        "surfaces",
+        "profiles",
+        "state",
+        "boundaries",
+        "source_of_truth",
+        "adapters",
+    }
+    assert set(data) <= allowed_keys
+    assert set(data["boundaries"]) == {"network", "data", "platforms"}
 
 
 def test_package_exports():
@@ -65,8 +93,8 @@ def test_security_policy_contract():
     content = security_file.read_text(encoding="utf-8")
     assert "Local-First" in content
     assert "Microphone Lifecycle" in content or "Mikrofon-Lebenszyklus" in content
-    assert "security@ellmos.ai" in content
-    assert "0.1.x" in content
+    assert "security/advisories/new" in content
+    assert "0.2.x" in content
 
 
 def test_sibling_ecosystem_matrix():
@@ -102,7 +130,7 @@ def test_llms_txt_integrity():
     assert llms_file.is_file()
 
     content = llms_file.read_text(encoding="utf-8")
-    assert "Last-checked: 2026-08-20" in content
+    assert "Last-checked: 2026-08-21" in content
     assert re.search(r"Test-suite:\s*\d+/\d+\s*passed", content) is not None
     assert "SECURITY.md" in content
     assert "README.md" in content
@@ -111,7 +139,17 @@ def test_llms_txt_integrity():
 
 def test_documentation_hygiene():
     root = Path(__file__).resolve().parent.parent
-    doc_files = [root / "README.md", root / "README_de.md", root / "llms.txt", root / "SECURITY.md", root / "CHANGELOG.md"]
+    doc_files = [
+        root / "README.md",
+        root / "README_de.md",
+        root / "llms.txt",
+        root / "SECURITY.md",
+        root / "CHANGELOG.md",
+        root / "ROADMAP.md",
+        root / "RELEASE_GATE.md",
+        root / "THIRD_PARTY_LICENSES.md",
+        root / "docs" / "ai-act-note.md",
+    ]
 
     for doc in doc_files:
         if not doc.is_file():
@@ -119,4 +157,3 @@ def test_documentation_hygiene():
         text = doc.read_text(encoding="utf-8")
         assert "file:///" not in text, f"Found file:/// URI scheme in {doc.name}"
         assert "C:\\Users\\" not in text and "C:/Users/" not in text, f"Found private user path in {doc.name}"
-

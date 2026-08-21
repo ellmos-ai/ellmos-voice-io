@@ -1,5 +1,28 @@
 # Changelog
 
+## [0.2.0] - 2026-08-21
+
+- Enforced the no-implicit-network contract for Whisper: named models require
+  `allow_model_download=True`; local model files remain the offline default.
+- Added deterministic regression coverage for Whisper download consent and
+  local-model routing without loading a real model or accessing the network.
+- Added cross-platform CI, reproducible package checks, public contribution and
+  conduct documents, third-party license inventory, AI deployment note, and a
+  fail-closed release gate.
+- Corrected installation guidance: the package is not published to PyPI and is
+  installed from a trusted checkout until a separately approved release exists.
+- Added the project banner and synchronized English/German privacy, package,
+  provenance, and release documentation.
+- Removed a host-specific development path from the current public surface;
+  historical commits remain documented as a low-risk publication decision.
+- Aligned `ellmos-module.v2.json` with the strict canonical schema: the explicit
+  Whisper download path is represented as optional network access, unpublished
+  package metadata is not advertised as an installable registry release, and
+  unsupported manifest fields were removed.
+- Pinned GitHub Actions to immutable commit SHAs, added Python 3.10 to the
+  Windows/macOS/Linux matrix, and added regressions for the declared support
+  range and movable workflow action references.
+
 ## [0.1.2] - 2026-08-20
 
 - Discoverability, Sibling Ecosystem & Metadata Parity Check (Pfad B):
@@ -28,6 +51,6 @@
 
 ## [0.1.0] - 2026-08-01
 
-- Initial independent extraction of the BACH Voice Service core.
+- Initial independent extraction of an earlier internal Voice Service core.
 - Added optional Whisper/Vosk STT, pyttsx3/Piper TTS, and openWakeWord integration.
 - Added explicit privacy boundaries, Python API, CLI status surface, and tests.

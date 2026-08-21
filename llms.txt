@@ -2,66 +2,57 @@
 
 > Local-first speech input, speech output, and wake-word helpers for LLM systems.
 
-Last-checked: 2026-08-20
-Test-suite: 24/24 passed (pytest, Python 3.12.10)
-Version: 0.1.2
+Last-checked: 2026-08-21
+Test-suite: 36/36 passed (pytest, Python 3.12)
+Version: 0.2.0
+Release-state: private repository; not published to PyPI
 
 ## Summary
 
-`ellmos-voice-io` is a lightweight, LLM-neutral runtime module providing pluggable local-first primitives for Speech-to-Text (STT), Text-to-Speech (TTS), and Wake-Word detection. It operates strictly within caller-owned boundaries with zero background services, zero telemetry, and zero unrequested network calls.
+`ellmos-voice-io` is a lightweight, LLM-neutral Python runtime providing
+explicit local-first primitives for file Speech-to-Text (STT), Text-to-Speech
+(TTS), and caller-owned wake-word detection. The base package has no runtime
+dependencies, background service, storage, telemetry, or implicit network use.
 
-## Key Architecture & Privacy Principles
+## Security and privacy contract
 
-- **Local-First & Offline Ready**: Core capabilities work completely offline without external cloud API dependencies.
-- **Lazy & Optional Engines**: Engine libraries (Whisper, Vosk, pyttsx3, Piper, openWakeWord) remain lazy during construction and are only loaded when invoked.
-- **Explicit Caller Ownership**: Callers explicitly control microphone permissions, audio retention, model storage paths, and audio playback.
-- **Fail-Safe Privacy Boundary**: No hidden telemetry, no background listening daemons, and no database or telemetry dependencies.
-- **Deterministic Lifecycles**: `WakeWordListener` checks stop events before accessing audio hardware and guarantees deterministic cleanup on exceptions.
-- **Read-Only CLI Inspection**: `ellmos-voice-io status` outputs engine availability JSON without initializing hardware or downloading models.
+- Optional engines are imported lazily and only after an explicit operation.
+- Vosk and Piper require caller-provided local model paths.
+- Whisper requires a caller-provided local model file or the explicit
+  `allow_model_download=True` network opt-in.
+- Wake-word microphone access occurs only inside the synchronous
+  `WakeWordListener.listen()` call and is cleaned up on stop or exception.
+- `ellmos-voice-io status` is read-only and never opens audio hardware,
+  downloads models, or writes state.
+- Audio files, transcripts, model licenses, consent, retention, and transport
+  remain caller responsibilities.
 
-## Engine Capabilities Matrix
+## Capability matrix
 
-| Primitive | Engine | Mode / Dependency | Characteristics |
-|---|---|---|---|
-| **STT** | `vosk` | Offline / Local Model | Offline speech-to-text with local model folder (`model_path` or `VOSK_MODEL`) |
-| **STT** | `whisper` | Local / OpenAI Whisper | Neural STT with automatic or pre-loaded Whisper model sizes |
-| **TTS** | `pyttsx3` | System Voices | Real-time audio playback or WAV/MP3/OGG file generation via OS voices |
-| **TTS** | `piper` | Local ONNX Neural | Fast neural speech synthesis directly to audio files via explicit ONNX model |
-| **Wake-Word** | `openwakeword` | Local Microphone | Caller-bound wake-word detection loop with explicit stop events and debouncing |
+| Primitive | Optional engine | Boundary |
+|---|---|---|
+| File STT | Vosk | Explicit local model directory |
+| File STT | OpenAI Whisper | Explicit local model file or download opt-in |
+| TTS playback/file | pyttsx3 | Installed system voices |
+| TTS file | Piper | Explicit local ONNX model |
+| Wake word | openWakeWord + PyAudio + NumPy | Explicit synchronous microphone call |
 
-## Primary Documentation & References
+## Primary files
 
-- [README.md](README.md): Project overview, installation, Python API, and lifecycle documentation (English).
-- [README_de.md](README_de.md): Deutsche Projektdokumentation, Installationshinweise und API-Leitfaden.
-- [SECURITY.md](SECURITY.md): Security policy, local-first invariants, and vulnerability reporting.
-- [CHANGELOG.md](CHANGELOG.md): Release history and maintenance verification logs.
-- [ROADMAP.md](ROADMAP.md): Prioritized development gates and task specifications.
-- [SKILL.md](SKILL.md): Agent skill declaration and Anthropic-compatible tool metadata.
-- [pyproject.toml](pyproject.toml): PEP 621 metadata, optional extras (`stt-vosk`, `stt-whisper`, `tts-pyttsx3`, `tts-piper`, `wakeword`).
-- [ellmos-module.v2.json](ellmos-module.v2.json): ellmos v2 module manifest and capability declarations.
-- [src/ellmos_voice_io/](src/ellmos_voice_io/): Core implementation (`VoiceIO`, `SpeechToText`, `TextToSpeech`, `WakeWordListener`, `cli`).
-- [tests/](tests/): 24 pytest unit tests verifying lazy loading, validation, engine routing, metadata parity, ecosystem integrity, and lifecycle cleanup.
+- `README.md` — English overview, install, API, privacy, and ecosystem.
+- `README_de.md` — German overview with the same technical contract.
+- `SECURITY.md` — bilingual vulnerability and privacy boundaries.
+- `ROADMAP.md` — verified gates and remaining external decisions.
+- `RELEASE_GATE.md` — private/public/PyPI release boundary and evidence.
+- `THIRD_PARTY_LICENSES.md` — direct optional dependency and model-license notes.
+- `docs/ai-act-note.md` — technical deployment and transparency boundary.
+- `SKILL.md` — agent-facing usage and safety rules.
+- `ellmos-module.v2.json` — machine-readable capability manifest.
+- `src/ellmos_voice_io/` — runtime implementation.
+- `tests/` — deterministic tests without hardware, models, or network.
 
-## Ecosystem & Sibling Tools
+## Release boundary
 
-- [ellmos-core](https://github.com/ellmos-ai/ellmos-core): Modular AI runtime, task dispatching & agent state substrate
-- [ellmos-scheduler](https://github.com/ellmos-ai/ellmos-scheduler): Local cron, interval & scheduled task execution engine
-- [clutch](https://github.com/ellmos-ai/clutch): Adaptive multi-model LLM router & agent execution gear
-- [coma](https://github.com/ellmos-ai/coma): Single-binary multi-agent orchestrator & execution coordinator
-- [gardener](https://github.com/ellmos-ai/gardener): Local-first autonomous session and context memory engine
-- [prompt-evidence-collector](https://github.com/ellmos-ai/prompt-evidence-collector): Audit-ready LLM interaction capture & cryptographic evidence store
-- [lock-master](https://github.com/ellmos-ai/lock-master): Multi-agent file locking and concurrency control protocol
-- [ticket-master](https://github.com/ellmos-ai/ticket-master): Autonomous ticket routing and task dispatching triage console
-- [ellmos-controlcenter-mcp](https://github.com/ellmos-ai/ellmos-controlcenter-mcp): MCP runtime supervision, skill routing & tool bundle discovery
-- [ellmos-filecommander-mcp](https://github.com/ellmos-ai/ellmos-filecommander-mcp): MCP file management, safe delete & archive operations server
-- [ellmos-codecommander-mcp](https://github.com/ellmos-ai/ellmos-codecommander-mcp): MCP code analysis, AST transformations & format server
-- [ellmos-clatcher-mcp](https://github.com/ellmos-ai/ellmos-clatcher-mcp): MCP clipboard & scratchpad manager with dry-run safety
-- [n8n-manager-mcp](https://github.com/ellmos-ai/n8n-manager-mcp): MCP n8n workflow management, execution monitoring & node introspection
-- [skills](https://github.com/ellmos-ai/skills): Multi-agent canonical capability library & agent catalog
-- [usb-podcast-studio](https://github.com/entertain-and-more/usb-podcast-studio): Desktop audio workstation, soundboard & recording suite (Klangpult)
-- [companion-for-agy](https://github.com/ellmos-ai/companion-for-agy): Terminal companion & PTY wrapper for Google Antigravity
-- [safe-start-for-codex](https://github.com/dev-bricks/safe-start-for-codex): Safe starter and permission isolator for Codex CLI sessions
-- [automizer-for-claude-desktop](https://github.com/dev-bricks/automizer-for-claude-desktop): Scheduled task automation manager for Claude Desktop
-- [DevCenter](https://github.com/dev-bricks/DevCenter): Developer control plane, repository dashboard & environment manager
-- [CodeBox](https://github.com/dev-bricks/CodeBox): Polyglot code snippet manager & developer workbench
-- [open-bricks](https://github.com/open-bricks): Umbrella catalog for open-source bricks, tools, and libraries
+This file does not authorize repository visibility changes, tags, releases,
+registry uploads, credentials, microphone access, or model downloads. Those
+actions remain separate, explicit gates.

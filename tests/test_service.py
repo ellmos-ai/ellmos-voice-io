@@ -95,6 +95,61 @@ def test_stt_vosk_contract_uses_fixture_audio_and_explicit_model(monkeypatch, tm
     assert calls["log_level"] == -1
 
 
+def _install_whisper_double(monkeypatch, calls: dict[str, object]) -> None:
+    class FakeWhisperModel:
+        def transcribe(self, path: str, language: str | None = None):
+            calls["transcribe"] = (path, language)
+            return {"text": "local transcript"}
+
+    def load_model(model_ref: str):
+        calls["model_ref"] = model_ref
+        return FakeWhisperModel()
+
+    monkeypatch.setattr(SpeechToText, "available", lambda self: (True, "whisper"))
+    monkeypatch.setitem(sys.modules, "whisper", types.SimpleNamespace(load_model=load_model))
+
+
+def test_whisper_named_model_requires_explicit_download_opt_in(monkeypatch, tmp_path: Path):
+    audio_path = tmp_path / "note.wav"
+    audio_path.write_bytes(b"fixture")
+    calls: dict[str, object] = {}
+    _install_whisper_double(monkeypatch, calls)
+
+    with pytest.raises(RuntimeError, match="allow_model_download"):
+        SpeechToText(engine="whisper", model_size="base").transcribe_file(audio_path)
+
+    assert "model_ref" not in calls
+
+
+def test_whisper_named_model_allows_explicit_download_opt_in(monkeypatch, tmp_path: Path):
+    audio_path = tmp_path / "note.wav"
+    audio_path.write_bytes(b"fixture")
+    calls: dict[str, object] = {}
+    _install_whisper_double(monkeypatch, calls)
+
+    transcript = SpeechToText(
+        engine="whisper", model_size="base", allow_model_download=True
+    ).transcribe_file(audio_path, language="en")
+
+    assert transcript == "local transcript"
+    assert calls["model_ref"] == "base"
+    assert calls["transcribe"] == (str(audio_path), "en")
+
+
+def test_whisper_accepts_explicit_local_model_file(monkeypatch, tmp_path: Path):
+    audio_path = tmp_path / "note.wav"
+    audio_path.write_bytes(b"fixture")
+    model_path = tmp_path / "base.pt"
+    model_path.write_bytes(b"model fixture")
+    calls: dict[str, object] = {}
+    _install_whisper_double(monkeypatch, calls)
+
+    transcript = SpeechToText(engine="whisper", model_path=model_path).transcribe_file(audio_path)
+
+    assert transcript == "local transcript"
+    assert calls["model_ref"] == str(model_path)
+
+
 def test_stt_existing_audio_reports_missing_optional_engine(monkeypatch, tmp_path: Path):
     audio_path = tmp_path / "note.wav"
     audio_path.write_bytes(b"not-a-real-audio-file")

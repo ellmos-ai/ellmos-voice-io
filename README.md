@@ -1,9 +1,13 @@
+<p align="center">
+  <img src="docs/assets/banner.png" alt="ellmos-voice-io: local microphone, speech processing, and speaker flow" width="900">
+</p>
+
 # ellmos-voice-io
 
 [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
-[![Version](https://img.shields.io/badge/Version-0.1.2-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/Version-0.2.0-blue.svg)](CHANGELOG.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Tests](https://img.shields.io/badge/Tests-24%20passed-brightgreen?logo=pytest&logoColor=white)](tests/)
+[![Tests](https://img.shields.io/badge/Tests-36%20passed-brightgreen?logo=pytest&logoColor=white)](tests/)
 [![Privacy: Local-First](https://img.shields.io/badge/Privacy-Local--First%20%7C%20No--Telemetry-blue)](README.md#privacy-and-boundaries)
 [![llms.txt](https://img.shields.io/badge/llms.txt-available-0055ff?logo=markdown)](llms.txt)
 [![Org](https://img.shields.io/badge/Org-ellmos--ai-8A2BE2)](https://github.com/ellmos-ai)
@@ -91,16 +95,23 @@ It intentionally does not replace audio workstations such as KlangpultLight or U
 
 ## Installation
 
+The package is not published to PyPI yet. Until an owner-approved release exists,
+install it only from a trusted local checkout:
+
 ```bash
 # Minimal base package (no optional heavy dependencies)
-pip install ellmos-voice-io
+python -m pip install .
 
 # Install with specific optional extras
-pip install "ellmos-voice-io[stt-vosk,tts-pyttsx3]"
+python -m pip install ".[stt-vosk,tts-pyttsx3]"
 
-# Or install all available local engines
-pip install "ellmos-voice-io[all]"
+# Development and verification toolchain
+python -m pip install -e ".[dev]"
 ```
+
+The `all` extra also installs `piper-tts`, whose current distribution is
+GPL-3.0-or-later. Review [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md)
+and the licenses of any selected voice/model files before redistribution.
 
 Inspect engine status safely without starting hardware:
 ```bash
@@ -133,9 +144,16 @@ stt = SpeechToText(engine="vosk", model_path="/path/to/vosk-model-de")
 transcript = stt.transcribe_file("input_voice.wav")
 print(f"Transcribed: {transcript}")
 
-# Using Whisper
-stt_whisper = SpeechToText(engine="whisper", model_size="base")
+# Using Whisper with an explicit local model file (no network access)
+stt_whisper = SpeechToText(engine="whisper", model_path="/path/to/base.pt")
 transcript_whisper = stt_whisper.transcribe_file("meeting_clip.wav", language="en")
+
+# A named model may download only after explicit opt-in
+stt_download = SpeechToText(
+    engine="whisper",
+    model_size="base",
+    allow_model_download=True,
+)
 ```
 
 ### Text-to-Speech (TTS)
@@ -175,6 +193,8 @@ listener.listen(on_wake=on_wake, stop_event=stop_event)
 - **Audio, transcripts, and generated files stay where the caller puts them.**
 - **No telemetry, database, account requirement, background service, or implicit upload.**
 - **Microphone access occurs only during active `WakeWordListener.listen()`.**
+- **No implicit Whisper download**: provide a local model file or opt in with
+  `allow_model_download=True`; the caller then owns network and model-license policy.
 - **Read-only CLI**: `status` never attempts permissions or model downloads.
 
 ### Wake-Word Lifecycle Contract
@@ -189,12 +209,18 @@ listener.listen(on_wake=on_wake, stop_event=stop_event)
 ## Development Status & Roadmap
 
 The current development gates, task plans, and next verifiable milestones are documented in [`ROADMAP.md`](ROADMAP.md).
+The repository is still private and the package is not on PyPI. A visibility,
+tag, release, or registry upload requires a separate owner decision; see
+[`RELEASE_GATE.md`](RELEASE_GATE.md).
 
 ---
 
 ## Provenance
 
-This module rescues the generic, MIT-licensed core of BACH's former Voice Service: file STT, TTS file export, and wake-word integration. It is rewritten as an independent, user-neutral package with explicit dependencies and zero BACH database or bridge bindings.
+This module preserves the generic, MIT-licensed core of an earlier internal
+voice service: file STT, TTS file export, and wake-word integration. It is
+rewritten as an independent, user-neutral package with explicit dependencies
+and no legacy database or bridge bindings.
 
 ## Ecosystem & Sibling Tools
 
@@ -228,4 +254,9 @@ Part of the [ellmos-ai](https://github.com/ellmos-ai) multi-agent infrastructure
 
 ## License
 
-MIT License. See [LICENSE](LICENSE) for details.
+The repository's code and documentation are MIT licensed; see [LICENSE](LICENSE).
+Optional engines, system tools, and voice/model files retain their own licenses;
+see [THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md). Responsible-use and
+deployment boundaries are documented in [SECURITY.md](SECURITY.md) and
+[docs/ai-act-note.md](docs/ai-act-note.md). Contributions follow
+[CONTRIBUTING.md](CONTRIBUTING.md) and [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).

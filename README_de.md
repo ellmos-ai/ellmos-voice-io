@@ -1,9 +1,13 @@
+<p align="center">
+  <img src="docs/assets/banner.png" alt="ellmos-voice-io: lokaler Mikrofon-, Sprachverarbeitungs- und Lautsprecherfluss" width="900">
+</p>
+
 # ellmos-voice-io
 
 [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
-[![Version](https://img.shields.io/badge/Version-0.1.2-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/Version-0.2.0-blue.svg)](CHANGELOG.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Tests](https://img.shields.io/badge/Tests-24%20bestanden-brightgreen?logo=pytest&logoColor=white)](tests/)
+[![Tests](https://img.shields.io/badge/Tests-36%20bestanden-brightgreen?logo=pytest&logoColor=white)](tests/)
 [![Privacy: Local-First](https://img.shields.io/badge/Datenschutz-Local--First%20%7C%20Keine--Telemetrie-blue)](README_de.md#datenschutz-und-grenzen)
 [![llms.txt](https://img.shields.io/badge/llms.txt-verf%C3%BCgbar-0055ff?logo=markdown)](llms.txt)
 [![Org](https://img.shields.io/badge/Org-ellmos--ai-8A2BE2)](https://github.com/ellmos-ai)
@@ -24,28 +28,28 @@ Lokale Speech-to-Text-, Text-to-Speech- und Wake-Word-Hilfen für LLM-Systeme.
 
 ```mermaid
 graph TD
-    UserApp["Aufrufer / LLM-Anwendung / MCP-Adapter"]
+    UserApp["Caller / LLM Application / MCP Adapter"]
     
-    subgraph FacadeLayer ["ellmos-voice-io Laufzeit"]
-        VoiceIO["VoiceIO (Einheitliche Fassade)"]
+    subgraph FacadeLayer ["ellmos-voice-io Runtime"]
+        VoiceIO["VoiceIO (Unified Facade)"]
         CLI["CLI (ellmos-voice-io status)"]
         STT["SpeechToText"]
         TTS["TextToSpeech"]
         WakeWord["WakeWordListener"]
     end
     
-    subgraph OptionalEngines ["Optionale Lazy Engines"]
-        Vosk["Vosk (Lokales Offline STT)"]
-        Whisper["Whisper (Neuronales STT)"]
-        Pyttsx3["pyttsx3 (System-TTS)"]
-        Piper["Piper (ONNX Neuronales TTS)"]
-        OpenWakeWord["openWakeWord (Lokales Mikrofon)"]
+    subgraph OptionalEngines ["Optional Lazy Engines"]
+        Vosk["Vosk (Local Offline STT)"]
+        Whisper["Whisper (Neural STT)"]
+        Pyttsx3["pyttsx3 (System TTS)"]
+        Piper["Piper (ONNX Neural TTS)"]
+        OpenWakeWord["openWakeWord (Local Mic)"]
     end
     
-    subgraph PrivacyBoundary ["Datenschutz- & Hardware-Grenze"]
-        Mic["Mikrofon (Explizit autorisiert)"]
-        AudioFiles["Lokale WAV / MP3 / OGG Dateien"]
-        ZeroNet["Keine Telemetrie / Kein Cloud-Upload"]
+    subgraph PrivacyBoundary ["Privacy & Hardware Boundary"]
+        Mic["Microphone (Caller-Authorized)"]
+        AudioFiles["Local WAV / MP3 / OGG Files"]
+        ZeroNet["Zero Telemetry / Zero Cloud Storage"]
     end
 
     UserApp --> VoiceIO
@@ -91,16 +95,25 @@ Das Modul ersetzt bewusst keine Audio-Workstations wie KlangpultLight oder USBPo
 
 ## Installation
 
+Das Paket ist noch nicht auf PyPI veröffentlicht. Bis zu einer vom Eigentümer
+freigegebenen Veröffentlichung erfolgt die Installation ausschließlich aus
+einem vertrauenswürdigen lokalen Checkout:
+
 ```bash
-# Minimales Basispaket (ohne schwere optionale Abhängigkeiten)
-pip install ellmos-voice-io
+# Minimal base package (no optional heavy dependencies)
+python -m pip install .
 
-# Installation mit spezifischen optionalen Extras
-pip install "ellmos-voice-io[stt-vosk,tts-pyttsx3]"
+# Install with specific optional extras
+python -m pip install ".[stt-vosk,tts-pyttsx3]"
 
-# Oder Installation aller verfügbaren lokalen Engines
-pip install "ellmos-voice-io[all]"
+# Development and verification toolchain
+python -m pip install -e ".[dev]"
 ```
+
+Das Extra `all` installiert auch `piper-tts`, dessen aktuelle Distribution
+unter GPL-3.0-or-later steht. Prüfe vor einer Weitergabe
+[`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md) und die Lizenzen der
+ausgewählten Stimmen und Modelldateien.
 
 Engine-Verfügbarkeit sicher prüfen ohne Hardware-Initialisierung:
 ```bash
@@ -128,14 +141,21 @@ Ausgabe:
 ```python
 from ellmos_voice_io import SpeechToText
 
-# Vosk mit lokalem Modellpfad
-stt = SpeechToText(engine="vosk", model_path="/pfad/zu/vosk-model-de")
-transkript = stt.transcribe_file("input_voice.wav")
-print(f"Transkribiert: {transkript}")
+# Using Vosk with an explicit local model path
+stt = SpeechToText(engine="vosk", model_path="/path/to/vosk-model-de")
+transcript = stt.transcribe_file("input_voice.wav")
+print(f"Transcribed: {transcript}")
 
-# Whisper
-stt_whisper = SpeechToText(engine="whisper", model_size="base")
-transkript_whisper = stt_whisper.transcribe_file("aufnahme.wav", language="de")
+# Using Whisper with an explicit local model file (no network access)
+stt_whisper = SpeechToText(engine="whisper", model_path="/path/to/base.pt")
+transcript_whisper = stt_whisper.transcribe_file("meeting_clip.wav", language="en")
+
+# A named model may download only after explicit opt-in
+stt_download = SpeechToText(
+    engine="whisper",
+    model_size="base",
+    allow_model_download=True,
+)
 ```
 
 ### Text-to-Speech (TTS)
@@ -145,11 +165,11 @@ from ellmos_voice_io import TextToSpeech
 
 tts = TextToSpeech(engine="pyttsx3", rate=160)
 
-# Direkte Sprachausgabe auf Systemlautsprecher
-tts.speak("Verarbeitung abgeschlossen.")
+# Speak directly to system default speakers
+tts.speak("Processing complete.")
 
-# Synthese in eine Audiodatei (.wav, .mp3, .ogg) exportieren
-tts.speak_to_file("Benachrichtigungston erzeugt.", "output/meldung.wav")
+# Export synthesis directly to an audio file (.wav, .mp3, .ogg)
+tts.speak_to_file("Notification sound generated.", "output/alert.wav")
 ```
 
 ### Wake-Word Listener
@@ -159,12 +179,12 @@ import threading
 from ellmos_voice_io import WakeWordListener
 
 def on_wake():
-    print("Wake-Word erkannt! Assistent wird aktiviert...")
+    print("Wake word detected! Activating assistant...")
 
 stop_event = threading.Event()
 listener = WakeWordListener(threshold=0.6)
 
-# Blockiert synchron bis stop_event gesetzt wird; bereinigt Audio-Streams automatisch
+# Blocks until stop_event is set; handles cleanup automatically
 listener.listen(on_wake=on_wake, stop_event=stop_event)
 ```
 
@@ -175,6 +195,9 @@ listener.listen(on_wake=on_wake, stop_event=stop_event)
 - **Audio, Transkripte und Ausgabedateien bleiben am vom Aufrufer bestimmten Ort.**
 - **Kein Datenbankzugriff, keine Telemetrie, kein Konto, kein Hintergrunddienst, kein impliziter Upload.**
 - **Mikrofonzugriff erfolgt ausschließlich während aktivem `WakeWordListener.listen()`.**
+- **Kein impliziter Whisper-Download**: Verwende eine lokale Modelldatei oder
+  erlaube den Download ausdrücklich mit `allow_model_download=True`; Netzwerk-
+  und Modelllizenzregeln verbleiben dann beim Aufrufer.
 - **Rein lesende CLI**: `status` fordert keine Berechtigungen an und lädt keine Modelle herunter.
 
 ### Wake-Word-Lebenszyklus
@@ -189,12 +212,18 @@ listener.listen(on_wake=on_wake, stop_event=stop_event)
 ## Entwicklungsstatus & Roadmap
 
 Die aktuellen Gatter und die nächsten prüfbaren Schritte stehen in [`ROADMAP.md`](ROADMAP.md).
+Das Repository ist weiterhin privat und das Paket nicht auf PyPI veröffentlicht.
+Sichtbarkeit, Tag, Release oder Registry-Upload benötigen eine gesonderte
+Eigentümerentscheidung; siehe [`RELEASE_GATE.md`](RELEASE_GATE.md).
 
 ---
 
 ## Herkunft
 
-Das Modul rettet den generischen, MIT-lizenzierten Kern des früheren BACH Voice Service: Datei-STT, TTS-Dateiexport und Wake-Word-Anbindung. Es wurde als unabhängiges, nutzungsneutrales Paket neu aufgebaut – ohne BACH-Datenbank oder Bridge-Bindungen.
+Das Modul erhält den generischen, MIT-lizenzierten Kern eines früheren internen
+Sprachdienstes: Datei-STT, TTS-Dateiexport und Wake-Word-Anbindung. Es wurde als
+unabhängiges, nutzungsneutrales Paket neu aufgebaut – ohne Bindungen an frühere
+Datenbanken oder Bridges.
 
 ## Ökosystem & Geschwister-Werkzeuge
 
@@ -228,4 +257,10 @@ Teil der [ellmos-ai](https://github.com/ellmos-ai) Multi-Agenten-Infrastruktur u
 
 ## Lizenz
 
-MIT Lizenz. Siehe [LICENSE](LICENSE) für Details.
+Code und Dokumentation dieses Repositories stehen unter der MIT-Lizenz; siehe
+[LICENSE](LICENSE). Optionale Engines, Systemwerkzeuge sowie Stimmen und
+Modelldateien behalten ihre eigenen Lizenzen; siehe
+[THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md). Verantwortungs- und
+Einsatzgrenzen stehen in [SECURITY.md](SECURITY.md) und
+[docs/ai-act-note.md](docs/ai-act-note.md). Für Beiträge gelten
+[CONTRIBUTING.md](CONTRIBUTING.md) und [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).

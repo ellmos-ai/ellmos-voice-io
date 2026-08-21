@@ -1,34 +1,34 @@
 # ellmos-voice-io Roadmap
 
-## Recheck 2026-08-02
+## Verified preparation — 2026-08-21
 
-`ellmos-voice-io` is a small, LLM-neutral runtime module for explicit local
-speech-to-text, text-to-speech, and wake-word operations. The package keeps
-engines optional and lazy, has no storage or telemetry boundary, and exposes a
-read-only `status` CLI.
+`ellmos-voice-io` remains a small, LLM-neutral runtime module for explicit
+local speech-to-text, text-to-speech, and wake-word operations. Optional engines
+stay lazy; the base package has no storage, telemetry, background service, or
+implicit network activity.
 
-Intake baseline: canonical clone `C:\_Local_DEV\repos\ellmos-voice-io`, branch
-`main`, HEAD `317dadb7930ddb40dcaeec11a6adc4b85b6bd5a7`, tracking `origin/main`
-at `https://github.com/ellmos-ai/ellmos-voice-io.git`; no foreign lock was
-present. The manifest remains `status=development` and `visibility=private`.
+### Completed gates
 
-The source manifest declares Windows, macOS, and Linux, but the repository has
-no CI workflow or checked-in build/readback record. Existing tests cover the
-facade, validation, missing-file and CLI guard cases; optional-engine paths,
-real platform evidence, and release provenance are not yet established by
-the checked-in controls. No task was executed during this recheck.
+| Former task | Gate | Verified result |
+|---:|---|---|
+| 1877 | PACKAGE-PREFLIGHT | Reproducible sdist/wheel, clean-install CLI smoke, tests, Ruff, compileall, Twine, and archive inspection |
+| 1878 | ENGINE-CONTRACTS | Hardware-, model-, and network-free test doubles cover Vosk, Whisper, pyttsx3, Piper routing, conversion, and failure paths |
+| 1879 | PLATFORM-CI | Checked-in CI covers Windows, macOS, and Linux on Python 3.10, 3.11, and 3.12 without audio hardware |
+| 1881 | WAKEWORD-LIFECYCLE | Cancellation, repeated hits, callback/read/open failures, and deterministic stream cleanup are specified and tested |
 
-## Prioritized next work
+The Whisper path now fails closed: a caller supplies a local model file or opts
+in explicitly to a named-model download. The read-only `status` command never
+opens hardware or downloads models.
 
-| TaskPLAN | Gate | Priority | Effort | Scope | Next verifiable result |
-|---:|---|---|---|---|---|
-| 1877 | PACKAGE-PREFLIGHT | high | medium | local | Reproducible sdist/wheel, clean install, compileall, tests, CLI and hash readback |
-| 1878 | ENGINE-CONTRACTS | medium | medium | local | Deterministic, hardware/model/network-free contracts for optional engines |
-| 1879 | PLATFORM-CI | medium | large | local | Separate Windows/macOS/Linux CI evidence or explicit runner/dependency blockers |
-| 1880 | RELEASE-PROVENANCE | high | special | local | User decision and provenance for development/private status versus Pip distribution |
-| 1881 | WAKEWORD-LIFECYCLE | medium | medium | local | Defined and isolated callback, cancellation, repeated-hit, and cleanup contract |
+### Remaining external gates
 
-Task details, sources, acceptance criteria, dependencies, and boundaries are
-recorded in TASKPLAN. Release, upload, registry writes, credentials, and
-microphone permission remain outside this writer pass.
+| Gate | Owner | Condition |
+|---|---|---|
+| Repository visibility | Repository owner | Explicit decision after reviewing `RELEASE_GATE.md` and the local publication report |
+| PyPI publication | Repository owner | Separate registry approval, trusted-publishing setup, package-name review, and uploaded-artifact readback |
+| Optional-engine platform evidence | Maintainers | Real engine/model/hardware checks on each claimed platform; unit tests do not claim this evidence |
+| Model and voice licensing | Distributors | Review every selected model/voice license in addition to the direct dependency inventory |
+| Commercial name clearance | Repository owner | Official similarity search before commercialization or package registration |
 
+No release, upload, visibility change, credential operation, microphone access,
+or model download is authorized by this roadmap.

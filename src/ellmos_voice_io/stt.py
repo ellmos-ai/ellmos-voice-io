@@ -12,16 +12,25 @@ from pathlib import Path
 class SpeechToText:
     """Transcribe an existing audio file with Whisper or Vosk.
 
-    ``whisper`` may download a selected model on its first use. ``vosk`` stays local
+    ``whisper`` requires either an explicit local ``model_path`` or the explicit
+    ``allow_model_download=True`` opt-in for a named model. ``vosk`` stays local
     and requires an explicit ``model_path`` or ``VOSK_MODEL`` environment variable.
     """
 
-    def __init__(self, engine: str = "auto", model_size: str = "base", model_path: str | None = None):
+    def __init__(
+        self,
+        engine: str = "auto",
+        model_size: str = "base",
+        model_path: str | Path | None = None,
+        *,
+        allow_model_download: bool = False,
+    ):
         if engine not in {"auto", "whisper", "vosk"}:
             raise ValueError("engine must be auto, whisper, or vosk")
         self.engine = engine
         self.model_size = model_size
         self.model_path = model_path
+        self.allow_model_download = allow_model_download
         self._whisper_model = None
         self._vosk_model = None
 
@@ -47,7 +56,19 @@ class SpeechToText:
         import whisper
 
         if self._whisper_model is None:
-            self._whisper_model = whisper.load_model(self.model_size)
+            if self.model_path is not None:
+                local_model = Path(self.model_path).expanduser()
+                if not local_model.is_file():
+                    raise FileNotFoundError(local_model)
+                model_ref = str(local_model)
+            elif self.allow_model_download:
+                model_ref = self.model_size
+            else:
+                raise RuntimeError(
+                    "Whisper named models may access the network when missing. "
+                    "Pass a local model_path or set allow_model_download=True explicitly."
+                )
+            self._whisper_model = whisper.load_model(model_ref)
         result = self._whisper_model.transcribe(str(path), language=language)
         return str(result.get("text", "")).strip()
 
