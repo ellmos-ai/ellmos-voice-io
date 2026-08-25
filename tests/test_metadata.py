@@ -134,7 +134,7 @@ def test_llms_txt_integrity():
     assert llms_file.is_file()
 
     content = llms_file.read_text(encoding="utf-8")
-    assert "Last-checked: 2026-08-21" in content
+    assert "Last-checked: 2026-08-25" in content
     assert re.search(r"Test-suite:\s*\d+/\d+\s*passed", content) is not None
     assert "SECURITY.md" in content
     assert "README.md" in content
@@ -161,3 +161,42 @@ def test_documentation_hygiene():
         text = doc.read_text(encoding="utf-8")
         assert "file:///" not in text, f"Found file:/// URI scheme in {doc.name}"
         assert "C:\\Users\\" not in text and "C:/Users/" not in text, f"Found private user path in {doc.name}"
+
+
+def test_ci_concurrency_configuration():
+    root = Path(__file__).resolve().parent.parent
+    ci_workflow = (root / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
+    assert "concurrency:" in ci_workflow
+    assert "cancel-in-progress: true" in ci_workflow
+
+
+def test_project_urls_pep621():
+    root = Path(__file__).resolve().parent.parent
+    with (root / "pyproject.toml").open("rb") as f:
+        pyproject_data = tomllib.load(f)
+    urls = pyproject_data["project"]["urls"]
+    assert "Homepage" in urls
+    assert "Documentation" in urls
+    assert "Issues" in urls
+    assert "Security" in urls
+    assert "Parent Organization" in urls
+    assert "Umbrella Ecosystem" in urls
+    assert urls["Parent Organization"] == "https://github.com/ellmos-ai"
+    assert urls["Umbrella Ecosystem"] == "https://github.com/open-bricks"
+
+
+def test_security_sla_and_contacts():
+    root = Path(__file__).resolve().parent.parent
+    security_file = (root / "SECURITY.md").read_text(encoding="utf-8")
+    assert "48 hours" in security_file or "48 Stunden" in security_file
+    assert "security@ellmos.ai" in security_file
+    assert "support@lukasgeiger.com" in security_file
+    assert "lukas@open-bricks.org" in security_file
+
+
+def test_gitignore_hygiene_patterns():
+    root = Path(__file__).resolve().parent.parent
+    gitignore_text = (root / ".gitignore").read_text(encoding="utf-8")
+    assert "*.sync-conflict-*" in gitignore_text
+    assert ".ruff_cache/" in gitignore_text
+    assert "*.tmp" in gitignore_text

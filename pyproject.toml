@@ -52,6 +52,9 @@ Documentation = "https://github.com/ellmos-ai/ellmos-voice-io#readme"
 Issues = "https://github.com/ellmos-ai/ellmos-voice-io/issues"
 Security = "https://github.com/ellmos-ai/ellmos-voice-io/security/advisories/new"
 Source = "https://github.com/ellmos-ai/ellmos-voice-io"
+"Parent Organization" = "https://github.com/ellmos-ai"
+"Umbrella Ecosystem" = "https://github.com/open-bricks"
+Changelog = "https://github.com/ellmos-ai/ellmos-voice-io/blob/main/CHANGELOG.md"
 
 [project.scripts]
 ellmos-voice-io = "ellmos_voice_io.cli:main"
@@ -61,7 +64,7 @@ where = ["src"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-pythonpath = ["src"]
+pythonpath = ["src", "."]
 
 [tool.ruff]
 line-length = 120

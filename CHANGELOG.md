@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.2.0] - 2026-08-25
+
+- Repository Hygiene, CI Hardening, PEP 621 Metadata & Contract Parity (Pfad A):
+  - Hardened GitHub Actions CI workflow (`.github/workflows/ci.yml`) with automated concurrency control (`cancel-in-progress: true`).
+  - Extended `pyproject.toml` with PEP 621 ecosystem URLs (`Parent Organization`, `Umbrella Ecosystem`, `Changelog`) and normalized pytest pythonpath to include repository root for isolated test discovery.
+  - Hardened bilingual security policy (`SECURITY.md`) with explicit 48h response SLA and official security contacts (`security@ellmos.ai`, `support@lukasgeiger.com`, `lukas@open-bricks.org`).
+  - Expanded `.gitignore` with sync conflict patterns (`*.sync-conflict-*`, `*.conflict`, `*-CONFLIT-*`) and development caches (`.ruff_cache/`, `.mypy_cache/`, `*.tmp`).
+  - Expanded automated contract test suite in `tests/test_metadata.py` to 40 passed tests with verifications for CI concurrency, PEP 621 URLs, security SLA/contacts, and gitignore hygiene patterns.
+  - Synchronized Shields.io test badges in `README.md` / `README_de.md` and machine-readable `llms.txt` context to 40 passed tests and 2026-08-25 timestamp.
+
 ## [0.2.0] - 2026-08-21
 
 - Enforced the no-implicit-network contract for Whisper: named models require
