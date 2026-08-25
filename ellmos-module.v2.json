@@ -1,0 +1,22 @@
+{
+  "schema": "ellmos.module.v2",
+  "id": "ellmos-voice-io",
+  "display_name": "ellmos-voice-io",
+  "kind": "runtime",
+  "category": "runtime",
+  "version": "0.2.0",
+  "status": "development",
+  "visibility": "private",
+  "package": null,
+  "description": "LLM-neutral local speech input, speech output, and wake-word primitives.",
+  "provides": ["voice.stt.file", "voice.tts.file", "voice.tts.speak", "voice.wakeword.local"],
+  "requires": [],
+  "optional": ["engine.whisper", "engine.vosk", "engine.pyttsx3", "engine.piper", "engine.openwakeword"],
+  "conflicts": [],
+  "surfaces": ["library", "cli", "skill"],
+  "entrypoints": {"cli": "ellmos-voice-io status", "library": "ellmos_voice_io.VoiceIO", "skill": "SKILL.md"},
+  "state": {"ownership": "none", "location": "none"},
+  "boundaries": {"data": "application-defined", "network": "optional", "platforms": ["windows", "macos", "linux"]},
+  "source_of_truth": {"type": "git-repository", "path": ".", "repository": "https://github.com/ellmos-ai/ellmos-voice-io.git"},
+  "adapters": []
+}

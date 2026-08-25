@@ -1,0 +1,58 @@
+# ellmos-ai / ellmos-voice-io
+
+> Local-first speech input, speech output, and wake-word helpers for LLM systems.
+
+Last-checked: 2026-08-25
+Test-suite: 40/40 passed (pytest, Python 3.12)
+Version: 0.2.0
+Release-state: private repository; not published to PyPI
+
+## Summary
+
+`ellmos-voice-io` is a lightweight, LLM-neutral Python runtime providing
+explicit local-first primitives for file Speech-to-Text (STT), Text-to-Speech
+(TTS), and caller-owned wake-word detection. The base package has no runtime
+dependencies, background service, storage, telemetry, or implicit network use.
+
+## Security and privacy contract
+
+- Optional engines are imported lazily and only after an explicit operation.
+- Vosk and Piper require caller-provided local model paths.
+- Whisper requires a caller-provided local model file or the explicit
+  `allow_model_download=True` network opt-in.
+- Wake-word microphone access occurs only inside the synchronous
+  `WakeWordListener.listen()` call and is cleaned up on stop or exception.
+- `ellmos-voice-io status` is read-only and never opens audio hardware,
+  downloads models, or writes state.
+- Audio files, transcripts, model licenses, consent, retention, and transport
+  remain caller responsibilities.
+
+## Capability matrix
+
+| Primitive | Optional engine | Boundary |
+|---|---|---|
+| File STT | Vosk | Explicit local model directory |
+| File STT | OpenAI Whisper | Explicit local model file or download opt-in |
+| TTS playback/file | pyttsx3 | Installed system voices |
+| TTS file | Piper | Explicit local ONNX model |
+| Wake word | openWakeWord + PyAudio + NumPy | Explicit synchronous microphone call |
+
+## Primary files
+
+- `README.md` — English overview, install, API, privacy, and ecosystem.
+- `README_de.md` — German overview with the same technical contract.
+- `SECURITY.md` — bilingual vulnerability and privacy boundaries.
+- `ROADMAP.md` — verified gates and remaining external decisions.
+- `RELEASE_GATE.md` — private/public/PyPI release boundary and evidence.
+- `THIRD_PARTY_LICENSES.md` — direct optional dependency and model-license notes.
+- `docs/ai-act-note.md` — technical deployment and transparency boundary.
+- `SKILL.md` — agent-facing usage and safety rules.
+- `ellmos-module.v2.json` — machine-readable capability manifest.
+- `src/ellmos_voice_io/` — runtime implementation.
+- `tests/` — deterministic tests without hardware, models, or network.
+
+## Release boundary
+
+This file does not authorize repository visibility changes, tags, releases,
+registry uploads, credentials, microphone access, or model downloads. Those
+actions remain separate, explicit gates.

@@ -1,0 +1,5 @@
+include CHANGELOG.md
+include LICENSE
+include SECURITY.md
+include THIRD_PARTY_LICENSES.md
+include tools/normalize_sdist.py

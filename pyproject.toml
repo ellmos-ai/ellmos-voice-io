@@ -1,0 +1,75 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ellmos-voice-io"
+version = "0.2.0"
+description = "Local-first speech input, speech output, and wake-word helpers for LLM systems."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+license-files = ["LICENSE", "THIRD_PARTY_LICENSES.md"]
+authors = [{ name = "ELLMOS AI" }]
+keywords = ["speech-to-text", "text-to-speech", "wake-word", "local-first", "audio"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Multimedia :: Sound/Audio :: Speech",
+]
+dependencies = []
+
+[project.optional-dependencies]
+stt-whisper = ["openai-whisper>=20240930"]
+stt-vosk = ["vosk>=0.3.45"]
+tts-pyttsx3 = ["pyttsx3>=2.98"]
+tts-piper = ["piper-tts>=1.2"]
+wakeword = ["openwakeword>=0.6", "pyaudio>=0.2.14", "numpy>=1.24"]
+all = [
+  "openai-whisper>=20240930",
+  "vosk>=0.3.45",
+  "pyttsx3>=2.98",
+  "piper-tts>=1.2",
+  "openwakeword>=0.6",
+  "pyaudio>=0.2.14",
+  "numpy>=1.24",
+]
+dev = [
+  "build>=1.2",
+  "pytest>=8",
+  "ruff>=0.8",
+  "tomli>=2; python_version < '3.11'",
+  "twine>=5",
+]
+
+[project.urls]
+Homepage = "https://github.com/ellmos-ai/ellmos-voice-io"
+Documentation = "https://github.com/ellmos-ai/ellmos-voice-io#readme"
+Issues = "https://github.com/ellmos-ai/ellmos-voice-io/issues"
+Security = "https://github.com/ellmos-ai/ellmos-voice-io/security/advisories/new"
+Source = "https://github.com/ellmos-ai/ellmos-voice-io"
+"Parent Organization" = "https://github.com/ellmos-ai"
+"Umbrella Ecosystem" = "https://github.com/open-bricks"
+Changelog = "https://github.com/ellmos-ai/ellmos-voice-io/blob/main/CHANGELOG.md"
+
+[project.scripts]
+ellmos-voice-io = "ellmos_voice_io.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src", "."]
+
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W"]
+ignore = ["E501", "E402"]
