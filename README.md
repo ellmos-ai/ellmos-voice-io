@@ -6,25 +6,63 @@
 
 [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![Version](https://img.shields.io/badge/Version-0.2.0-blue.svg)](CHANGELOG.md)
+[![CI Status](https://img.shields.io/badge/CI-Multi--OS%20Actions-success?logo=github-actions&logoColor=white)](.github/workflows/ci.yml)
+[![Code Style: Ruff](https://img.shields.io/badge/Code%20Style-Ruff-000000.svg?logo=ruff&logoColor=white)](https://github.com/astral-sh/ruff)
+[![Tests](https://img.shields.io/badge/Tests-46%20passed-brightgreen?logo=pytest&logoColor=white)](tests/)
+[![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey)](pyproject.toml)
+[![Privacy: Zero-Egress](https://img.shields.io/badge/Privacy-100%25%20Offline%20%7C%20Zero--Egress-success)](README.md#9-privacy-and-hardware-boundaries)
+[![Security: Local-First](https://img.shields.io/badge/Security-Local--First%20%7C%20RunAsInvoker-blue)](SECURITY.md)
+[![Security SLA](https://img.shields.io/badge/Security%20SLA-48h%20response-blue.svg)](SECURITY.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Tests](https://img.shields.io/badge/Tests-40%20passed-brightgreen?logo=pytest&logoColor=white)](tests/)
-[![Privacy: Local-First](https://img.shields.io/badge/Privacy-Local--First%20%7C%20No--Telemetry-blue)](README.md#privacy-and-boundaries)
-[![llms.txt](https://img.shields.io/badge/llms.txt-available-0055ff?logo=markdown)](llms.txt)
 [![Org](https://img.shields.io/badge/Org-ellmos--ai-8A2BE2)](https://github.com/ellmos-ai)
-[![Ecosystem](https://img.shields.io/badge/Ecosystem-open--bricks-blue)](https://github.com/open-bricks)
+[![Umbrella](https://img.shields.io/badge/Umbrella-open--bricks-indigo)](https://github.com/open-bricks)
+[![llms.txt](https://img.shields.io/badge/llms.txt-available-0055ff?logo=markdown)](llms.txt)
 
 **[English](README.md)** | **[Deutsch](README_de.md)**
 
 > [!TIP]
 > **Machine-Readable Documentation:** An [`llms.txt`](llms.txt) index is provided for AI agents, LLMs, and automated RAG pipelines.
 
-Local-first speech input, speech output, and wake-word helpers for LLM systems.
+### Quick Navigation
 
-`ellmos-voice-io` is a small, LLM-neutral runtime module. It does not run a server, store recordings, ship voice models, or choose a cloud provider. A caller explicitly selects optional local engines and owns all microphone permissions, model downloads, retention, and any networked integration.
+- [1. Executive Summary](#1-executive-summary)
+- [2. System Architecture & Component Flow](#2-system-architecture--component-flow)
+- [3. Audio Lifecycle & Event Flow](#3-audio-lifecycle--event-flow)
+- [4. Safety Model & Governance Invariants](#4-safety-model--governance-invariants)
+- [5. Scope & Supported Engines](#5-scope--supported-engines)
+- [6. Installation & Environment Setup](#6-installation--environment-setup)
+- [7. Read-Only CLI Operations](#7-read-only-cli-operations)
+- [8. Python API Integration](#8-python-api-integration)
+- [9. Privacy and Hardware Boundaries](#9-privacy-and-hardware-boundaries)
+- [10. Ecosystem & Sibling Tools](#10-ecosystem--sibling-tools)
+- [11. Development Status & Roadmap](#11-development-status--roadmap)
+- [12. Provenance & History Boundary](#12-provenance--history-boundary)
+- [13. Security & Vulnerability Reporting](#13-security--vulnerability-reporting)
+- [14. License, Attribution & German Documentation](README_de.md)
 
 ---
 
-## Architecture Overview
+## 1. Executive Summary
+
+`ellmos-voice-io` provides local-first speech input, speech output, and wake-word helpers for LLM systems, agent runtimes, and desktop applications.
+
+`ellmos-voice-io` is a lightweight, LLM-neutral runtime module. It does not run a server, store recordings, ship voice models, or choose a cloud provider. A caller explicitly selects optional local engines and owns all microphone permissions, model downloads, retention, and any networked integration.
+
+| If you want to... | Open this |
+|---|---|
+| Inspect component architecture | [2. System Architecture & Component Flow](#2-system-architecture--component-flow) |
+| Trace audio & wake-word execution | [3. Audio Lifecycle & Event Flow](#3-audio-lifecycle--event-flow) |
+| Review safety invariants & SLA | [4. Safety Model & Governance Invariants](#4-safety-model--governance-invariants) |
+| Install package & optional extras | [6. Installation & Environment Setup](#6-installation--environment-setup) |
+| Query engine availability via CLI | [7. Read-Only CLI Operations](#7-read-only-cli-operations) |
+| Integrate Python STT/TTS/Wake-Word | [8. Python API Integration](#8-python-api-integration) |
+| Explore multi-agent sibling tools | [10. Ecosystem & Sibling Tools](#10-ecosystem--sibling-tools) |
+| Read AI/LLM index file | [llms.txt](llms.txt) |
+| Read the German guide | [README_de.md](README_de.md) |
+
+---
+
+## 2. System Architecture & Component Flow
 
 ```mermaid
 graph TD
@@ -76,7 +114,74 @@ graph TD
 
 ---
 
-## Scope & Capabilities
+## 3. Audio Lifecycle & Event Flow
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Caller as Caller / LLM App / Agent
+    participant Facade as VoiceIO Facade
+    participant STT as SpeechToText Engine
+    participant TTS as TextToSpeech Engine
+    participant Wake as WakeWordListener
+    participant Audio as Local Audio / Speaker / Mic
+
+    rect rgb(240, 245, 255)
+    note right of Caller: 1. Speech-to-Text (STT) - Local File Processing
+    Caller->>Facade: transcribe_file("clip.wav", engine="vosk")
+    Facade->>STT: Route to lazy local engine
+    STT->>Audio: Read local .wav bytes (Zero Network)
+    Audio-->>STT: Audio PCM buffer
+    STT-->>Caller: Transcribed text string
+    end
+
+    rect rgb(245, 255, 240)
+    note right of Caller: 2. Text-to-Speech (TTS) - Local Synthesis
+    Caller->>Facade: speak_to_file("Alert", "out.wav", engine="piper")
+    Facade->>TTS: Synthesize via local model / system voice
+    TTS->>Audio: Write output audio file or stream to speaker
+    Audio-->>Caller: Synthesis complete (Zero Egress)
+    end
+
+    rect rgb(255, 250, 240)
+    note right of Caller: 3. Wake-Word Detection - Caller-Owned Lifecycle
+    Caller->>Wake: listen(on_wake=callback, stop_event=event)
+    loop Synchronous Chunk Read
+        Wake->>Audio: Read mic frame (Active Stream)
+        Audio-->>Wake: 16-bit PCM chunk
+        Wake->>Wake: Predict wake-word probability
+        opt Probability >= Threshold
+            Wake->>Caller: invoke on_wake() callback
+        end
+    end
+    Caller->>Wake: set stop_event
+    Wake->>Audio: Deterministically terminate & close stream
+    Wake-->>Caller: Return cleanly
+    end
+```
+
+---
+
+## 4. Safety Model & Governance Invariants
+
+The following 10 invariants govern all `ellmos-voice-io` runtime operations, CLI entrypoints, and engine bindings:
+
+| # | Invariant | Guarantee | Enforcement Mechanism |
+|---|---|---|---|
+| 1 | **100% Local-First & Zero-Egress** | STT, TTS, and wake-word operations run entirely offline without telemetry or background cloud services. | Pure local processing; no outbound network calls initiated by default runtime. |
+| 2 | **Non-Elevation (RunAsInvoker)** | Module runs strictly in unprivileged user space; never requests administrative or root elevation. | Operates in user space; uses standard platform APIs and user-level audio bindings. |
+| 3 | **Explicit Model Download Consent** | No implicit network connections or silent downloads for Whisper models. | Mandatory `allow_model_download=True` opt-in flag; offline local model file required otherwise. |
+| 4 | **Deterministic Microphone Lifecycle** | Audio capture hardware is accessed solely during active synchronous `WakeWordListener.listen()` calls. | Audio streams terminated deterministically in `finally` blocks; pre-set stop events exit immediately. |
+| 5 | **Caller-Owned Audio Retention** | System never stores recordings, transcripts, or syntheses in hidden caches or internal databases. | Audio files read from and written to caller-specified paths only; zero telemetry persistence. |
+| 6 | **Lazy Engine Isolation** | Heavy optional dependencies (Whisper, Vosk, pyttsx3, Piper, openWakeWord) load lazily on demand. | Deferred imports inside engine wrappers; unrequested engines never allocate process memory. |
+| 7 | **Read-Only Inspection CLI** | `ellmos-voice-io status` outputs structured availability JSON without opening hardware or downloading files. | Pure environment introspection with `importlib.util.find_spec` and zero hardware side effects. |
+| 8 | **Cross-Platform Operating Parity** | Consistent runtime behavior across Windows, Linux, and macOS environments. | Multi-OS GitHub Actions CI matrix with Python 3.10, 3.11, and 3.12 validation. |
+| 9 | **Cloud-Sync & Multi-Agent Defense** | Hardened against file locks and synchronization conflicts across distributed hosts. | `.gitignore` filters `LOCK.*`, `*.lock`, `*.sync-conflict-*`, `*.conflict`, and temporary files. |
+| 10 | **48h Security SLA & Coordinated Disclosure** | Rapid vulnerability response with guaranteed acknowledgment and triage SLA. | Documented in `SECURITY.md` with 48h response, 5-day triage, and multi-inbox contact chain. |
+
+---
+
+## 5. Scope & Supported Engines
 
 - **File-based STT**: Speech-to-Text through optional Whisper or Vosk.
 - **File & Speaker TTS**: Text-to-Speech to speakers or files through optional pyttsx3 or Piper.
@@ -93,7 +198,7 @@ It intentionally does not replace audio workstations such as KlangpultLight or U
 
 ---
 
-## Installation
+## 6. Installation & Environment Setup
 
 The package is not published to PyPI yet. Until an owner-approved release exists,
 install it only from a trusted local checkout:
@@ -113,7 +218,12 @@ The `all` extra also installs `piper-tts`, whose current distribution is
 GPL-3.0-or-later. Review [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md)
 and the licenses of any selected voice/model files before redistribution.
 
-Inspect engine status safely without starting hardware:
+---
+
+## 7. Read-Only CLI Operations
+
+Inspect engine status safely without starting hardware or querying external endpoints:
+
 ```bash
 ellmos-voice-io status
 ```
@@ -132,7 +242,7 @@ Output:
 
 ---
 
-## Python API Examples
+## 8. Python API Integration
 
 ### Speech-to-Text (STT)
 
@@ -188,7 +298,7 @@ listener.listen(on_wake=on_wake, stop_event=stop_event)
 
 ---
 
-## Privacy and Boundaries
+## 9. Privacy and Hardware Boundaries
 
 - **Audio, transcripts, and generated files stay where the caller puts them.**
 - **No telemetry, database, account requirement, background service, or implicit upload.**
@@ -206,23 +316,7 @@ listener.listen(on_wake=on_wake, stop_event=stop_event)
 
 ---
 
-## Development Status & Roadmap
-
-The current development gates, task plans, and next verifiable milestones are documented in [`ROADMAP.md`](ROADMAP.md).
-The repository is still private and the package is not on PyPI. A visibility,
-tag, release, or registry upload requires a separate owner decision; see
-[`RELEASE_GATE.md`](RELEASE_GATE.md).
-
----
-
-## Provenance
-
-This module preserves the generic, MIT-licensed core of an earlier internal
-voice service: file STT, TTS file export, and wake-word integration. It is
-rewritten as an independent, user-neutral package with explicit dependencies
-and no legacy database or bridge bindings.
-
-## Ecosystem & Sibling Tools
+## 10. Ecosystem & Sibling Tools
 
 Part of the [ellmos-ai](https://github.com/ellmos-ai) multi-agent infrastructure and the overarching [open-bricks](https://github.com/open-bricks) open-source software ecosystem:
 
@@ -248,11 +342,38 @@ Part of the [ellmos-ai](https://github.com/ellmos-ai) multi-agent infrastructure
 | [automizer-for-claude-desktop](https://github.com/dev-bricks/automizer-for-claude-desktop) | dev-bricks | Scheduled task automation manager for Claude Desktop |
 | [DevCenter](https://github.com/dev-bricks/DevCenter) | dev-bricks | Developer control plane, repository dashboard & environment manager |
 | [CodeBox](https://github.com/dev-bricks/CodeBox) | dev-bricks | Polyglot code snippet manager & developer workbench |
+| [WikiStub-Seed](https://github.com/dev-bricks/WikiStub-Seed) | dev-bricks | Multilingual JSON knowledge skeleton with 630 stubs across 12 domains |
+| [automation-master](https://github.com/ellmos-ai/automation-master) | ellmos-ai | Multi-host automation, scheduled task registry & health supervisor |
+| [WinStorePackager](https://github.com/file-bricks/WinStorePackager) | file-bricks | Windows Store packaging, MSIX build & release automation tool |
 | [open-bricks](https://github.com/open-bricks) | open-bricks | Umbrella catalog for open-source bricks, tools, and libraries |
 
 ---
 
-## License
+## 11. Development Status & Roadmap
+
+The current development gates, task plans, and next verifiable milestones are documented in [`ROADMAP.md`](ROADMAP.md).
+The repository is public on GitHub and the package is not on PyPI. A visibility,
+tag, release, or registry upload requires a separate owner decision; see
+[`RELEASE_GATE.md`](RELEASE_GATE.md).
+
+---
+
+## 12. Provenance & History Boundary
+
+This module preserves the generic, MIT-licensed core of an earlier internal
+voice service: file STT, TTS file export, and wake-word integration. It is
+rewritten as an independent, user-neutral package with explicit dependencies
+and no legacy database or bridge bindings.
+
+---
+
+## 13. Security & Vulnerability Reporting
+
+Security and privacy invariants are strictly maintained. For details on coordinated disclosure, supported versions, and our 48h response SLA, see [`SECURITY.md`](SECURITY.md).
+
+---
+
+## 14. License, Attribution & German Documentation
 
 The repository's code and documentation are MIT licensed; see [LICENSE](LICENSE).
 Optional engines, system tools, and voice/model files retain their own licenses;
@@ -260,3 +381,5 @@ see [THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md). Responsible-use and
 deployment boundaries are documented in [SECURITY.md](SECURITY.md) and
 [docs/ai-act-note.md](docs/ai-act-note.md). Contributions follow
 [CONTRIBUTING.md](CONTRIBUTING.md) and [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
+
+For the German edition of this documentation, please consult **[README_de.md](README_de.md)**.

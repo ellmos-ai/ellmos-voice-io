@@ -60,8 +60,8 @@ jobs:
       - name: Run deterministic tests
         run: python -m pytest -q -ra
 
-      - name: Compile package
-        run: python -m compileall -q src
+      - name: Compile package and tests
+        run: python -m compileall -q src tests
 
       - name: Build distributions
         run: python -m build

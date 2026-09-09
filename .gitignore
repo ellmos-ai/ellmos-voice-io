@@ -19,10 +19,17 @@ data/
 *.ogg
 .env
 LOCK*.txt
+LOCK.*
+*.lock
 _reports/internal-business/
 .ruff_cache/
 .mypy_cache/
 *.sync-conflict-*
+*.sync-temp-*
 *.conflict
 *-CONFLIT-*
+*-conflict-*
 *.tmp
+*.bak
+*.swp
+*~

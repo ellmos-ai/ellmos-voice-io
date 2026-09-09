@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.2.0] - 2026-09-09
+
+- Marketing, Discoverability, Visual Architecture & Parity Check (Pfad B):
+  - Added bilingual 14-point Quick Navigation to `README.md` and `README_de.md` with deep anchor links and complete section parity.
+  - Added dual Mermaid architecture diagrams: Flowchart Architecture TD and 3-Phase Audio Lifecycle Sequence diagram with deterministic hardware cleanup.
+  - Added 10 formal Governance & Runtime Invariants table covering zero-egress, non-elevation (RunAsInvoker), deterministic microphone lifecycle, lazy engine isolation, and 48h security SLA.
+  - Expanded Sibling & Ecosystem Matrix to 24 partner tools across `ellmos-ai`, `dev-bricks`, `file-bricks`, `entertain-and-more`, and `open-bricks`.
+  - Upgraded Shields.io badges to include CI Status, Ruff code style, 46 passed tests, Win/Linux/macOS platforms, Privacy Zero-Egress, Security Local-First, Security SLA 48h, and Umbrella open-bricks.
+  - Hardened `SECURITY.md` with `security@open-bricks.org` umbrella contact and explicit 5-business-day triage commitment.
+  - Hardened `.gitignore` against multi-agent lock files (`LOCK.*`, `*.lock`, `LOCK*.txt`) and sync-conflict variants.
+  - Created repository-level `MARKETING-LOG.txt` documenting discoverability metrics, keyword targeting, and contract verifications.
+  - Synchronized `llms.txt` index to 2026-09-09 timestamp, 46 passed tests, and public repository status.
+  - Expanded contract test suite in `tests/test_metadata.py` to 46 passed tests covering quick nav anchors, governance invariants, dual diagrams, marketing log presence, security SLA/triage, and gitignore hardening.
+
 ## [0.2.0] - 2026-08-25 (public release)
 
 - Repository visibility changed to public (owner decision F7=B): the GitHub

@@ -40,8 +40,8 @@
 If you discover a security vulnerability or privacy boundary leak in `ellmos-voice-io`:
 
 1. **Do not open a public issue.**
-2. Report the vulnerability privately via [GitHub Security Advisories](https://github.com/ellmos-ai/ellmos-voice-io/security/advisories/new) or by emailing `security@ellmos.ai` (cc: `support@lukasgeiger.com`, `lukas@open-bricks.org`).
-3. **Response SLA**: Initial confirmation within **48 hours** and continuous triage updates.
+2. Report the vulnerability privately via [GitHub Security Advisories](https://github.com/ellmos-ai/ellmos-voice-io/security/advisories/new) or by emailing `security@open-bricks.org` (cc: `security@ellmos.ai`, `support@lukasgeiger.com`, `lukas@open-bricks.org`).
+3. **Response SLA**: Initial confirmation within **48 hours**, an initial triage assessment within **5 business days**, and continuous status updates until resolution.
 4. Please provide a clear description of the vulnerability, reproduction steps, affected environment, and impact assessment.
 5. Do not attach recordings, transcripts, credentials, model files, or other sensitive data unless a maintainer requests a safe transfer channel.
 
@@ -84,7 +84,7 @@ If you discover a security vulnerability or privacy boundary leak in `ellmos-voi
 Sollten Sie eine Sicherheitslücke oder eine Verletzung der Datenschutzgrenzen in `ellmos-voice-io` feststellen:
 
 1. **Bitte erstellen Sie kein öffentliches Issue.**
-2. Melden Sie die Schwachstelle vertraulich über [GitHub Security Advisories](https://github.com/ellmos-ai/ellmos-voice-io/security/advisories/new) oder per E-Mail an `security@ellmos.ai` (Kopie an: `support@lukasgeiger.com`, `lukas@open-bricks.org`).
-3. **Reaktions-SLA**: Erstbestätigung innerhalb von **48 Stunden** und kontinuierliche Status-Updates.
+2. Melden Sie die Schwachstelle vertraulich über [GitHub Security Advisories](https://github.com/ellmos-ai/ellmos-voice-io/security/advisories/new) oder per E-Mail an `security@open-bricks.org` (Kopie an: `security@ellmos.ai`, `support@lukasgeiger.com`, `lukas@open-bricks.org`).
+3. **Reaktions-SLA**: Erstbestätigung innerhalb von **48 Stunden**, eine erste Triage-Bewertung innerhalb von **5 Werktagen** und kontinuierliche Status-Updates bis zur Behebung.
 4. Bitte fügen Sie eine Beschreibung, Reproduktionsschritte und eine Einschätzung der Auswirkungen bei.
 5. Fügen Sie keine Aufnahmen, Transkripte, Zugangsdaten, Modelldateien oder anderen sensiblen Daten bei, solange kein sicherer Übertragungsweg mit den Maintainern vereinbart wurde.

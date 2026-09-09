@@ -6,25 +6,63 @@
 
 [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![Version](https://img.shields.io/badge/Version-0.2.0-blue.svg)](CHANGELOG.md)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Tests](https://img.shields.io/badge/Tests-40%20bestanden-brightgreen?logo=pytest&logoColor=white)](tests/)
-[![Privacy: Local-First](https://img.shields.io/badge/Datenschutz-Local--First%20%7C%20Keine--Telemetrie-blue)](README_de.md#datenschutz-und-grenzen)
-[![llms.txt](https://img.shields.io/badge/llms.txt-verf%C3%BCgbar-0055ff?logo=markdown)](llms.txt)
+[![CI Status](https://img.shields.io/badge/CI-Multi--OS%20Actions-success?logo=github-actions&logoColor=white)](.github/workflows/ci.yml)
+[![Code Style: Ruff](https://img.shields.io/badge/Code%20Style-Ruff-000000.svg?logo=ruff&logoColor=white)](https://github.com/astral-sh/ruff)
+[![Tests](https://img.shields.io/badge/Tests-46%20bestanden-brightgreen?logo=pytest&logoColor=white)](tests/)
+[![Platform](https://img.shields.io/badge/Plattform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey)](pyproject.toml)
+[![Privacy: Zero-Egress](https://img.shields.io/badge/Datenschutz-100%25%20Offline%20%7C%20Zero--Egress-success)](README_de.md#9-datenschutz-und-hardware-grenzen)
+[![Security: Local-First](https://img.shields.io/badge/Sicherheit-Local--First%20%7C%20RunAsInvoker-blue)](SECURITY.md)
+[![Security SLA](https://img.shields.io/badge/Sicherheits--SLA-48h%20Antwort-blue.svg)](SECURITY.md)
+[![License: MIT](https://img.shields.io/badge/Lizenz-MIT-green.svg)](LICENSE)
 [![Org](https://img.shields.io/badge/Org-ellmos--ai-8A2BE2)](https://github.com/ellmos-ai)
-[![Ecosystem](https://img.shields.io/badge/Ecosystem-open--bricks-blue)](https://github.com/open-bricks)
+[![Umbrella](https://img.shields.io/badge/Umbrella-open--bricks-indigo)](https://github.com/open-bricks)
+[![llms.txt](https://img.shields.io/badge/llms.txt-verf%C3%BCgbar-0055ff?logo=markdown)](llms.txt)
 
 **[English](README.md)** | **[Deutsch](README_de.md)**
 
 > [!TIP]
 > **Maschinenlesbare Dokumentation:** Ein [`llms.txt`](llms.txt)-Index steht für KI-Agenten, LLMs und automatisierte RAG-Pipelines bereit.
 
-Lokale Speech-to-Text-, Text-to-Speech- und Wake-Word-Hilfen für LLM-Systeme.
+### Schnellnavigation
 
-`ellmos-voice-io` ist ein kleines, LLM-neutrales Laufzeitmodul. Es startet keinen Server, speichert keine Aufnahmen, liefert keine Stimmmodelle aus und wählt keinen Cloud-Provider. Aufrufer wählen optionale lokale Engines ausdrücklich und verantworten Mikrofonberechtigungen, Modelldownloads, Aufbewahrung und jede Netzwerkintegration.
+- [1. Kurzfassung](#1-kurzfassung)
+- [2. Systemarchitektur & Komponentenfluss](#2-systemarchitektur--komponentenfluss)
+- [3. Audio-Lebenszyklus & Ereignisfluss](#3-audio-lebenszyklus--ereignisfluss)
+- [4. Sicherheitsmodell & Governance-Invarianten](#4-sicherheitsmodell--governance-invarianten)
+- [5. Umfang & Unterstützte Engines](#5-umfang--unterstützte-engines)
+- [6. Installation & Umgebungseinrichtung](#6-installation--umgebungseinrichtung)
+- [7. Rein lesende CLI-Bedienung](#7-rein-lesende-cli-bedienung)
+- [8. Python-API-Integration](#8-python-api-integration)
+- [9. Datenschutz und Hardware-Grenzen](#9-datenschutz-und-hardware-grenzen)
+- [10. Ökosystem & Geschwister-Werkzeuge](#10-ökosystem--geschwister-werkzeuge)
+- [11. Entwicklungsstatus & Roadmap](#11-entwicklungsstatus--roadmap)
+- [12. Provenienz & Historien-Grenze](#12-provenienz--historien-grenze)
+- [13. Sicherheitsrichtlinie & Meldewege](#13-sicherheitsrichtlinie--meldewege)
+- [14. Lizenz, Urheberrecht & Englische Dokumentation](README.md)
 
 ---
 
-## Architektur-Übersicht
+## 1. Kurzfassung
+
+`ellmos-voice-io` stellt lokale Speech-to-Text-, Text-to-Speech- und Wake-Word-Hilfen für LLM-Systeme, Agenten-Laufzeiten und Desktop-Anwendungen bereit.
+
+`ellmos-voice-io` ist ein kleines, LLM-neutrales Laufzeitmodul. Es startet keinen Server, speichert keine Aufnahmen, liefert keine Stimmmodelle aus und wählt keinen Cloud-Provider. Aufrufer wählen optionale lokale Engines ausdrücklich und verantworten Mikrofonberechtigungen, Modelldownloads, Aufbewahrung und jede Netzwerkintegration.
+
+| Wenn Sie folgendes tun möchten... | Öffnen Sie... |
+|---|---|
+| Komponentenarchitektur einsehen | [2. Systemarchitektur & Komponentenfluss](#2-systemarchitektur--komponentenfluss) |
+| Audio- und Wake-Word-Ausführung verfolgen | [3. Audio-Lebenszyklus & Ereignisfluss](#3-audio-lebenszyklus--ereignisfluss) |
+| Sicherheitsinvarianten & SLA prüfen | [4. Sicherheitsmodell & Governance-Invarianten](#4-sicherheitsmodell--governance-invarianten) |
+| Paket & optionale Extras installieren | [6. Installation & Umgebungseinrichtung](#6-installation--umgebungseinrichtung) |
+| Engine-Verfügbarkeit per CLI abfragen | [7. Rein lesende CLI-Bedienung](#7-rein-lesende-cli-bedienung) |
+| Python STT/TTS/Wake-Word anbinden | [8. Python-API-Integration](#8-python-api-integration) |
+| Multi-Agenten-Geschwister erkunden | [10. Ökosystem & Geschwister-Werkzeuge](#10-ökosystem--geschwister-werkzeuge) |
+| KI-/LLM-Indexdatei lesen | [llms.txt](llms.txt) |
+| Den englischen Leitfaden lesen | [README.md](README.md) |
+
+---
+
+## 2. Systemarchitektur & Komponentenfluss
 
 ```mermaid
 graph TD
@@ -76,7 +114,74 @@ graph TD
 
 ---
 
-## Umfang & Fähigkeiten
+## 3. Audio-Lebenszyklus & Ereignisfluss
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Caller as Caller / LLM App / Agent
+    participant Facade as VoiceIO Facade
+    participant STT as SpeechToText Engine
+    participant TTS as TextToSpeech Engine
+    participant Wake as WakeWordListener
+    participant Audio as Local Audio / Speaker / Mic
+
+    rect rgb(240, 245, 255)
+    note right of Caller: 1. Speech-to-Text (STT) - Local File Processing
+    Caller->>Facade: transcribe_file("clip.wav", engine="vosk")
+    Facade->>STT: Route to lazy local engine
+    STT->>Audio: Read local .wav bytes (Zero Network)
+    Audio-->>STT: Audio PCM buffer
+    STT-->>Caller: Transcribed text string
+    end
+
+    rect rgb(245, 255, 240)
+    note right of Caller: 2. Text-to-Speech (TTS) - Local Synthesis
+    Caller->>Facade: speak_to_file("Alert", "out.wav", engine="piper")
+    Facade->>TTS: Synthesize via local model / system voice
+    TTS->>Audio: Write output audio file or stream to speaker
+    Audio-->>Caller: Synthesis complete (Zero Egress)
+    end
+
+    rect rgb(255, 250, 240)
+    note right of Caller: 3. Wake-Word Detection - Caller-Owned Lifecycle
+    Caller->>Wake: listen(on_wake=callback, stop_event=event)
+    loop Synchronous Chunk Read
+        Wake->>Audio: Read mic frame (Active Stream)
+        Audio-->>Wake: 16-bit PCM chunk
+        Wake->>Wake: Predict wake-word probability
+        opt Probability >= Threshold
+            Wake->>Caller: invoke on_wake() callback
+        end
+    end
+    Caller->>Wake: set stop_event
+    Wake->>Audio: Deterministically terminate & close stream
+    Wake-->>Caller: Return cleanly
+    end
+```
+
+---
+
+## 4. Sicherheitsmodell & Governance-Invarianten
+
+Die folgenden 10 Invarianten regeln alle Laufzeitoperationen, CLI-Einstiegspunkte und Engine-Bindungen von `ellmos-voice-io`:
+
+| # | Invariante | Garantie | Durchsetzungs-Mechanismus |
+|---|---|---|---|
+| 1 | **100% Local-First & Zero-Egress** | STT-, TTS- und Wake-Word-Operationen laufen vollständig offline ohne Telemetrie oder Cloud-Dienste. | Reine lokale Verarbeitung; keine ausgehenden Netzwerkverbindungen im Standardbetrieb. |
+| 2 | **Non-Elevation (RunAsInvoker)** | Modul arbeitet strikt im unprivilegierten Benutzermodus ohne Administrator- oder Root-Rechte. | Läuft im Benutzermodus; nutzt reguläre Betriebssystem-APIs und Audiogeräte-Treiber. |
+| 3 | **Explizite Modelldownload-Zustimmung** | Keine impliziten Netzwerkzugriffe oder unbemerkte Downloads für Whisper-Modelle. | Verpflichtender `allow_model_download=True`-Parameter; andernfalls zwingend lokale Modelldatei. |
+| 4 | **Deterministischer Mikrofon-Lebenszyklus** | Mikrofonhardware wird ausschließlich während aktiver synchroner `listen()`-Aufrufe belegt. | Deterministisches Schließen der Streams in `finally`-Blöcken; gesetztes Stop-Event beendet sofort. |
+| 5 | **Aufrufer-eigene Audiospeicherung** | Keine persistenten Aufnahmen, Transkripte oder Synthesen in versteckten Caches oder Datenbanken. | Dateien werden ausschließlich an vom Aufrufer vorgegebenen Pfaden gelesen und geschrieben. |
+| 6 | **Lazy Engine-Isolation** | Schwere optionale Abhängigkeiten (Whisper, Vosk, pyttsx3, Piper, openWakeWord) laden nur bei Bedarf. | Verzögerte Imports in Engine-Klassen; ungenutzte Bibliotheken belegen keinen Arbeitsspeicher. |
+| 7 | **Rein lesende CLI-Inspektion** | `ellmos-voice-io status` liefert strukturiertes JSON ohne Hardware-Aktivierung oder Downloads. | Reine Modul-Introspektion über `importlib.util.find_spec` ohne Nebeneffekte auf Audiogeräte. |
+| 8 | **Plattformübergreifende Betriebsparität** | Einheitliches Verhalten unter Windows, Linux und macOS. | Multi-OS GitHub Actions CI-Matrix für Python 3.10, 3.11 und 3.12. |
+| 9 | **Cloud-Sync- & Multi-Agenten-Schutz** | Schutz vor Synchronisationskonflikten und konkurrierenden Datei-Locks über mehrere Hosts. | `.gitignore` filtert `LOCK.*`, `*.lock`, `*.sync-conflict-*`, `*.conflict` und temporäre Dateien. |
+| 10 | **48h Sicherheits-SLA & Koordinierte Meldung** | Verbindliche Reaktionszeiten bei Sicherheits- und Datenschutzmeldungen. | In `SECURITY.md` verankertes 48h-Bestätigungs-SLA, 5-Werktage-Triage und Multi-Inbox-Meldeweg. |
+
+---
+
+## 5. Umfang & Unterstützte Engines
 
 - **Dateibasiertes STT**: Speech-to-Text über optionales Whisper oder Vosk.
 - **Lautsprecher- & Datei-TTS**: Text-to-Speech auf Lautsprecher oder in Dateien über optionales pyttsx3 oder Piper.
@@ -93,7 +198,7 @@ Das Modul ersetzt bewusst keine Audio-Workstations wie KlangpultLight oder USBPo
 
 ---
 
-## Installation
+## 6. Installation & Umgebungseinrichtung
 
 Das Paket ist noch nicht auf PyPI veröffentlicht. Bis zu einer vom Eigentümer
 freigegebenen Veröffentlichung erfolgt die Installation ausschließlich aus
@@ -115,7 +220,12 @@ unter GPL-3.0-or-later steht. Prüfe vor einer Weitergabe
 [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md) und die Lizenzen der
 ausgewählten Stimmen und Modelldateien.
 
-Engine-Verfügbarkeit sicher prüfen ohne Hardware-Initialisierung:
+---
+
+## 7. Rein lesende CLI-Bedienung
+
+Engine-Verfügbarkeit sicher prüfen ohne Hardware-Initialisierung oder externe Netzanfragen:
+
 ```bash
 ellmos-voice-io status
 ```
@@ -134,7 +244,7 @@ Ausgabe:
 
 ---
 
-## Python API Beispiele
+## 8. Python-API-Integration
 
 ### Speech-to-Text (STT)
 
@@ -190,7 +300,7 @@ listener.listen(on_wake=on_wake, stop_event=stop_event)
 
 ---
 
-## Datenschutz und Grenzen
+## 9. Datenschutz und Hardware-Grenzen
 
 - **Audio, Transkripte und Ausgabedateien bleiben am vom Aufrufer bestimmten Ort.**
 - **Kein Datenbankzugriff, keine Telemetrie, kein Konto, kein Hintergrunddienst, kein impliziter Upload.**
@@ -209,23 +319,7 @@ listener.listen(on_wake=on_wake, stop_event=stop_event)
 
 ---
 
-## Entwicklungsstatus & Roadmap
-
-Die aktuellen Gatter und die nächsten prüfbaren Schritte stehen in [`ROADMAP.md`](ROADMAP.md).
-Das Repository ist weiterhin privat und das Paket nicht auf PyPI veröffentlicht.
-Sichtbarkeit, Tag, Release oder Registry-Upload benötigen eine gesonderte
-Eigentümerentscheidung; siehe [`RELEASE_GATE.md`](RELEASE_GATE.md).
-
----
-
-## Herkunft
-
-Das Modul erhält den generischen, MIT-lizenzierten Kern eines früheren internen
-Sprachdienstes: Datei-STT, TTS-Dateiexport und Wake-Word-Anbindung. Es wurde als
-unabhängiges, nutzungsneutrales Paket neu aufgebaut – ohne Bindungen an frühere
-Datenbanken oder Bridges.
-
-## Ökosystem & Geschwister-Werkzeuge
+## 10. Ökosystem & Geschwister-Werkzeuge
 
 Teil der [ellmos-ai](https://github.com/ellmos-ai) Multi-Agenten-Infrastruktur und des übergeordneten [open-bricks](https://github.com/open-bricks) Open-Source-Software-Ökosystems:
 
@@ -251,11 +345,38 @@ Teil der [ellmos-ai](https://github.com/ellmos-ai) Multi-Agenten-Infrastruktur u
 | [automizer-for-claude-desktop](https://github.com/dev-bricks/automizer-for-claude-desktop) | dev-bricks | Aufgaben-Automationsmanager für Claude Desktop |
 | [DevCenter](https://github.com/dev-bricks/DevCenter) | dev-bricks | Entwickler-Leitstand, Repository-Dashboard & Umgebungsmanager |
 | [CodeBox](https://github.com/dev-bricks/CodeBox) | dev-bricks | Polyglotter Code-Snippet-Manager & Entwickler-Werkbank |
+| [WikiStub-Seed](https://github.com/dev-bricks/WikiStub-Seed) | dev-bricks | Mehrsprachiges JSON-Wissensskelett mit 630 Stubs über 12 Domänen |
+| [automation-master](https://github.com/ellmos-ai/automation-master) | ellmos-ai | Multi-Host-Automations- & Scheduled-Task-Register |
+| [WinStorePackager](https://github.com/file-bricks/WinStorePackager) | file-bricks | Windows Store Packaging-, MSIX-Erstellungs- & Release-Tool |
 | [open-bricks](https://github.com/open-bricks) | open-bricks | Dachkatalog für Open-Source-Bausteine, Werkzeuge und Bibliotheken |
 
 ---
 
-## Lizenz
+## 11. Entwicklungsstatus & Roadmap
+
+Die aktuellen Gatter und die nächsten prüfbaren Schritte stehen in [`ROADMAP.md`](ROADMAP.md).
+Das Repository ist öffentlich auf GitHub und das Paket nicht auf PyPI veröffentlicht.
+Sichtbarkeit, Tag, Release oder Registry-Upload benötigen eine gesonderte
+Eigentümerentscheidung; siehe [`RELEASE_GATE.md`](RELEASE_GATE.md).
+
+---
+
+## 12. Provenienz & Historien-Grenze
+
+Das Modul erhält den generischen, MIT-lizenzierten Kern eines früheren internen
+Sprachdienstes: Datei-STT, TTS-Dateiexport und Wake-Word-Anbindung. Es wurde als
+unabhängiges, nutzungsneutrales Paket neu aufgebaut – ohne Bindungen an frühere
+Datenbanken oder Bridges.
+
+---
+
+## 13. Sicherheitsrichtlinie & Meldewege
+
+Sicherheits- und Datenschutz-Invarianten werden strikt eingehalten. Details zu koordinierter Offenlegung, unterstützten Versionen und unserem 48-Stunden-Reaktions-SLA finden sich in [`SECURITY.md`](SECURITY.md).
+
+---
+
+## 14. Lizenz, Urheberrecht & Englische Dokumentation
 
 Code und Dokumentation dieses Repositories stehen unter der MIT-Lizenz; siehe
 [LICENSE](LICENSE). Optionale Engines, Systemwerkzeuge sowie Stimmen und
@@ -264,3 +385,5 @@ Modelldateien behalten ihre eigenen Lizenzen; siehe
 Einsatzgrenzen stehen in [SECURITY.md](SECURITY.md) und
 [docs/ai-act-note.md](docs/ai-act-note.md). Für Beiträge gelten
 [CONTRIBUTING.md](CONTRIBUTING.md) und [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
+
+Die englische Ausgabe dieser Dokumentation finden Sie unter **[README.md](README.md)**.

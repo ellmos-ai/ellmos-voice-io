@@ -134,11 +134,12 @@ def test_llms_txt_integrity():
     assert llms_file.is_file()
 
     content = llms_file.read_text(encoding="utf-8")
-    assert "Last-checked: 2026-08-25" in content
-    assert re.search(r"Test-suite:\s*\d+/\d+\s*passed", content) is not None
+    assert "Last-checked: 2026-09-09" in content
+    assert re.search(r"Test-suite:\s*46/46\s*passed", content) is not None
     assert "SECURITY.md" in content
     assert "README.md" in content
     assert "README_de.md" in content
+    assert "MARKETING-LOG.txt" in content
 
 
 def test_documentation_hygiene():
@@ -153,6 +154,7 @@ def test_documentation_hygiene():
         root / "RELEASE_GATE.md",
         root / "THIRD_PARTY_LICENSES.md",
         root / "docs" / "ai-act-note.md",
+        root / "MARKETING-LOG.txt",
     ]
 
     for doc in doc_files:
@@ -192,6 +194,8 @@ def test_security_sla_and_contacts():
     assert "security@ellmos.ai" in security_file
     assert "support@lukasgeiger.com" in security_file
     assert "lukas@open-bricks.org" in security_file
+    assert "security@open-bricks.org" in security_file
+    assert "5 business days" in security_file or "5 Werktagen" in security_file
 
 
 def test_gitignore_hygiene_patterns():
@@ -200,3 +204,84 @@ def test_gitignore_hygiene_patterns():
     assert "*.sync-conflict-*" in gitignore_text
     assert ".ruff_cache/" in gitignore_text
     assert "*.tmp" in gitignore_text
+    assert "LOCK.*" in gitignore_text
+    assert "*.lock" in gitignore_text
+    assert "*.bak" in gitignore_text
+
+
+def test_quick_navigation_anchors_and_parity():
+    root = Path(__file__).resolve().parent.parent
+    readme_en = (root / "README.md").read_text(encoding="utf-8")
+    readme_de = (root / "README_de.md").read_text(encoding="utf-8")
+
+    assert "### Quick Navigation" in readme_en
+    assert "### Schnellnavigation" in readme_de
+
+    for i in range(1, 14):
+        assert f"[{i}. " in readme_en, f"Missing Quick Nav item {i} in README.md"
+        assert f"[{i}. " in readme_de, f"Missing Quick Nav item {i} in README_de.md"
+
+    assert "[14. License, Attribution & German Documentation](README_de.md)" in readme_en
+    assert "[14. Lizenz, Urheberrecht & Englische Dokumentation](README.md)" in readme_de
+
+
+def test_governance_invariants_table():
+    root = Path(__file__).resolve().parent.parent
+    readme_en = (root / "README.md").read_text(encoding="utf-8")
+    readme_de = (root / "README_de.md").read_text(encoding="utf-8")
+
+    assert "## 4. Safety Model & Governance Invariants" in readme_en
+    assert "## 4. Sicherheitsmodell & Governance-Invarianten" in readme_de
+
+    for num in range(1, 11):
+        assert f"| {num} |" in readme_en, f"Missing invariant #{num} in README.md"
+        assert f"| {num} |" in readme_de, f"Missing invariant #{num} in README_de.md"
+
+    assert "Zero-Egress" in readme_en and "Zero-Egress" in readme_de
+    assert "RunAsInvoker" in readme_en and "RunAsInvoker" in readme_de
+
+
+def test_dual_mermaid_diagrams():
+    root = Path(__file__).resolve().parent.parent
+    readme_en = (root / "README.md").read_text(encoding="utf-8")
+    readme_de = (root / "README_de.md").read_text(encoding="utf-8")
+
+    for doc in (readme_en, readme_de):
+        assert "```mermaid\ngraph TD" in doc
+        assert "```mermaid\nsequenceDiagram" in doc
+        assert "autonumber" in doc
+
+
+def test_local_marketing_log_present():
+    root = Path(__file__).resolve().parent.parent
+    log_file = root / "MARKETING-LOG.txt"
+    assert log_file.is_file(), "Missing MARKETING-LOG.txt"
+    text = log_file.read_text(encoding="utf-8")
+    assert len(text) > 200
+    assert "MARKETING & DISCOVERABILITY LOG: ellmos-voice-io" in text
+    assert "Pfad B" in text
+
+
+def test_extended_sibling_matrix_coverage():
+    root = Path(__file__).resolve().parent.parent
+    readme_en = (root / "README.md").read_text(encoding="utf-8")
+    readme_de = (root / "README_de.md").read_text(encoding="utf-8")
+
+    additional_siblings = [
+        "ellmos-clatcher-mcp",
+        "n8n-manager-mcp",
+        "skills",
+        "automizer-for-claude-desktop",
+        "WikiStub-Seed",
+        "automation-master",
+        "WinStorePackager",
+    ]
+    for tool in additional_siblings:
+        assert tool in readme_en, f"Missing extended sibling {tool} in README.md"
+        assert tool in readme_de, f"Missing extended sibling {tool} in README_de.md"
+
+
+def test_ci_workflow_bytecode_compilation_gate():
+    root = Path(__file__).resolve().parent.parent
+    ci_workflow = (root / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
+    assert "python -m compileall -q src tests" in ci_workflow

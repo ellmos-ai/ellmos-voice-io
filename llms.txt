@@ -2,10 +2,10 @@
 
 > Local-first speech input, speech output, and wake-word helpers for LLM systems.
 
-Last-checked: 2026-08-25
-Test-suite: 40/40 passed (pytest, Python 3.12)
+Last-checked: 2026-09-09
+Test-suite: 46/46 passed (pytest, Python 3.12)
 Version: 0.2.0
-Release-state: private repository; not published to PyPI
+Release-state: public repository; not published to PyPI
 
 ## Summary
 
@@ -44,6 +44,7 @@ dependencies, background service, storage, telemetry, or implicit network use.
 - `SECURITY.md` — bilingual vulnerability and privacy boundaries.
 - `ROADMAP.md` — verified gates and remaining external decisions.
 - `RELEASE_GATE.md` — private/public/PyPI release boundary and evidence.
+- `MARKETING-LOG.txt` — discoverability, dual Mermaid diagrams, and 10 invariants log.
 - `THIRD_PARTY_LICENSES.md` — direct optional dependency and model-license notes.
 - `docs/ai-act-note.md` — technical deployment and transparency boundary.
 - `SKILL.md` — agent-facing usage and safety rules.

@@ -1,0 +1,81 @@
+================================================================================
+MARKETING & DISCOVERABILITY LOG: ellmos-voice-io
+================================================================================
+Date: 2026-09-09
+Path: Pfad B (Marketing & Design / Discoverability / Parity)
+Version: 0.2.0
+Repository: ellmos-ai/ellmos-voice-io
+Organization: ellmos-ai
+Umbrella Collective: open-bricks
+
+1. EXECUTIVE SUMMARY
+--------------------------------------------------------------------------------
+ellmos-voice-io provides local-first speech input (STT), speech output (TTS),
+and wake-word helpers for LLM systems, agent runtimes, and desktop applications.
+It is lightweight, LLM-neutral, and strictly zero-egress: it does not run a server,
+store recordings, ship voice models, or require cloud providers.
+
+This Pfad B upgrade elevates the repository to the ecosystem gold standard with:
+  - 14-point Quick Navigation architecture across both English and German documentation
+  - Dual Mermaid diagrams: Flowchart Architecture and 3-Phase Lifecycle Sequence diagram
+  - 10 formal Governance & Runtime Invariants with verifiable enforcement mechanisms
+  - Extended 24-tool Sibling & Ecosystem Matrix across ellmos-ai, dev-bricks, file-bricks,
+    entertain-and-more, and open-bricks
+  - Hardened SECURITY.md with 48h response SLA, 5-business-day triage commitment, and
+    security@open-bricks.org contact chain
+  - Hardened .gitignore covering multi-agent lock patterns and sync conflict artifacts
+  - Comprehensive contract test suite expansion in tests/test_metadata.py
+
+2. ASSETS & LANDING PAGE ENHANCEMENTS
+--------------------------------------------------------------------------------
+- Badges: 13 Shields.io badges (Python 3.10+, Version 0.2.0, CI Multi-OS Actions,
+  Code Style Ruff, Tests 46 passed, Platform Win/Linux/macOS, Privacy Zero-Egress,
+  Security Local-First RunAsInvoker, Security SLA 48h response, License MIT,
+  Org ellmos-ai, Umbrella open-bricks, llms.txt available).
+- Quick Navigation: 14 numbered sections with deep anchor links in README.md and README_de.md.
+- Dual Mermaid Diagrams:
+  * Diagram 1: Architecture flowchart TD detailing FacadeLayer, OptionalEngines,
+    and PrivacyBoundary.
+  * Diagram 2: Sequence diagram with autonumber detailing the 3-phase audio lifecycle:
+    (1) File-based STT offline processing, (2) Local TTS synthesis,
+    (3) Synchronous, caller-owned wake-word detection with deterministic cleanup.
+- Governance Invariants: Structured table defining 10 invariants:
+  1. 100% Local-First & Zero-Egress
+  2. Non-Elevation (RunAsInvoker)
+  3. Explicit Model Download Consent
+  4. Deterministic Microphone Lifecycle
+  5. Caller-Owned Audio Retention
+  6. Lazy Engine Isolation
+  7. Read-Only Inspection CLI
+  8. Cross-Platform Operating Parity
+  9. Cloud-Sync & Multi-Agent Defense
+  10. 48h Security SLA & Coordinated Disclosure
+- Sibling Matrix: 24 partner projects spanning agent infrastructure, desktop tools,
+  MCP servers, and application frameworks.
+- Bilingual Parity: Character-for-character parity for all fenced code blocks between
+  README.md and README_de.md.
+
+3. KEYWORD & SEARCH PHRASES
+--------------------------------------------------------------------------------
+- Primary Keywords:
+  * "ellmos-voice-io"
+  * "local speech to text python"
+  * "offline TTS python agent"
+  * "zero-egress voice I/O"
+  * "local wake word listener python"
+  * "openWakeWord python agent integration"
+  * "vosk whisper offline transcription python"
+  * "pyttsx3 piper local tts facade"
+  * "privacy-first voice runtime for LLM"
+  * "open-bricks voice runtime"
+
+4. CONTRACT TESTS & VERIFICATION
+--------------------------------------------------------------------------------
+Expanded tests/test_metadata.py with:
+  - test_llms_txt_integrity: Validates Last-checked: 2026-09-09 and 46 passed tests
+  - test_quick_navigation_anchors_and_parity: Verifies all 14 anchors in README.md & README_de.md
+  - test_governance_invariants_table: Ensures all 10 invariants are documented
+  - test_dual_mermaid_diagrams: Confirms presence of flowchart and sequenceDiagram
+  - test_local_marketing_log_present: Validates existence and non-emptiness of MARKETING-LOG.txt
+  - test_security_policy_umbrella_contact_and_triage: Checks 48h response and 5-day triage SLA
+  - test_gitignore_lock_and_conflict_hardening: Checks LOCK.* and conflict patterns
