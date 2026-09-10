@@ -18,6 +18,8 @@ data/
 *.mp3
 *.ogg
 .env
+LOCK
+LOCK*
 LOCK*.txt
 LOCK.*
 *.lock
@@ -29,7 +31,18 @@ _reports/internal-business/
 *.conflict
 *-CONFLIT-*
 *-conflict-*
+*-WORKSTATION-LG.*
+*-WORKSTATION-LG-*
+*-ASUS-GEI.*
+*-ASUS-GEI-*
+* (kopie)*
+* (copy)*
+Thumbs.db
+desktop.ini
 *.tmp
 *.bak
 *.swp
 *~
+*.orig
+*.rej
+.cache/

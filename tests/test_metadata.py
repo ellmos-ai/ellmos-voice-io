@@ -134,8 +134,8 @@ def test_llms_txt_integrity():
     assert llms_file.is_file()
 
     content = llms_file.read_text(encoding="utf-8")
-    assert "Last-checked: 2026-09-09" in content
-    assert re.search(r"Test-suite:\s*46/46\s*passed", content) is not None
+    assert "Last-checked: 2026-09-10" in content
+    assert re.search(r"Test-suite:\s*51/51\s*passed", content) is not None
     assert "SECURITY.md" in content
     assert "README.md" in content
     assert "README_de.md" in content
@@ -285,3 +285,66 @@ def test_ci_workflow_bytecode_compilation_gate():
     root = Path(__file__).resolve().parent.parent
     ci_workflow = (root / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
     assert "python -m compileall -q src tests" in ci_workflow
+
+
+def test_pyproject_python313_and_options():
+    root = Path(__file__).resolve().parent.parent
+    with (root / "pyproject.toml").open("rb") as f:
+        data = tomllib.load(f)
+    classifiers = data["project"]["classifiers"]
+    assert "Programming Language :: Python :: 3.13" in classifiers
+    pytest_opts = data.get("tool", {}).get("pytest", {}).get("ini_options", {})
+    assert "-ra" in pytest_opts.get("addopts", "")
+    assert "-v" in pytest_opts.get("addopts", "")
+
+
+def test_ci_matrix_expanded_python_coverage():
+    root = Path(__file__).resolve().parent.parent
+    ci_workflow = (root / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
+    for os_name in ("ubuntu-latest", "windows-latest", "macos-latest"):
+        for py_ver in ("3.10", "3.11", "3.12", "3.13"):
+            pattern = rf"- os: {re.escape(os_name)}\s+python-version: \"{re.escape(py_ver)}\""
+            assert re.search(pattern, ci_workflow) is not None, f"Missing matrix job {os_name} / {py_ver}"
+
+
+def test_gitignore_multihost_and_lock_patterns():
+    root = Path(__file__).resolve().parent.parent
+    gitignore_text = (root / ".gitignore").read_text(encoding="utf-8")
+    patterns = [
+        "*-WORKSTATION-LG.*",
+        "*-WORKSTATION-LG-*",
+        "*-ASUS-GEI.*",
+        "*-ASUS-GEI-*",
+        "Thumbs.db",
+        "desktop.ini",
+        "* (kopie)*",
+        "* (copy)*",
+        "LOCK",
+        "LOCK*",
+        "*.orig",
+        "*.rej",
+        ".cache/",
+    ]
+    for pattern in patterns:
+        assert pattern in gitignore_text, f"Missing pattern {pattern} in .gitignore"
+
+
+def test_clean_bytecode_compilation():
+    import compileall
+    root = Path(__file__).resolve().parent.parent
+    assert compileall.compile_dir(str(root / "src"), force=False, quiet=1)
+    assert compileall.compile_dir(str(root / "tests"), force=False, quiet=1)
+
+
+def test_license_files_metadata_contract():
+    root = Path(__file__).resolve().parent.parent
+    with (root / "pyproject.toml").open("rb") as f:
+        data = tomllib.load(f)
+    assert data["project"]["license"] == "MIT"
+    license_files = data["project"]["license-files"]
+    assert "LICENSE" in license_files
+    assert "THIRD_PARTY_LICENSES.md" in license_files
+    for lf in license_files:
+        p = root / lf
+        assert p.is_file(), f"Missing license file {lf}"
+        assert len(p.read_text(encoding="utf-8").strip()) > 50

@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.2.0] - 2026-09-10
+
+- Repository Hygiene, CI-Matrix Modernization & Contract Test Expansion (Pfad A):
+  - Modernized GitHub Actions CI matrix (`.github/workflows/ci.yml`) to include Python 3.13 across all 3 supported operating systems (`ubuntu-latest`, `windows-latest`, `macos-latest`), expanding test matrix coverage from 9 to 12 parallel platform/Python jobs.
+  - Hardened PEP 621 metadata in `pyproject.toml` by adding the `"Programming Language :: Python :: 3.13"` classifier and configured `addopts = "-ra -v"` under `[tool.pytest.ini_options]` for deterministic test reporting.
+  - Strengthened `.gitignore` with multi-host sync and cloud synchronization conflict patterns (`*-WORKSTATION-LG.*`, `*-WORKSTATION-LG-*`, `*-ASUS-GEI.*`, `*-ASUS-GEI-*`, `* (kopie)*`, `* (copy)*`, `Thumbs.db`, `desktop.ini`), multi-agent lock invariants (`LOCK`, `LOCK*`), patch remnants (`*.orig`, `*.rej`), and `.cache/`.
+  - Added 5 new automated contract tests to `tests/test_metadata.py` and updated `tests/test_public_readiness.py`, bringing the contract test suite to 51/51 passed tests:
+    - `test_pyproject_python313_and_options`: validates Python 3.13 classifier and pytest addopts.
+    - `test_ci_matrix_expanded_python_coverage`: validates full 12-job CI matrix spanning Python 3.10-3.13 on Ubuntu, Windows, macOS.
+    - `test_gitignore_multihost_and_lock_patterns`: validates all multi-host sync and lock protection patterns.
+    - `test_clean_bytecode_compilation`: asserts 100% clean bytecode compilation across `src` and `tests`.
+    - `test_license_files_metadata_contract`: asserts `LICENSE` and `THIRD_PARTY_LICENSES.md` exist and conform to metadata definitions.
+  - Synchronized Shields.io test badges in `README.md` and `README_de.md` to 51 passed tests, and refreshed `llms.txt` verification timestamp to 2026-09-10.
+
 ## [0.2.0] - 2026-09-09
 
 - Marketing, Discoverability, Visual Architecture & Parity Check (Pfad B):

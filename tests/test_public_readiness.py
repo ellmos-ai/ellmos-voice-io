@@ -51,7 +51,12 @@ def test_ci_declares_all_supported_platforms():
     workflow = (ROOT / ".github/workflows/ci.yml").read_text(encoding="utf-8")
     for runner in ("ubuntu-latest", "windows-latest", "macos-latest"):
         assert runner in workflow
-    for version in ('python-version: "3.10"', 'python-version: "3.11"', 'python-version: "3.12"'):
+    for version in (
+        'python-version: "3.10"',
+        'python-version: "3.11"',
+        'python-version: "3.12"',
+        'python-version: "3.13"',
+    ):
         assert version in workflow
 
 
