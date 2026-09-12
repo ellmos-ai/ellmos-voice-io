@@ -4,7 +4,7 @@
   "display_name": "ellmos-voice-io",
   "kind": "runtime",
   "category": "runtime",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "status": "development",
   "visibility": "private",
   "package": null,

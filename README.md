@@ -5,10 +5,10 @@
 # ellmos-voice-io
 
 [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
-[![Version](https://img.shields.io/badge/Version-0.2.0-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/Version-0.2.1-blue.svg)](CHANGELOG.md)
 [![CI Status](https://img.shields.io/badge/CI-Multi--OS%20Actions-success?logo=github-actions&logoColor=white)](.github/workflows/ci.yml)
 [![Code Style: Ruff](https://img.shields.io/badge/Code%20Style-Ruff-000000.svg?logo=ruff&logoColor=white)](https://github.com/astral-sh/ruff)
-[![Tests](https://img.shields.io/badge/Tests-51%20passed-brightgreen?logo=pytest&logoColor=white)](tests/)
+[![Tests](https://img.shields.io/badge/Tests-56%20passed-brightgreen?logo=pytest&logoColor=white)](tests/)
 [![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey)](pyproject.toml)
 [![Privacy: Zero-Egress](https://img.shields.io/badge/Privacy-100%25%20Offline%20%7C%20Zero--Egress-success)](README.md#9-privacy-and-hardware-boundaries)
 [![Security: Local-First](https://img.shields.io/badge/Security-Local--First%20%7C%20RunAsInvoker-blue)](SECURITY.md)
@@ -34,11 +34,13 @@
 - [7. Read-Only CLI Operations](#7-read-only-cli-operations)
 - [8. Python API Integration](#8-python-api-integration)
 - [9. Privacy and Hardware Boundaries](#9-privacy-and-hardware-boundaries)
-- [10. Ecosystem & Sibling Tools](#10-ecosystem--sibling-tools)
-- [11. Development Status & Roadmap](#11-development-status--roadmap)
-- [12. Provenance & History Boundary](#12-provenance--history-boundary)
-- [13. Security & Vulnerability Reporting](#13-security--vulnerability-reporting)
-- [14. License, Attribution & German Documentation](README_de.md)
+- [10. Target Personas & Discoverability](#10-target-personas--discoverability)
+- [11. Third-Party Licenses & Dependency Audits](#11-third-party-licenses--dependency-audits)
+- [12. Ecosystem & Sibling Tools](#12-ecosystem--sibling-tools)
+- [13. Development Status & Roadmap](#13-development-status--roadmap)
+- [14. Provenance & History Boundary](#14-provenance--history-boundary)
+- [15. Security & Vulnerability Reporting](#15-security--vulnerability-reporting)
+- [16. License, Attribution & German Documentation](README_de.md)
 
 ---
 
@@ -56,7 +58,9 @@
 | Install package & optional extras | [6. Installation & Environment Setup](#6-installation--environment-setup) |
 | Query engine availability via CLI | [7. Read-Only CLI Operations](#7-read-only-cli-operations) |
 | Integrate Python STT/TTS/Wake-Word | [8. Python API Integration](#8-python-api-integration) |
-| Explore multi-agent sibling tools | [10. Ecosystem & Sibling Tools](#10-ecosystem--sibling-tools) |
+| Review target personas & use cases | [10. Target Personas & Discoverability](#10-target-personas--discoverability) |
+| Review third-party licenses & audits | [11. Third-Party Licenses & Dependency Audits](#11-third-party-licenses--dependency-audits) |
+| Explore multi-agent sibling tools | [12. Ecosystem & Sibling Tools](#12-ecosystem--sibling-tools) |
 | Read AI/LLM index file | [llms.txt](llms.txt) |
 | Read the German guide | [README_de.md](README_de.md) |
 
@@ -316,7 +320,37 @@ listener.listen(on_wake=on_wake, stop_event=stop_event)
 
 ---
 
-## 10. Ecosystem & Sibling Tools
+## 10. Target Personas & Discoverability
+
+`ellmos-voice-io` is purpose-built for four primary developer and operational personas:
+
+1. **Autonomous Local AI Agent Developers & Swarm Operators:** Add lightweight, zero-overhead speech transcription, audio synthesis, and hands-free wake-word detection to agent frameworks (Claude Code, Antigravity, Codex, Kimi, n8n) without deploying bloated background daemons or incurring recurring cloud API token fees.
+2. **Privacy-Conscious Desktop Application Engineers:** Build desktop applications with PySide6, PyQt, Tkinter, or Electron local bridges requiring offline dictation or system voice synthesis that operates 100% locally and complies with stringent privacy regulations.
+3. **Edge & Embedded AI Engineers:** Deploy local wake-word detection and speech synthesis on Raspberry Pi, mini-PCs, or air-gapped industrial kiosks with deterministic microphone lifecycle and immediate resource cleanup.
+4. **Enterprise Security & Compliance Officers:** Enforce air-gapped audio isolation, zero external network egress (`INV-LOCAL-01`), unprivileged user-mode execution (`INV-PRIV-02`), and complete transparency over third-party licenses and model acquisition.
+
+For detailed search queries, bilingual discoverability matrices, and competitive breakdowns, consult [`MARKETING-LOG.txt`](MARKETING-LOG.txt).
+
+---
+
+## 11. Third-Party Licenses & Dependency Audits
+
+The base wheel of `ellmos-voice-io` contains **zero external runtime dependencies** (`dependencies = []`), eliminating third-party supply-chain attack vectors.
+
+Optional speech and wake-word engines are decoupled into explicit extras:
+- **Core Runtime & Facade:** MIT License (100% permissive).
+- **Vosk STT (`stt-vosk`):** Apache-2.0 License.
+- **OpenAI Whisper STT (`stt-whisper`):** MIT License (caller-owned network opt-in).
+- **pyttsx3 TTS (`tts-pyttsx3`):** MPL-2.0 License (uses native operating system voices).
+- **openWakeWord (`wakeword`):** Apache-2.0 License.
+- **PyAudio & NumPy (`wakeword`):** MIT / BSD-3-Clause.
+- **Piper TTS (`tts-piper`):** **GPL-3.0-or-later** (isolated copyleft engine; optional and never bundled in the base distribution).
+
+For comprehensive dependency audits, system tool boundaries (FFmpeg), and model weights licenses, review [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md).
+
+---
+
+## 12. Ecosystem & Sibling Tools
 
 Part of the [ellmos-ai](https://github.com/ellmos-ai) multi-agent infrastructure and the overarching [open-bricks](https://github.com/open-bricks) open-source software ecosystem:
 
@@ -345,11 +379,12 @@ Part of the [ellmos-ai](https://github.com/ellmos-ai) multi-agent infrastructure
 | [WikiStub-Seed](https://github.com/dev-bricks/WikiStub-Seed) | dev-bricks | Multilingual JSON knowledge skeleton with 630 stubs across 12 domains |
 | [automation-master](https://github.com/ellmos-ai/automation-master) | ellmos-ai | Multi-host automation, scheduled task registry & health supervisor |
 | [WinStorePackager](https://github.com/file-bricks/WinStorePackager) | file-bricks | Windows Store packaging, MSIX build & release automation tool |
+| [policy-registry](https://github.com/ellmos-ai/policy-registry) | ellmos-ai | Autonomous compliance, audit and policy governance store |
 | [open-bricks](https://github.com/open-bricks) | open-bricks | Umbrella catalog for open-source bricks, tools, and libraries |
 
 ---
 
-## 11. Development Status & Roadmap
+## 13. Development Status & Roadmap
 
 The current development gates, task plans, and next verifiable milestones are documented in [`ROADMAP.md`](ROADMAP.md).
 The repository is public on GitHub and the package is not on PyPI. A visibility,
@@ -358,7 +393,7 @@ tag, release, or registry upload requires a separate owner decision; see
 
 ---
 
-## 12. Provenance & History Boundary
+## 14. Provenance & History Boundary
 
 This module preserves the generic, MIT-licensed core of an earlier internal
 voice service: file STT, TTS file export, and wake-word integration. It is
@@ -367,13 +402,13 @@ and no legacy database or bridge bindings.
 
 ---
 
-## 13. Security & Vulnerability Reporting
+## 15. Security & Vulnerability Reporting
 
 Security and privacy invariants are strictly maintained. For details on coordinated disclosure, supported versions, and our 48h response SLA, see [`SECURITY.md`](SECURITY.md).
 
 ---
 
-## 14. License, Attribution & German Documentation
+## 16. License, Attribution & German Documentation
 
 The repository's code and documentation are MIT licensed; see [LICENSE](LICENSE).
 Optional engines, system tools, and voice/model files retain their own licenses;

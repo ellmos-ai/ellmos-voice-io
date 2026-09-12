@@ -1,10 +1,10 @@
 ---
 name: ellmos-voice-io
-version: 0.2.0
+version: 0.2.1
 type: service
 author: ELLMOS AI
 created: 2026-08-01
-updated: 2026-08-21
+updated: 2026-09-12
 anthropic_compatible: true
 dependencies:
   tools: []

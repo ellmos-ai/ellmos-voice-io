@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.2.1] - 2026-09-12
+
+- Marketing, Discoverability, License Audit & Contract Test Expansion (Pfad B):
+  - Upgraded bilingual documentation navigation to 16-point Quick Navigation in `README.md` and `README_de.md` with reciprocal language linking and deep anchor jumps.
+  - Added dedicated Target Personas & Discoverability section (Section 10) covering 4 primary user archetypes: Autonomous Local AI Agent Developers, Privacy-Conscious Desktop Application Engineers, Edge & Embedded AI Engineers, and Enterprise Security & Compliance Officers.
+  - Added dedicated Third-Party Licenses & Dependency Audits section (Section 11) detailing zero runtime dependencies in the base wheel and isolated copyleft licenses for optional extras (`piper-tts` GPLv3).
+  - Upgraded `THIRD_PARTY_LICENSES.md` to full 2026-09-12 standard with comprehensive dependency audit table, license categorization, copyleft isolation boundary, zero-egress hardware lifecycle guarantees, and 48h SLA disclosure.
+  - Upgraded `MARKETING-LOG.txt` to 2026-09-12 standard, detailing 4 target personas, bilingual keyword search terms, a 5-way competitive matrix across 10 dimensions, 10 governance & runtime invariants (`INV-LOCAL-01` to `INV-SLA-10`), and 25 sibling tools.
+  - Extended PEP 621 metadata in `pyproject.toml` with project URLs for `"Third-Party Licenses"`, `"Marketing-Log"`, and `"LLM-Ready"`.
+  - Bumped package and manifest versions to `0.2.1` in `pyproject.toml`, `src/ellmos_voice_io/__init__.py`, `ellmos-module.v2.json`, `SKILL.md`, and `llms.txt`.
+  - Expanded contract test suite in `tests/test_metadata.py` with tests for 16-point navigation, PEP 621 URLs, target personas, third-party licenses contract, and competitive matrix assertions, bringing the suite to 56/56 passed tests.
+
 ## [0.2.0] - 2026-09-10
 
 - Repository Hygiene, CI-Matrix Modernization & Contract Test Expansion (Pfad A):

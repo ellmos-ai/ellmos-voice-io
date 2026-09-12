@@ -134,8 +134,8 @@ def test_llms_txt_integrity():
     assert llms_file.is_file()
 
     content = llms_file.read_text(encoding="utf-8")
-    assert "Last-checked: 2026-09-10" in content
-    assert re.search(r"Test-suite:\s*51/51\s*passed", content) is not None
+    assert "Last-checked: 2026-09-12" in content
+    assert re.search(r"Test-suite:\s*56/56\s*passed", content) is not None
     assert "SECURITY.md" in content
     assert "README.md" in content
     assert "README_de.md" in content
@@ -183,6 +183,9 @@ def test_project_urls_pep621():
     assert "Security" in urls
     assert "Parent Organization" in urls
     assert "Umbrella Ecosystem" in urls
+    assert "Third-Party Licenses" in urls
+    assert "Marketing-Log" in urls
+    assert "LLM-Ready" in urls
     assert urls["Parent Organization"] == "https://github.com/ellmos-ai"
     assert urls["Umbrella Ecosystem"] == "https://github.com/open-bricks"
 
@@ -217,12 +220,12 @@ def test_quick_navigation_anchors_and_parity():
     assert "### Quick Navigation" in readme_en
     assert "### Schnellnavigation" in readme_de
 
-    for i in range(1, 14):
+    for i in range(1, 16):
         assert f"[{i}. " in readme_en, f"Missing Quick Nav item {i} in README.md"
         assert f"[{i}. " in readme_de, f"Missing Quick Nav item {i} in README_de.md"
 
-    assert "[14. License, Attribution & German Documentation](README_de.md)" in readme_en
-    assert "[14. Lizenz, Urheberrecht & Englische Dokumentation](README.md)" in readme_de
+    assert "[16. License, Attribution & German Documentation](README_de.md)" in readme_en
+    assert "[16. Lizenz, Urheberrecht & Englische Dokumentation](README.md)" in readme_de
 
 
 def test_governance_invariants_table():
@@ -348,3 +351,70 @@ def test_license_files_metadata_contract():
         p = root / lf
         assert p.is_file(), f"Missing license file {lf}"
         assert len(p.read_text(encoding="utf-8").strip()) > 50
+
+
+def test_target_personas_and_discoverability_contract():
+    root = Path(__file__).resolve().parent.parent
+    readme_en = (root / "README.md").read_text(encoding="utf-8")
+    readme_de = (root / "README_de.md").read_text(encoding="utf-8")
+    mkt_log = (root / "MARKETING-LOG.txt").read_text(encoding="utf-8")
+
+    assert "## 10. Target Personas & Discoverability" in readme_en
+    assert "## 10. Zielgruppen & Auffindbarkeit" in readme_de
+
+    personas = [
+        "Autonomous Local AI Agent Developers",
+        "Privacy-Conscious Desktop Application Engineers",
+        "Edge & Embedded AI Engineers",
+        "Enterprise Security",
+    ]
+    for persona in personas:
+        assert persona in readme_en, f"Missing persona '{persona}' in README.md"
+        assert persona in mkt_log, f"Missing persona '{persona}' in MARKETING-LOG.txt"
+
+
+def test_third_party_licenses_audit_contract():
+    root = Path(__file__).resolve().parent.parent
+    readme_en = (root / "README.md").read_text(encoding="utf-8")
+    readme_de = (root / "README_de.md").read_text(encoding="utf-8")
+    lic_file = (root / "THIRD_PARTY_LICENSES.md").read_text(encoding="utf-8")
+
+    assert "## 11. Third-Party Licenses & Dependency Audits" in readme_en
+    assert "## 11. Drittanbieter-Lizenzen & Abhängigkeits-Audits" in readme_de
+
+    assert "piper-tts" in lic_file
+    assert "GPL-3.0-or-later" in lic_file
+    assert "zero external runtime dependencies" in lic_file.lower()
+
+
+def test_competitive_matrix_and_invariants_in_marketing_log():
+    root = Path(__file__).resolve().parent.parent
+    mkt_log = (root / "MARKETING-LOG.txt").read_text(encoding="utf-8")
+
+    assert "COMPETITIVE DIFFERENTIATION MATRIX" in mkt_log
+    competitors = ["Cloud APIs", "SpeechRecognition", "WhisperX", "PyAudio"]
+    for comp in competitors:
+        assert comp in mkt_log, f"Missing competitor keyword '{comp}' in MARKETING-LOG.txt"
+
+    for inv_num in range(1, 11):
+        assert f"{inv_num:02d}" in mkt_log
+
+
+def test_policy_registry_sibling_coverage():
+    root = Path(__file__).resolve().parent.parent
+    readme_en = (root / "README.md").read_text(encoding="utf-8")
+    readme_de = (root / "README_de.md").read_text(encoding="utf-8")
+
+    assert "policy-registry" in readme_en
+    assert "policy-registry" in readme_de
+
+
+def test_zero_runtime_dependencies_and_optional_extras():
+    root = Path(__file__).resolve().parent.parent
+    with (root / "pyproject.toml").open("rb") as f:
+        data = tomllib.load(f)
+    assert data["project"]["dependencies"] == [], "Base wheel must have zero runtime dependencies"
+    optional = data["project"]["optional-dependencies"]
+    expected_extras = ["stt-vosk", "stt-whisper", "tts-pyttsx3", "tts-piper", "wakeword", "all"]
+    for extra in expected_extras:
+        assert extra in optional, f"Missing expected extra '{extra}' in optional-dependencies"

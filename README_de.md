@@ -5,10 +5,10 @@
 # ellmos-voice-io
 
 [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
-[![Version](https://img.shields.io/badge/Version-0.2.0-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/Version-0.2.1-blue.svg)](CHANGELOG.md)
 [![CI Status](https://img.shields.io/badge/CI-Multi--OS%20Actions-success?logo=github-actions&logoColor=white)](.github/workflows/ci.yml)
 [![Code Style: Ruff](https://img.shields.io/badge/Code%20Style-Ruff-000000.svg?logo=ruff&logoColor=white)](https://github.com/astral-sh/ruff)
-[![Tests](https://img.shields.io/badge/Tests-51%20bestanden-brightgreen?logo=pytest&logoColor=white)](tests/)
+[![Tests](https://img.shields.io/badge/Tests-56%20bestanden-brightgreen?logo=pytest&logoColor=white)](tests/)
 [![Platform](https://img.shields.io/badge/Plattform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey)](pyproject.toml)
 [![Privacy: Zero-Egress](https://img.shields.io/badge/Datenschutz-100%25%20Offline%20%7C%20Zero--Egress-success)](README_de.md#9-datenschutz-und-hardware-grenzen)
 [![Security: Local-First](https://img.shields.io/badge/Sicherheit-Local--First%20%7C%20RunAsInvoker-blue)](SECURITY.md)
@@ -34,11 +34,13 @@
 - [7. Rein lesende CLI-Bedienung](#7-rein-lesende-cli-bedienung)
 - [8. Python-API-Integration](#8-python-api-integration)
 - [9. Datenschutz und Hardware-Grenzen](#9-datenschutz-und-hardware-grenzen)
-- [10. Ökosystem & Geschwister-Werkzeuge](#10-ökosystem--geschwister-werkzeuge)
-- [11. Entwicklungsstatus & Roadmap](#11-entwicklungsstatus--roadmap)
-- [12. Provenienz & Historien-Grenze](#12-provenienz--historien-grenze)
-- [13. Sicherheitsrichtlinie & Meldewege](#13-sicherheitsrichtlinie--meldewege)
-- [14. Lizenz, Urheberrecht & Englische Dokumentation](README.md)
+- [10. Zielgruppen & Auffindbarkeit](#10-zielgruppen--auffindbarkeit)
+- [11. Drittanbieter-Lizenzen & Abhängigkeits-Audits](#11-drittanbieter-lizenzen--abhängigkeits-audits)
+- [12. Ökosystem & Geschwister-Werkzeuge](#12-ökosystem--geschwister-werkzeuge)
+- [13. Entwicklungsstatus & Roadmap](#13-entwicklungsstatus--roadmap)
+- [14. Provenienz & Historien-Grenze](#14-provenienz--historien-grenze)
+- [15. Sicherheitsrichtlinie & Meldewege](#15-sicherheitsrichtlinie--meldewege)
+- [16. Lizenz, Urheberrecht & Englische Dokumentation](README.md)
 
 ---
 
@@ -56,7 +58,9 @@
 | Paket & optionale Extras installieren | [6. Installation & Umgebungseinrichtung](#6-installation--umgebungseinrichtung) |
 | Engine-Verfügbarkeit per CLI abfragen | [7. Rein lesende CLI-Bedienung](#7-rein-lesende-cli-bedienung) |
 | Python STT/TTS/Wake-Word anbinden | [8. Python-API-Integration](#8-python-api-integration) |
-| Multi-Agenten-Geschwister erkunden | [10. Ökosystem & Geschwister-Werkzeuge](#10-ökosystem--geschwister-werkzeuge) |
+| Zielgruppen & Anwendungsfälle einsehen | [10. Zielgruppen & Auffindbarkeit](#10-zielgruppen--auffindbarkeit) |
+| Drittanbieter-Lizenzen & Audits prüfen | [11. Drittanbieter-Lizenzen & Abhängigkeits-Audits](#11-drittanbieter-lizenzen--abhängigkeits-audits) |
+| Multi-Agenten-Geschwister erkunden | [12. Ökosystem & Geschwister-Werkzeuge](#12-ökosystem--geschwister-werkzeuge) |
 | KI-/LLM-Indexdatei lesen | [llms.txt](llms.txt) |
 | Den englischen Leitfaden lesen | [README.md](README.md) |
 
@@ -319,7 +323,37 @@ listener.listen(on_wake=on_wake, stop_event=stop_event)
 
 ---
 
-## 10. Ökosystem & Geschwister-Werkzeuge
+## 10. Zielgruppen & Auffindbarkeit
+
+`ellmos-voice-io` wurde gezielt für vier Entwickler- und Betreiber-Zielgruppen entworfen:
+
+1. **Autonome lokale KI-Agenten-Entwickler & Schwarm-Operatoren:** Leichtgewichtige, latenzarme Sprachtranskription, Audiosynthese und freihändige Wake-Word-Erkennung für Agenten-Frameworks (Claude Code, Antigravity, Codex, Kimi, n8n) ohne speicherhungrige Hintergrund-Daemons oder wiederkehrende Cloud-API-Gebühren.
+2. **Datenschutzbewusste Desktop-Anwendungsentwickler:** Entwicklung von Desktop-Software mit PySide6, PyQt, Tkinter oder Electron-Bridges mit lokaler Diktatfunktion oder System-Sprachausgabe, die zu 100 % offline arbeitet und strenge Datenschutzauflagen erfüllt.
+3. **Edge- & Embedded-KI-Ingenieure:** Betrieb lokaler Wake-Word-Erkennung und Sprachsynthese auf Raspberry Pi, Mini-PCs oder luftdicht abgeschotteten Industrie-Terminals mit deterministischem Hardware-Lebenszyklus und sofortiger Ressourcenfreigabe.
+4. **Sicherheits- & Compliance-Verantwortliche in Unternehmen:** Gewährleistung vollständiger Audio-Isolation, Verhinderung von Datenabflüssen (`INV-LOCAL-01`), Ausführung ohne erhöhte Privilegien (`INV-PRIV-02`) und vollkommene Transparenz über Drittanbieter-Lizenzen und Modellquellen.
+
+Ausführliche Suchbegriffe, zweisprachige Auffindbarkeitsmatrizen und Wettbewerbsanalysen finden sich in [`MARKETING-LOG.txt`](MARKETING-LOG.txt).
+
+---
+
+## 11. Drittanbieter-Lizenzen & Abhängigkeits-Audits
+
+Das Basis-Wheel von `ellmos-voice-io` besitzt **keinerlei externe Laufzeitabhängigkeiten** (`dependencies = []`), wodurch Risiken in der Lieferkette vollständig vermieden werden.
+
+Optionale Sprach- und Wake-Word-Engines sind in modulare Extras ausgelagert:
+- **Basis-Laufzeit & Fassade:** MIT-Lizenz (100 % permissiv).
+- **Vosk STT (`stt-vosk`):** Apache-2.0-Lizenz.
+- **OpenAI Whisper STT (`stt-whisper`):** MIT-Lizenz (ausdrückliches Netzwerk-Opt-in durch den Aufrufer).
+- **pyttsx3 TTS (`tts-pyttsx3`):** MPL-2.0-Lizenz (nutzt native Betriebssystem-Stimmen).
+- **openWakeWord (`wakeword`):** Apache-2.0-Lizenz.
+- **PyAudio & NumPy (`wakeword`):** MIT / BSD-3-Clause.
+- **Piper TTS (`tts-piper`):** **GPL-3.0-or-later** (isoliertes Copyleft-Modul; rein optional und niemals im Basispaket enthalten).
+
+Vollständige Abhängigkeits-Audits, Systemwerkzeug-Grenzen (FFmpeg) und Richtlinien zu Modellgewichten sind in [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md) dokumentiert.
+
+---
+
+## 12. Ökosystem & Geschwister-Werkzeuge
 
 Teil der [ellmos-ai](https://github.com/ellmos-ai) Multi-Agenten-Infrastruktur und des übergeordneten [open-bricks](https://github.com/open-bricks) Open-Source-Software-Ökosystems:
 
@@ -348,11 +382,12 @@ Teil der [ellmos-ai](https://github.com/ellmos-ai) Multi-Agenten-Infrastruktur u
 | [WikiStub-Seed](https://github.com/dev-bricks/WikiStub-Seed) | dev-bricks | Mehrsprachiges JSON-Wissensskelett mit 630 Stubs über 12 Domänen |
 | [automation-master](https://github.com/ellmos-ai/automation-master) | ellmos-ai | Multi-Host-Automations- & Scheduled-Task-Register |
 | [WinStorePackager](https://github.com/file-bricks/WinStorePackager) | file-bricks | Windows Store Packaging-, MSIX-Erstellungs- & Release-Tool |
+| [policy-registry](https://github.com/ellmos-ai/policy-registry) | ellmos-ai | Autonomous compliance, audit and policy governance store |
 | [open-bricks](https://github.com/open-bricks) | open-bricks | Dachkatalog für Open-Source-Bausteine, Werkzeuge und Bibliotheken |
 
 ---
 
-## 11. Entwicklungsstatus & Roadmap
+## 13. Entwicklungsstatus & Roadmap
 
 Die aktuellen Gatter und die nächsten prüfbaren Schritte stehen in [`ROADMAP.md`](ROADMAP.md).
 Das Repository ist öffentlich auf GitHub und das Paket nicht auf PyPI veröffentlicht.
@@ -361,7 +396,7 @@ Eigentümerentscheidung; siehe [`RELEASE_GATE.md`](RELEASE_GATE.md).
 
 ---
 
-## 12. Provenienz & Historien-Grenze
+## 14. Provenienz & Historien-Grenze
 
 Das Modul erhält den generischen, MIT-lizenzierten Kern eines früheren internen
 Sprachdienstes: Datei-STT, TTS-Dateiexport und Wake-Word-Anbindung. Es wurde als
@@ -370,13 +405,13 @@ Datenbanken oder Bridges.
 
 ---
 
-## 13. Sicherheitsrichtlinie & Meldewege
+## 15. Sicherheitsrichtlinie & Meldewege
 
 Sicherheits- und Datenschutz-Invarianten werden strikt eingehalten. Details zu koordinierter Offenlegung, unterstützten Versionen und unserem 48-Stunden-Reaktions-SLA finden sich in [`SECURITY.md`](SECURITY.md).
 
 ---
 
-## 14. Lizenz, Urheberrecht & Englische Dokumentation
+## 16. Lizenz, Urheberrecht & Englische Dokumentation
 
 Code und Dokumentation dieses Repositories stehen unter der MIT-Lizenz; siehe
 [LICENSE](LICENSE). Optionale Engines, Systemwerkzeuge sowie Stimmen und

@@ -2,9 +2,9 @@
 
 > Local-first speech input, speech output, and wake-word helpers for LLM systems.
 
-Last-checked: 2026-09-10
-Test-suite: 51/51 passed (pytest, Python 3.12)
-Version: 0.2.0
+Last-checked: 2026-09-12
+Test-suite: 56/56 passed (pytest, Python 3.12)
+Version: 0.2.1
 Release-state: public repository; not published to PyPI
 
 ## Summary
