@@ -35,8 +35,11 @@ _reports/internal-business/
 *-WORKSTATION-LG-*
 *-ASUS-GEI.*
 *-ASUS-GEI-*
+*-LAPTOP.*
+*-LAPTOP-*
 * (kopie)*
 * (copy)*
+*conflicted copy*
 Thumbs.db
 desktop.ini
 *.tmp
@@ -46,3 +49,6 @@ desktop.ini
 *.orig
 *.rej
 .cache/
+uv.lock
+poetry.lock
+!package-lock.json

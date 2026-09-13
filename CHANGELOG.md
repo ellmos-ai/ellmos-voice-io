@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.2.1] - 2026-09-13
+
+- Repository Hygiene, CI Timeout Hardening, Stale Workflow & Contract Test Expansion (Pfad A):
+  - Hardened GitHub Actions CI workflow (`.github/workflows/ci.yml`) by adding explicit `timeout-minutes: 15` to the `test` matrix job, preventing runaway runner execution across 12 Multi-OS platform configurations.
+  - Added automated Stale Issues & PRs lifecycle workflow (`.github/workflows/stale.yml`) utilizing `actions/stale@v9` with `timeout-minutes: 10`, 30-day stale threshold, 7-day close period, and least-privilege `issues: write` / `pull-requests: write` permissions.
+  - Hardened `.gitignore` with multi-host cloud-sync and lock defense patterns (`*conflicted copy*`, `*-LAPTOP.*`, `*-LAPTOP-*`, `uv.lock`, `poetry.lock`, and `!package-lock.json`).
+  - Expanded automated contract test suite in `tests/test_metadata.py` with 3 new contract tests (`test_ci_workflow_timeout_minutes`, `test_stale_workflow_contract`, `test_gitignore_cloud_sync_and_lock_defense`), raising the full test suite from 56 to 59 passed tests (100% green).
+  - Synchronized documentation and test badges across `README.md` and `README_de.md` to 59 passed tests, refreshed `llms.txt` verification timestamp to 2026-09-13, and updated `MARKETING-LOG.txt`.
+
 ## [0.2.1] - 2026-09-12
 
 - Marketing, Discoverability, License Audit & Contract Test Expansion (Pfad B):

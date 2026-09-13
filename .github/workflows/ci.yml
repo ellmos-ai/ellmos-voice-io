@@ -16,6 +16,7 @@ jobs:
   test:
     name: ${{ matrix.os }} / Python ${{ matrix.python-version }}
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
     env:
       SOURCE_DATE_EPOCH: "1787270400"
     strategy:

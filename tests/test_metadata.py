@@ -134,8 +134,8 @@ def test_llms_txt_integrity():
     assert llms_file.is_file()
 
     content = llms_file.read_text(encoding="utf-8")
-    assert "Last-checked: 2026-09-12" in content
-    assert re.search(r"Test-suite:\s*56/56\s*passed", content) is not None
+    assert "Last-checked: 2026-09-13" in content
+    assert re.search(r"Test-suite:\s*59/59\s*passed", content) is not None
     assert "SECURITY.md" in content
     assert "README.md" in content
     assert "README_de.md" in content
@@ -418,3 +418,35 @@ def test_zero_runtime_dependencies_and_optional_extras():
     expected_extras = ["stt-vosk", "stt-whisper", "tts-pyttsx3", "tts-piper", "wakeword", "all"]
     for extra in expected_extras:
         assert extra in optional, f"Missing expected extra '{extra}' in optional-dependencies"
+
+
+def test_ci_workflow_timeout_minutes():
+    root = Path(__file__).resolve().parent.parent
+    ci_workflow = (root / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
+    assert "timeout-minutes: 15" in ci_workflow
+
+
+def test_stale_workflow_contract():
+    root = Path(__file__).resolve().parent.parent
+    stale_workflow_path = root / ".github" / "workflows" / "stale.yml"
+    assert stale_workflow_path.is_file(), "Missing .github/workflows/stale.yml"
+    content = stale_workflow_path.read_text(encoding="utf-8")
+    assert "actions/stale@v9" in content
+    assert "timeout-minutes: 10" in content
+    assert "issues: write" in content
+    assert "pull-requests: write" in content
+
+
+def test_gitignore_cloud_sync_and_lock_defense():
+    root = Path(__file__).resolve().parent.parent
+    gitignore_text = (root / ".gitignore").read_text(encoding="utf-8")
+    required_patterns = [
+        "*conflicted copy*",
+        "*-LAPTOP.*",
+        "*-LAPTOP-*",
+        "uv.lock",
+        "poetry.lock",
+        "!package-lock.json",
+    ]
+    for pattern in required_patterns:
+        assert pattern in gitignore_text, f"Missing pattern {pattern} in .gitignore"
