@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.2.1] - 2026-09-20
+
+- Marketing, Discoverability, 18-Point Quick Nav & Contract Test Expansion (Pfad B):
+  - Upgraded bilingual documentation navigation to full 18-point Quick Navigation in `README.md` and `README_de.md` with reciprocal language linking and deep anchor targets (`test_bilingual_readme_navigation_parity`).
+  - Added formal root `NOTICE` attribution and copyright file under MIT license, attributing Lukas Geiger, `ellmos-ai`, and `open-bricks`.
+  - Added Section 5: Comparative Matrix vs. 4 Alternatives (`Cloud APIs`, `SpeechRecognition`, `WhisperX`, `PyAudio`) across 10 architectural and operational invariants (`INV-LOCAL-01` to `INV-SLA-10`).
+  - Added Section 6: Target Personas tagged with `[PERSONA-01]` through `[PERSONA-04]` and high-intent bilingual search queries.
+  - Added Section 18: German statutory liability limitation (*Gefälligkeit* / *unentgeltliche Schenkung* pursuant to **§ 521 BGB** of the German Civil Code, limiting liability to intent and gross negligence).
+  - Overhauled `THIRD_PARTY_LICENSES.md` to 2026-09-20 audit standard with Level 1 SBOM, Invariant Cross-Reference Matrix, Zero-Copyleft Isolation Guarantee, and unprivileged user-mode `RunAsInvoker` certification.
+  - Hardened Mermaid architecture and sequence diagrams with strict semicolon-free line assertions (`test_dual_mermaid_diagrams_and_semicolons_free`).
+  - Enriched `pyproject.toml` with `license-files = ["LICENSE", "NOTICE", "THIRD_PARTY_LICENSES.md"]` and added new discoverability keywords.
+  - Updated `MARKETING-LOG.txt` and `llms.txt` with 2026-09-20 verification stamps and 10 governance invariants.
+  - Expanded contract test suite in `tests/test_metadata.py` with 7 new automated contract tests, expanding the test suite to 66/66 passed tests (100% green).
+
 ## [0.2.1] - 2026-09-13
 
 - Repository Hygiene, CI Timeout Hardening, Stale Workflow & Contract Test Expansion (Pfad A):

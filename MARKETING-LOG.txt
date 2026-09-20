@@ -1,7 +1,7 @@
 # ================================================================================
 # MARKETING & DISCOVERABILITY LOG: ellmos-voice-io
 # ================================================================================
-Date: 2026-09-12
+Date: 2026-09-20
 Operator: Antigravity / Gemini (via GITHUBBOT Pfad B)
 Target Repo: ellmos-ai/ellmos-voice-io
 Canonical Path: C:\_Local_DEV\repos\ellmos-voice-io
@@ -14,6 +14,7 @@ Umbrella Collective: open-bricks
 # [2026-09-10 16:40:00 CEST] [GITHUBBOT_ONE_REPO_CLEANER] ACTION: PFAD_A_HYGIENE | REPO: ellmos-ai/ellmos-voice-io | SCOPE: Modernized GitHub Actions CI matrix for Python 3.13 across 3 OS runners (12 jobs), hardened PEP 621 metadata with Python 3.13 classifier, hardened .gitignore against multi-host sync conflicts and lock patterns, and expanded test suite to 51/51 passed tests.
 # [2026-09-12 03:50:00 CEST] [GITHUBBOT_ONE_REPO_MARKETING_AND_DESIGN] ACTION: PFAD_B_UPGRADE | REPO: ellmos-ai/ellmos-voice-io | SCOPE: Upgraded to 16-point quick navigation standard with 100% reciprocal anchor parity, enriched PEP 621 URLs (Third-Party Licenses, Marketing-Log, LLM-Ready), comprehensive THIRD_PARTY_LICENSES.md audit with copyleft isolation disclosure, enriched MARKETING-LOG.txt (4 personas, bilingual search phrases, 5-way competitive matrix across 10 dimensions, 10 governance invariants, 25 partner tools), version bump to 0.2.1, and contract test expansion.
 # [2026-09-13 12:30:00 CEST] [GITHUBBOT_ONE_REPO_CLEANER] ACTION: PFAD_A_HYGIENE | REPO: ellmos-ai/ellmos-voice-io | SCOPE: CI workflow hardening with timeout-minutes: 15, automated Stale Issues & PRs workflow (.github/workflows/stale.yml with timeout-minutes: 10), multi-host cloud-sync and lock defense hardening in .gitignore (*conflicted copy*, *-LAPTOP.*, uv.lock, poetry.lock), and contract test expansion to 59/59 passed tests.
+# [2026-09-20 10:00:00 CEST] [GITHUBBOT_ONE_REPO_MARKETING_AND_DESIGN] ACTION: PFAD_B_OVERHAUL | REPO: ellmos-ai/ellmos-voice-io | SCOPE: 18-point quick navigation standard with 100% reciprocal anchor parity, Level 1 SBOM Third-Party Licenses update with Invariant Cross-Reference Matrix and RunAsInvoker non-elevation certification, Section 5 comparative matrix (INV-LOCAL-01..INV-SLA-10 vs 4 alternatives), Section 6 target personas ([PERSONA-01]..[PERSONA-04]) and high-intent bilingual queries, root NOTICE attribution file, Section 18 German statutory disclaimer (§ 521 BGB Gefälligkeitsrecht), and expanded test metadata contract suite.
 
 ================================================================================
 1. REPOSITORY AUDIT & DISCOVERABILITY BASELINE
@@ -28,25 +29,25 @@ Umbrella Collective: open-bricks
 ================================================================================
 2. TARGET PERSONAS & USER JOURNEYS
 ================================================================================
-1. Autonomous Local AI Agent Developers & Multi-Agent Swarm Orchestrators
+- [PERSONA-01] Autonomous Local AI Agent Developers & Multi-Agent Swarm Orchestrators
    - Needs: Add voice input (STT), voice synthesis (TTS), and hands-free wake-word detection to autonomous agent workflows (Claude Code, Antigravity, Codex, Kimi, n8n) without introducing heavy daemon runtimes or external cloud API costs.
    - Pain Points: Traditional speech packages enforce deep dependency trees (PyTorch, heavyweight CUDA frameworks) or default to cloud streaming with latency and recurring token costs.
    - Solution: Modular, lazy-loaded engine architecture. The base package installs in milliseconds with zero dependencies; engines load only when invoked; caller retains full lifecycle control over audio buffers and stop events.
 
-2. Privacy-Conscious Desktop Application Engineers (PySide6 / PyQt / Tkinter / Electron)
+- [PERSONA-02] Privacy-Conscious Desktop Application Engineers (PySide6 / PyQt / Tkinter / Electron)
    - Needs: Build desktop software requiring accessibility voice output or local audio transcription that runs 100% offline on end-user machines.
    - Pain Points: Cloud STT/TTS APIs violate customer confidentiality and GDPR requirements; users refuse apps that require constant Internet connectivity or telemetry.
    - Solution: 100% Local-First & Zero-Egress (`INV-LOCAL-01`). Supports Vosk for completely offline STT without GPU, pyttsx3 for zero-download native OS voices, and Piper for high-quality local neural synthesis.
 
-3. Edge & Embedded AI Engineers (Raspberry Pi / Mini-PCs / Air-Gapped Kiosks)
+- [PERSONA-03] Edge & Embedded AI Engineers (Raspberry Pi / Mini-PCs / Air-Gapped Kiosks)
    - Needs: Run wake-word listeners and speech synthesis on low-power, headless, or strictly air-gapped industrial devices.
    - Pain Points: Complex background audio daemons hang, fail to release ALSA/PulseAudio/PortAudio devices, or leak memory over long runtimes.
    - Solution: Deterministic microphone lifecycle (`INV-MIC-04`). Synchronous, caller-owned `WakeWordListener.listen()` execution with deterministic hardware cleanup in `finally` blocks and immediate exit on stop events.
 
-4. Enterprise Security, Privacy & Healthcare Compliance Officers
+- [PERSONA-04] Enterprise Security, Privacy & Healthcare Compliance Officers
    - Needs: Verify that internal software handling spoken audio or clinical dictation strictly prevents acoustic data leakage, cloud retention, or model training on private conversations.
    - Pain Points: Cloud voice vendors often retain audio logs for "service improvement"; unclear licensing and copyleft contamination risks in open-source audio wrappers.
-   - Solution: Caller-owned audio retention (`INV-DATA-05`), explicit copyleft isolation in `THIRD_PARTY_LICENSES.md` (identifying GPL Piper boundaries), unprivileged `RunAsInvoker` execution (`INV-PRIV-02`), and formal 48h security SLA (`INV-SLA-10`).
+   - Solution: Caller-owned audio retention (`INV-DATA-05`), explicit copyleft isolation in `THIRD_PARTY_LICENSES.md` (identifying GPL Piper boundaries), unprivileged `RunAsInvoker` execution (`INV-SEC-02`), and formal 48h security SLA (`INV-SLA-10`).
 
 ================================================================================
 3. HIGH-INTENT SEARCH QUERIES (BILINGUAL EN & DE)
@@ -80,26 +81,26 @@ German (DE):
 ================================================================================
 | Dimension / Capability | ellmos-voice-io | Cloud APIs (OpenAI / ElevenLabs) | SpeechRecognition (Legacy) | WhisperX / Heavy Frameworks | Ad-hoc PyAudio Scripts |
 |:---|:---|:---|:---|:---|:---|
-| **Local-First & Zero-Egress** | 100% Local-First (`INV-LOCAL-01`) | ❌ Requires continuous cloud uplink | ⚠️ Defaults to Google Speech web API | Local but heavy CUDA/Torch | Local script |
-| **Runtime Dependency Footprint** | Zero base dependencies (`dependencies = []`) | Cloud SDKs + HTTP clients | Medium (urllib, requests, etc.) | Very Large (Torch, CUDA, ctranslate2) | Raw bindings only |
-| **Telemetry & Audio Logging** | Zero telemetry or data storage | ❌ Cloud providers log/retain audio | Variable per engine backend | Local | None |
-| **Wake-Word Integration** | Built-in synchronous listener (openWakeWord) | ❌ Cloud APIs lack local wake-word | ❌ Not supported | ❌ Not supported | ⚠️ Manual stream chunking |
-| **Hardware Lifecycle** | Deterministic open/close in `finally` | N/A (HTTP client) | ⚠️ PyAudio streams often leak | ⚠️ Heavy GPU/VRAM retention | ❌ Prone to hardware lockups |
-| **Model Download Policy** | Explicit opt-in required (`INV-OPTIN-03`) | Cloud hosted | Cloud hosted | ⚠️ Implicit multi-GB downloads | Manual user setup |
-| **Privilege Model** | Unprivileged `RunAsInvoker` (`INV-PRIV-02`) | User mode | User mode | Often requires root/CUDA drivers | User mode |
-| **Copyleft Isolation** | Permissive MIT Core + isolated GPL Piper | Proprietary terms | BSD-3-Clause | Variable / Apache-2.0 | None |
-| **Inspection CLI** | Read-only `status` via `find_spec` | CLI requires API keys | None | None | None |
-| **Security SLA & Disclosure** | 48h response SLA + 5-day triage | Standard commercial support | Community best effort | Community best effort | None |
+| **Local-First & Zero-Egress** (`INV-LOCAL-01`) | **100% Local-First** (`INV-LOCAL-01`) | ❌ Requires continuous cloud uplink | ⚠️ Defaults to Google Speech web API | Local but heavy CUDA/Torch | Local script |
+| **Unprivileged Execution** (`INV-SEC-02`) | **RunAsInvoker** (`INV-SEC-02`) | User mode | User mode | Often requires root/CUDA drivers | User mode |
+| **Model Download Policy** (`INV-CONSENT-03`) | **Explicit opt-in required** (`INV-CONSENT-03`) | Cloud hosted | Cloud hosted | ⚠️ Implicit multi-GB downloads | Manual user setup |
+| **Hardware Lifecycle** (`INV-MIC-04`) | **Deterministic open/close in `finally`** (`INV-MIC-04`) | N/A (HTTP client) | ⚠️ PyAudio streams often leak | ⚠️ Heavy GPU/VRAM retention | ❌ Prone to hardware lockups |
+| **Caller-Owned Data** (`INV-DATA-05`) | **Zero internal audio retention or telemetry** (`INV-DATA-05`) | ❌ Cloud providers log/retain audio | Variable per engine backend | Local disk cache | Caller memory |
+| **Runtime Dependency Footprint** (`INV-LAZY-06`) | **Zero base dependencies** (`dependencies = []`, `INV-LAZY-06`) | Cloud SDKs + HTTP clients | Medium (urllib, requests, etc.) | Very Large (Torch, CUDA, ctranslate2) | Raw bindings only |
+| **Inspection CLI** (`INV-CLI-07`) | **Read-only `status` via `find_spec`** (`INV-CLI-07`) | CLI requires API keys | None | None | None |
+| **Operating Parity** (`INV-PORT-08`) | **Windows, Linux, macOS** (Py 3.10-3.13, `INV-PORT-08`) | Platform agnostic (HTTP) | Variable per platform | Linux / CUDA preferred | Prone to OS drift |
+| **Multi-Agent Defense** (`INV-SYNC-09`) | **Lock & conflict hardened** (`INV-SYNC-09`) | N/A | None | None | None |
+| **Security SLA & Disclosure** (`INV-SLA-10`) | **48h response SLA + 5-day triage** (`INV-SLA-10`) | Standard commercial support | Community best effort | Community best effort | None |
 
 ================================================================================
 5. GOVERNANCE & RUNTIME INVARIANTS
 ================================================================================
 - INV-LOCAL-01: 100% Local-First & Zero-Egress (no remote telemetry, no background upload, no cloud endpoints).
-- INV-PRIV-02: Non-Elevation / RunAsInvoker (runs entirely with standard user privileges; never requests UAC elevation).
-- INV-OPTIN-03: Explicit Model Download Consent (mandatory caller opt-in for Whisper downloads; local files default).
+- INV-SEC-02: Non-Elevation / RunAsInvoker (runs entirely with standard user privileges; never requests UAC elevation).
+- INV-CONSENT-03: Explicit Model Download Consent (mandatory caller opt-in for Whisper downloads; local files default).
 - INV-MIC-04: Deterministic Microphone Lifecycle (hardware stream engaged only during active listen; closed in `finally`).
 - INV-DATA-05: Caller-Owned Audio Retention (zero internal audio file retention, caching, or telemetry logging).
-- INV-LAZY-06: Lazy Engine Isolation (unimported optional engines consume zero RAM and trigger zero side-effects).
+- INV-LAZY-06: Lazy Engine & Copyleft Isolation (unimported optional engines consume zero RAM; GPL Piper isolated).
 - INV-CLI-07: Read-Only Inspection CLI (`ellmos-voice-io status` inspects via `find_spec` without hardware allocation).
 - INV-PORT-08: Cross-Platform Operating Parity (verified on Windows, Linux, macOS across Python 3.10-3.13).
 - INV-SYNC-09: Cloud-Sync & Multi-Agent Defense (.gitignore protects against `LOCK.*`, conflict files, and sync artifacts).
@@ -141,11 +142,19 @@ Part of the ellmos-ai multi-agent infrastructure and the open-bricks software co
 The repository maintains 100% deterministic automated test coverage in `tests/test_metadata.py`:
 - `test_version_parity`: Asserts version parity across `pyproject.toml`, `ellmos-module.v2.json`, `llms.txt`, `README.md`, `README_de.md`, and `src/ellmos_voice_io/__init__.py`.
 - `test_project_urls_pep621`: Asserts presence and accuracy of PEP 621 ecosystem URLs.
-- `test_quick_navigation_anchors_and_parity`: Asserts 16-point navigation structure and reciprocal anchor parity.
+- `test_quick_navigation_anchors_and_parity`: Asserts 18-point navigation structure and reciprocal anchor parity.
 - `test_governance_invariants_table`: Validates documentation of all 10 governance invariants.
 - `test_dual_mermaid_diagrams`: Ensures flowchart and sequence diagram syntax integrity.
 - `test_local_marketing_log_present`: Confirms MARKETING-LOG.txt integrity and content depth.
 - `test_security_policy_contract` & `test_security_sla_and_contacts`: Verifies 48h SLA and official contacts.
 - `test_gitignore_multihost_and_lock_patterns`: Verifies protection against sync artifacts and lock files.
 - `test_clean_bytecode_compilation`: Validates zero syntax or bytecode errors across `src` and `tests`.
-- `test_license_files_metadata_contract`: Validates `LICENSE` and `THIRD_PARTY_LICENSES.md` structure.
+- `test_license_files_metadata_contract`: Validates `LICENSE`, `NOTICE`, and `THIRD_PARTY_LICENSES.md` structure.
+
+================================================================================
+8. STRATEGIC ACTION ITEMS
+================================================================================
+1. Maintain zero runtime dependencies in the base wheel (`dependencies = []`).
+2. Keep Level 1 SBOM and Invariant Cross-Reference Matrix synchronized on every release.
+3. Validate 18-point bilingual navigation and reciprocal anchor parity on every documentation edit.
+4. Uphold strict unprivileged execution (`RunAsInvoker`) and zero-egress guarantees across all audio primitives.

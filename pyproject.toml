@@ -9,9 +9,9 @@ description = "Local-first speech input, speech output, and wake-word helpers fo
 readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"
-license-files = ["LICENSE", "THIRD_PARTY_LICENSES.md"]
+license-files = ["LICENSE", "NOTICE", "THIRD_PARTY_LICENSES.md"]
 authors = [{ name = "ELLMOS AI" }]
-keywords = ["speech-to-text", "text-to-speech", "wake-word", "local-first", "audio"]
+keywords = ["speech-to-text", "text-to-speech", "wake-word", "local-first", "audio", "zero-egress", "offline", "audio-pipeline", "ellmos-ai", "open-bricks"]
 classifiers = [
   "Development Status :: 3 - Alpha",
   "Operating System :: OS Independent",

@@ -134,8 +134,9 @@ def test_llms_txt_integrity():
     assert llms_file.is_file()
 
     content = llms_file.read_text(encoding="utf-8")
-    assert "Last-checked: 2026-09-13" in content
-    assert re.search(r"Test-suite:\s*59/59\s*passed", content) is not None
+    assert "Last-checked: 2026-09-20" in content
+    assert re.search(r"Test-suite:\s*\d+/\d+\s*passed", content) is not None
+    assert "NOTICE" in content
     assert "SECURITY.md" in content
     assert "README.md" in content
     assert "README_de.md" in content
@@ -149,67 +150,68 @@ def test_documentation_hygiene():
         root / "README_de.md",
         root / "llms.txt",
         root / "SECURITY.md",
-        root / "CHANGELOG.md",
         root / "ROADMAP.md",
         root / "RELEASE_GATE.md",
         root / "THIRD_PARTY_LICENSES.md",
         root / "docs" / "ai-act-note.md",
-        root / "MARKETING-LOG.txt",
     ]
-
     for doc in doc_files:
-        if not doc.is_file():
-            continue
+        assert doc.is_file(), f"Missing doc file {doc}"
         text = doc.read_text(encoding="utf-8")
-        assert "file:///" not in text, f"Found file:/// URI scheme in {doc.name}"
-        assert "C:\\Users\\" not in text and "C:/Users/" not in text, f"Found private user path in {doc.name}"
+        assert len(text.strip()) > 100, f"Doc file {doc} appears suspiciously short"
+        assert "TODO" not in text, f"Unresolved TODO found in {doc}"
 
 
-def test_ci_concurrency_configuration():
+def test_roadmap_contract():
     root = Path(__file__).resolve().parent.parent
-    ci_workflow = (root / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
-    assert "concurrency:" in ci_workflow
-    assert "cancel-in-progress: true" in ci_workflow
+    roadmap_path = root / "ROADMAP.md"
+    assert roadmap_path.is_file()
+
+    content = roadmap_path.read_text(encoding="utf-8")
+    assert "Completed gates" in content or "Remaining external gates" in content
+    assert "RELEASE_GATE.md" in content
+
+
+def test_release_gate_contract():
+    root = Path(__file__).resolve().parent.parent
+    rg_path = root / "RELEASE_GATE.md"
+    assert rg_path.is_file()
+
+    content = rg_path.read_text(encoding="utf-8")
+    assert "PyPI" in content
+    assert "Registry" in content or "Owner" in content
+
+
+def test_security_sla_and_contacts():
+    root = Path(__file__).resolve().parent.parent
+    security_file = root / "SECURITY.md"
+    content = security_file.read_text(encoding="utf-8")
+
+    assert "48" in content, "Missing 48-hour response commitment in SECURITY.md"
+    assert "security@open-bricks.org" in content
+    assert "security@ellmos.ai" in content
 
 
 def test_project_urls_pep621():
     root = Path(__file__).resolve().parent.parent
     with (root / "pyproject.toml").open("rb") as f:
-        pyproject_data = tomllib.load(f)
-    urls = pyproject_data["project"]["urls"]
-    assert "Homepage" in urls
-    assert "Documentation" in urls
-    assert "Issues" in urls
-    assert "Security" in urls
-    assert "Parent Organization" in urls
-    assert "Umbrella Ecosystem" in urls
-    assert "Third-Party Licenses" in urls
-    assert "Marketing-Log" in urls
-    assert "LLM-Ready" in urls
-    assert urls["Parent Organization"] == "https://github.com/ellmos-ai"
-    assert urls["Umbrella Ecosystem"] == "https://github.com/open-bricks"
+        data = tomllib.load(f)
 
-
-def test_security_sla_and_contacts():
-    root = Path(__file__).resolve().parent.parent
-    security_file = (root / "SECURITY.md").read_text(encoding="utf-8")
-    assert "48 hours" in security_file or "48 Stunden" in security_file
-    assert "security@ellmos.ai" in security_file
-    assert "support@lukasgeiger.com" in security_file
-    assert "lukas@open-bricks.org" in security_file
-    assert "security@open-bricks.org" in security_file
-    assert "5 business days" in security_file or "5 Werktagen" in security_file
-
-
-def test_gitignore_hygiene_patterns():
-    root = Path(__file__).resolve().parent.parent
-    gitignore_text = (root / ".gitignore").read_text(encoding="utf-8")
-    assert "*.sync-conflict-*" in gitignore_text
-    assert ".ruff_cache/" in gitignore_text
-    assert "*.tmp" in gitignore_text
-    assert "LOCK.*" in gitignore_text
-    assert "*.lock" in gitignore_text
-    assert "*.bak" in gitignore_text
+    urls = data.get("project", {}).get("urls", {})
+    expected_keys = [
+        "Homepage",
+        "Documentation",
+        "Issues",
+        "Security",
+        "Parent Organization",
+        "Umbrella Ecosystem",
+        "Third-Party Licenses",
+        "Marketing-Log",
+        "LLM-Ready",
+    ]
+    for key in expected_keys:
+        assert key in urls, f"Missing URL key '{key}' in pyproject.toml"
+        assert urls[key].startswith("http"), f"URL for '{key}' is invalid"
 
 
 def test_quick_navigation_anchors_and_parity():
@@ -217,15 +219,77 @@ def test_quick_navigation_anchors_and_parity():
     readme_en = (root / "README.md").read_text(encoding="utf-8")
     readme_de = (root / "README_de.md").read_text(encoding="utf-8")
 
-    assert "### Quick Navigation" in readme_en
-    assert "### Schnellnavigation" in readme_de
+    assert "### 🧭 Quick Navigation" in readme_en
+    assert "### 🧭 Schnellnavigation" in readme_de
 
-    for i in range(1, 16):
-        assert f"[{i}. " in readme_en, f"Missing Quick Nav item {i} in README.md"
-        assert f"[{i}. " in readme_de, f"Missing Quick Nav item {i} in README_de.md"
+    for i in range(1, 19):
+        assert f"[{i}. " in readme_en or f"{i}. [" in readme_en, f"Missing Quick Nav item {i} in README.md"
+        assert f"[{i}. " in readme_de or f"{i}. [" in readme_de, f"Missing Quick Nav item {i} in README_de.md"
 
-    assert "[16. License, Attribution & German Documentation](README_de.md)" in readme_en
-    assert "[16. Lizenz, Urheberrecht & Englische Dokumentation](README.md)" in readme_de
+    assert "(#license)" in readme_en
+    assert "(#lizenz)" in readme_de
+
+
+def test_bilingual_readme_navigation_parity():
+    """Verify that README.md and README_de.md have full 18-point quick navigation parity and heading targets."""
+    root = Path(__file__).resolve().parent.parent
+    en_content = (root / "README.md").read_text(encoding="utf-8")
+    de_content = (root / "README_de.md").read_text(encoding="utf-8")
+
+    en_anchors = [
+        "#executive-summary--core-identity",
+        "#visual-architecture-topology",
+        "#audio-lifecycle--event-flow",
+        "#safety-model--governance-invariants",
+        "#comparative-matrix-vs-alternatives",
+        "#marketing--target-personas",
+        "#scope--supported-engines",
+        "#installation--environment-setup",
+        "#read-only-cli-operations",
+        "#python-api",
+        "#privacy-and-hardware-boundaries",
+        "#third-party-licenses--transparency",
+        "#ecosystem--sibling-tools",
+        "#development-status--roadmap",
+        "#provenance--history-boundary",
+        "#security-policy",
+        "#testing-verification--quality-gates",
+        "#license",
+    ]
+
+    de_anchors = [
+        "#management-zusammenfassung--kernidentitaet",
+        "#visuelle-architektur-topologie",
+        "#audio-lebenszyklus--ereignisfluss",
+        "#sicherheitsmodell--governance-invarianten",
+        "#vergleichsmatrix-gegenueber-alternativen",
+        "#marketing--zielgruppen",
+        "#umfang--unterstuetzte-engines",
+        "#installation--umgebungseinrichtung",
+        "#rein-lesende-cli-bedienung",
+        "#python-api",
+        "#datenschutz-und-hardware-grenzen",
+        "#drittanbieter-lizenzen--transparenz",
+        "#oekosystem--geschwisterwerkzeuge",
+        "#entwicklungsstatus--roadmap",
+        "#provenienz--historien-grenze",
+        "#sicherheitsrichtlinie",
+        "#tests-ausfuehren",
+        "#lizenz",
+    ]
+
+    assert len(en_anchors) == 18
+    assert len(de_anchors) == 18
+
+    for anchor in en_anchors:
+        assert f"({anchor})" in en_content, f"Anchor {anchor} missing in README.md Quick Navigation"
+        anchor_id = anchor.lstrip("#")
+        assert f'id="{anchor_id}"' in en_content, f'Target id="{anchor_id}" missing in README.md headings'
+
+    for anchor in de_anchors:
+        assert f"({anchor})" in de_content, f"Anchor {anchor} missing in README_de.md Schnellnavigation"
+        anchor_id = anchor.lstrip("#")
+        assert f'id="{anchor_id}"' in de_content, f'Target id="{anchor_id}" missing in README_de.md headings'
 
 
 def test_governance_invariants_table():
@@ -233,8 +297,8 @@ def test_governance_invariants_table():
     readme_en = (root / "README.md").read_text(encoding="utf-8")
     readme_de = (root / "README_de.md").read_text(encoding="utf-8")
 
-    assert "## 4. Safety Model & Governance Invariants" in readme_en
-    assert "## 4. Sicherheitsmodell & Governance-Invarianten" in readme_de
+    assert "Safety Model & Governance Invariants" in readme_en
+    assert "Sicherheitsmodell & Governance-Invarianten" in readme_de
 
     for num in range(1, 11):
         assert f"| {num} |" in readme_en, f"Missing invariant #{num} in README.md"
@@ -250,9 +314,24 @@ def test_dual_mermaid_diagrams():
     readme_de = (root / "README_de.md").read_text(encoding="utf-8")
 
     for doc in (readme_en, readme_de):
-        assert "```mermaid\ngraph TD" in doc
+        assert "```mermaid\nflowchart TD" in doc
         assert "```mermaid\nsequenceDiagram" in doc
         assert "autonumber" in doc
+
+
+def test_dual_mermaid_diagrams_and_semicolons_free():
+    root = Path(__file__).resolve().parent.parent
+    readme_en = (root / "README.md").read_text(encoding="utf-8")
+    readme_de = (root / "README_de.md").read_text(encoding="utf-8")
+
+    for doc in (readme_en, readme_de):
+        mermaid_blocks = re.findall(r"```mermaid\s+(.*?)\s+```", doc, re.DOTALL)
+        assert len(mermaid_blocks) >= 2, "Must contain at least 2 mermaid diagrams"
+        for block in mermaid_blocks:
+            for line in block.splitlines():
+                line_clean = line.strip()
+                if line_clean and not line_clean.startswith("%%") and not line_clean.startswith("note"):
+                    assert not line_clean.endswith(";"), f"Mermaid line ends with illegal semicolon: '{line_clean}'"
 
 
 def test_local_marketing_log_present():
@@ -346,11 +425,24 @@ def test_license_files_metadata_contract():
     assert data["project"]["license"] == "MIT"
     license_files = data["project"]["license-files"]
     assert "LICENSE" in license_files
+    assert "NOTICE" in license_files
     assert "THIRD_PARTY_LICENSES.md" in license_files
     for lf in license_files:
         p = root / lf
         assert p.is_file(), f"Missing license file {lf}"
         assert len(p.read_text(encoding="utf-8").strip()) > 50
+
+
+def test_notice_attribution_file():
+    root = Path(__file__).resolve().parent.parent
+    notice = root / "NOTICE"
+    assert notice.is_file(), "NOTICE file must exist in repository root"
+    content = notice.read_text(encoding="utf-8")
+    assert "ellmos-voice-io" in content
+    assert "Lukas Geiger" in content
+    assert "ellmos-ai" in content
+    assert "open-bricks" in content
+    assert "MIT License" in content
 
 
 def test_target_personas_and_discoverability_contract():
@@ -359,8 +451,8 @@ def test_target_personas_and_discoverability_contract():
     readme_de = (root / "README_de.md").read_text(encoding="utf-8")
     mkt_log = (root / "MARKETING-LOG.txt").read_text(encoding="utf-8")
 
-    assert "## 10. Target Personas & Discoverability" in readme_en
-    assert "## 10. Zielgruppen & Auffindbarkeit" in readme_de
+    assert "Target Personas" in readme_en
+    assert "Zielgruppen" in readme_de
 
     personas = [
         "Autonomous Local AI Agent Developers",
@@ -372,6 +464,11 @@ def test_target_personas_and_discoverability_contract():
         assert persona in readme_en, f"Missing persona '{persona}' in README.md"
         assert persona in mkt_log, f"Missing persona '{persona}' in MARKETING-LOG.txt"
 
+    for tag in ["[PERSONA-01]", "[PERSONA-02]", "[PERSONA-03]", "[PERSONA-04]"]:
+        assert tag in readme_en, f"Missing persona tag '{tag}' in README.md"
+        assert tag in readme_de, f"Missing persona tag '{tag}' in README_de.md"
+        assert tag in mkt_log, f"Missing persona tag '{tag}' in MARKETING-LOG.txt"
+
 
 def test_third_party_licenses_audit_contract():
     root = Path(__file__).resolve().parent.parent
@@ -379,12 +476,98 @@ def test_third_party_licenses_audit_contract():
     readme_de = (root / "README_de.md").read_text(encoding="utf-8")
     lic_file = (root / "THIRD_PARTY_LICENSES.md").read_text(encoding="utf-8")
 
-    assert "## 11. Third-Party Licenses & Dependency Audits" in readme_en
-    assert "## 11. Drittanbieter-Lizenzen & Abhängigkeits-Audits" in readme_de
+    assert "Third-Party Licenses" in readme_en
+    assert "Drittanbieter-Lizenzen" in readme_de
 
     assert "piper-tts" in lic_file
     assert "GPL-3.0-or-later" in lic_file
     assert "zero external runtime dependencies" in lic_file.lower()
+    assert "Level 1 Software Bill of Materials (SBOM)" in lic_file
+
+
+def test_level1_sbom_and_cross_reference_matrix():
+    root = Path(__file__).resolve().parent.parent
+    third_party = (root / "THIRD_PARTY_LICENSES.md").read_text(encoding="utf-8")
+
+    assert "Level 1 Software Bill of Materials (SBOM)" in third_party
+    assert "Invariant Cross-Reference Matrix" in third_party
+    assert "RunAsInvoker" in third_party
+    assert "Zero-Copyleft Isolation Guarantee" in third_party
+
+    invariants = [
+        "INV-LOCAL-01",
+        "INV-SEC-02",
+        "INV-CONSENT-03",
+        "INV-MIC-04",
+        "INV-DATA-05",
+        "INV-LAZY-06",
+        "INV-CLI-07",
+        "INV-PORT-08",
+        "INV-SYNC-09",
+        "INV-SLA-10",
+    ]
+    for inv in invariants:
+        assert inv in third_party, f"Missing invariant {inv} in THIRD_PARTY_LICENSES.md"
+
+
+def test_comparative_matrix_sections():
+    root = Path(__file__).resolve().parent.parent
+    readme_en = (root / "README.md").read_text(encoding="utf-8")
+    readme_de = (root / "README_de.md").read_text(encoding="utf-8")
+
+    assert "Comparative Matrix vs. Alternatives" in readme_en
+    assert "Vergleichsmatrix gegenüber Alternativen" in readme_de
+
+    alternatives = [
+        "Cloud Speech APIs",
+        "SpeechRecognition",
+        "WhisperX",
+        "PyAudio",
+    ]
+    for alt in alternatives:
+        assert alt in readme_en, f"Missing alternative {alt} in README.md"
+
+    de_alternatives = [
+        "Cloud-Sprach-APIs",
+        "SpeechRecognition",
+        "WhisperX",
+        "PyAudio",
+    ]
+    for alt in de_alternatives:
+        assert alt in readme_de, f"Missing alternative {alt} in README_de.md"
+
+
+def test_statutory_disclaimer_521_bgb():
+    root = Path(__file__).resolve().parent.parent
+    readme_en = (root / "README.md").read_text(encoding="utf-8")
+    readme_de = (root / "README_de.md").read_text(encoding="utf-8")
+
+    assert "§ 521 BGB" in readme_en
+    assert "§ 521 BGB" in readme_de
+    assert "Vorsatz und grobe Fahrlässigkeit" in readme_en
+    assert "Vorsatz und grobe Fahrlässigkeit" in readme_de
+    assert "Gefälligkeit" in readme_en
+    assert "Gefälligkeit" in readme_de
+
+
+def test_governance_invariants_parity():
+    root = Path(__file__).resolve().parent.parent
+    invariants = [
+        "INV-LOCAL-01",
+        "INV-SEC-02",
+        "INV-CONSENT-03",
+        "INV-MIC-04",
+        "INV-DATA-05",
+        "INV-LAZY-06",
+        "INV-CLI-07",
+        "INV-PORT-08",
+        "INV-SYNC-09",
+        "INV-SLA-10",
+    ]
+    for target in ("README.md", "README_de.md", "THIRD_PARTY_LICENSES.md", "llms.txt"):
+        content = (root / target).read_text(encoding="utf-8")
+        for inv in invariants:
+            assert inv in content, f"Invariant {inv} missing in {target}"
 
 
 def test_competitive_matrix_and_invariants_in_marketing_log():

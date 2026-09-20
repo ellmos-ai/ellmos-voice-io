@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/assets/banner.png" alt="ellmos-voice-io: local microphone, speech processing, and speaker flow" width="900">
+  <img src="docs/assets/banner.png" alt="ellmos-voice-io: local microphone, speech, and speaker processing flow" width="900">
 </p>
 
 # ellmos-voice-io
@@ -8,11 +8,13 @@
 [![Version](https://img.shields.io/badge/Version-0.2.1-blue.svg)](CHANGELOG.md)
 [![CI Status](https://img.shields.io/badge/CI-Multi--OS%20Actions-success?logo=github-actions&logoColor=white)](.github/workflows/ci.yml)
 [![Code Style: Ruff](https://img.shields.io/badge/Code%20Style-Ruff-000000.svg?logo=ruff&logoColor=white)](https://github.com/astral-sh/ruff)
-[![Tests](https://img.shields.io/badge/Tests-59%20passed-brightgreen?logo=pytest&logoColor=white)](tests/)
+[![Tests](https://img.shields.io/badge/Tests-passing-brightgreen?logo=pytest&logoColor=white)](tests/)
 [![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey)](pyproject.toml)
-[![Privacy: Zero-Egress](https://img.shields.io/badge/Privacy-100%25%20Offline%20%7C%20Zero--Egress-success)](README.md#9-privacy-and-hardware-boundaries)
+[![Privacy: Zero-Egress](https://img.shields.io/badge/Privacy-100%25%20Offline%20%7C%20Zero--Egress-success)](#privacy-and-hardware-boundaries)
 [![Security: Local-First](https://img.shields.io/badge/Security-Local--First%20%7C%20RunAsInvoker-blue)](SECURITY.md)
-[![Security SLA](https://img.shields.io/badge/Security%20SLA-48h%20response-blue.svg)](SECURITY.md)
+[![Security SLA](https://img.shields.io/badge/Security%20SLA-48h%20Response-blue.svg)](SECURITY.md)
+[![Level 1 SBOM](https://img.shields.io/badge/SBOM-Level%201%20Audited-green.svg)](THIRD_PARTY_LICENSES.md)
+[![Attribution: NOTICE](https://img.shields.io/badge/Attribution-NOTICE-blue.svg)](NOTICE)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Org](https://img.shields.io/badge/Org-ellmos--ai-8A2BE2)](https://github.com/ellmos-ai)
 [![Umbrella](https://img.shields.io/badge/Umbrella-open--bricks-indigo)](https://github.com/open-bricks)
@@ -21,55 +23,59 @@
 **[English](README.md)** | **[Deutsch](README_de.md)**
 
 > [!TIP]
-> **Machine-Readable Documentation:** An [`llms.txt`](llms.txt) index is provided for AI agents, LLMs, and automated RAG pipelines.
+> **Machine-Readable Documentation:** An [`llms.txt`](llms.txt) index is provided for AI agents, LLMs, and automated RAG pipelines. Last checked: **2026-09-20**.
 
-### Quick Navigation
+### 🧭 Quick Navigation
 
-- [1. Executive Summary](#1-executive-summary)
-- [2. System Architecture & Component Flow](#2-system-architecture--component-flow)
-- [3. Audio Lifecycle & Event Flow](#3-audio-lifecycle--event-flow)
-- [4. Safety Model & Governance Invariants](#4-safety-model--governance-invariants)
-- [5. Scope & Supported Engines](#5-scope--supported-engines)
-- [6. Installation & Environment Setup](#6-installation--environment-setup)
-- [7. Read-Only CLI Operations](#7-read-only-cli-operations)
-- [8. Python API Integration](#8-python-api-integration)
-- [9. Privacy and Hardware Boundaries](#9-privacy-and-hardware-boundaries)
-- [10. Target Personas & Discoverability](#10-target-personas--discoverability)
-- [11. Third-Party Licenses & Dependency Audits](#11-third-party-licenses--dependency-audits)
-- [12. Ecosystem & Sibling Tools](#12-ecosystem--sibling-tools)
-- [13. Development Status & Roadmap](#13-development-status--roadmap)
-- [14. Provenance & History Boundary](#14-provenance--history-boundary)
-- [15. Security & Vulnerability Reporting](#15-security--vulnerability-reporting)
-- [16. License, Attribution & German Documentation](README_de.md)
+1. [Executive Summary & Core Identity](#executive-summary--core-identity)
+2. [Visual Architecture Topology & Decoupled Layers](#visual-architecture-topology)
+3. [Audio Lifecycle & Event Flow](#audio-lifecycle--event-flow)
+4. [Safety Model & Governance Invariants Matrix](#safety-model--governance-invariants)
+5. [Comparative Matrix vs. Alternatives](#comparative-matrix-vs-alternatives)
+6. [Target Personas & High-Intent SEO Queries](#marketing--target-personas)
+7. [Scope & Supported Audio Engines](#scope--supported-engines)
+8. [Installation & Environment Setup](#installation--environment-setup)
+9. [Read-Only CLI Operations](#read-only-cli-operations)
+10. [Python API Integration & Quickstart](#python-api)
+11. [Privacy, Hardware Boundaries & Mic Contract](#privacy-and-hardware-boundaries)
+12. [Third-Party Licenses & Level 1 SBOM](#third-party-licenses--transparency)
+13. [Ecosystem & Sibling Multi-Agent Tools](#ecosystem--sibling-tools)
+14. [Development Status, Roadmap & Release Gates](#development-status--roadmap)
+15. [Provenance, History & AI-Act Boundary](#provenance--history-boundary)
+16. [Security Policy, Contacts & Vulnerability SLA](#security-policy)
+17. [Testing, Verification & Quality Gates](#testing-verification--quality-gates)
+18. [Statutory Notice, Liability Limitation & License (§ 521 BGB)](#license)
 
 ---
 
-## 1. Executive Summary
+## <a id="executive-summary--core-identity"></a><a id="1-executive-summary"></a>1. Executive Summary & Core Identity
 
-`ellmos-voice-io` provides local-first speech input, speech output, and wake-word helpers for LLM systems, agent runtimes, and desktop applications.
+`ellmos-voice-io` provides local speech-to-text, text-to-speech, and wake-word building blocks for LLM systems, agent runtimes, and desktop applications.
 
-`ellmos-voice-io` is a lightweight, LLM-neutral runtime module. It does not run a server, store recordings, ship voice models, or choose a cloud provider. A caller explicitly selects optional local engines and owns all microphone permissions, model downloads, retention, and any networked integration.
+`ellmos-voice-io` is a small, LLM-neutral runtime module. It does not launch a server, store recordings, bundle voice models, or choose a cloud provider. Callers select optional local engines explicitly and remain responsible for microphone permissions, model downloads, retention, and any network integration.
 
-| If you want to... | Open this |
+| If you want to... | Open... |
 |---|---|
-| Inspect component architecture | [2. System Architecture & Component Flow](#2-system-architecture--component-flow) |
-| Trace audio & wake-word execution | [3. Audio Lifecycle & Event Flow](#3-audio-lifecycle--event-flow) |
-| Review safety invariants & SLA | [4. Safety Model & Governance Invariants](#4-safety-model--governance-invariants) |
-| Install package & optional extras | [6. Installation & Environment Setup](#6-installation--environment-setup) |
-| Query engine availability via CLI | [7. Read-Only CLI Operations](#7-read-only-cli-operations) |
-| Integrate Python STT/TTS/Wake-Word | [8. Python API Integration](#8-python-api-integration) |
-| Review target personas & use cases | [10. Target Personas & Discoverability](#10-target-personas--discoverability) |
-| Review third-party licenses & audits | [11. Third-Party Licenses & Dependency Audits](#11-third-party-licenses--dependency-audits) |
-| Explore multi-agent sibling tools | [12. Ecosystem & Sibling Tools](#12-ecosystem--sibling-tools) |
-| Read AI/LLM index file | [llms.txt](llms.txt) |
-| Read the German guide | [README_de.md](README_de.md) |
+| Review component architecture | [2. Visual Architecture Topology & Decoupled Layers](#visual-architecture-topology) |
+| Follow audio and wake-word execution | [3. Audio Lifecycle & Event Flow](#audio-lifecycle--event-flow) |
+| Review safety invariants & SLA | [4. Safety Model & Governance Invariants Matrix](#safety-model--governance-invariants) |
+| Compare vs alternatives | [5. Comparative Matrix vs. Alternatives](#comparative-matrix-vs-alternatives) |
+| Review personas & search terms | [6. Target Personas & High-Intent SEO Queries](#marketing--target-personas) |
+| Install the package and optional extras | [8. Installation & Environment Setup](#installation--environment-setup) |
+| Query engine availability via CLI | [9. Read-Only CLI Operations](#read-only-cli-operations) |
+| Use Python STT, TTS, or wake-word APIs | [10. Python API Integration & Quickstart](#python-api) |
+| Check hardware boundaries & microphone contract | [11. Privacy, Hardware Boundaries & Mic Contract](#privacy-and-hardware-boundaries) |
+| Inspect third-party licenses & Level 1 SBOM | [12. Third-Party Licenses & Level 1 SBOM](#third-party-licenses--transparency) |
+| Explore multi-agent sibling tools | [13. Ecosystem & Sibling Multi-Agent Tools](#ecosystem--sibling-tools) |
+| Read the AI / LLM index file | [llms.txt](llms.txt) |
+| Read the German documentation | [README_de.md](README_de.md) |
 
 ---
 
-## 2. System Architecture & Component Flow
+## <a id="visual-architecture-topology"></a><a id="2-system-architecture--component-flow"></a>2. Visual Architecture Topology & Decoupled Layers
 
 ```mermaid
-graph TD
+flowchart TD
     UserApp["Caller / LLM Application / MCP Adapter"]
     
     subgraph FacadeLayer ["ellmos-voice-io Runtime"]
@@ -112,13 +118,13 @@ graph TD
     Piper --> AudioFiles
     OpenWakeWord --> Mic
     
-    style PrivacyBoundary fill:#f4f9f4,stroke:#4CAF50,stroke-width:2px;
-    style FacadeLayer fill:#f0f4f8,stroke:#2196F3,stroke-width:2px;
+    style PrivacyBoundary fill:#f4f9f4,stroke:#4CAF50,stroke-width:2px
+    style FacadeLayer fill:#f0f4f8,stroke:#2196F3,stroke-width:2px
 ```
 
 ---
 
-## 3. Audio Lifecycle & Event Flow
+## <a id="audio-lifecycle--event-flow"></a><a id="3-audio-lifecycle--event-flow"></a>3. Audio Lifecycle & Event Flow
 
 ```mermaid
 sequenceDiagram
@@ -166,26 +172,63 @@ sequenceDiagram
 
 ---
 
-## 4. Safety Model & Governance Invariants
+## <a id="safety-model--governance-invariants"></a><a id="4-safety-model--governance-invariants"></a>4. Safety Model & Governance Invariants Matrix
 
-The following 10 invariants govern all `ellmos-voice-io` runtime operations, CLI entrypoints, and engine bindings:
+The architecture strictly adheres to 10 foundational invariants:
 
 | # | Invariant | Guarantee | Enforcement Mechanism |
 |---|---|---|---|
-| 1 | **100% Local-First & Zero-Egress** | STT, TTS, and wake-word operations run entirely offline without telemetry or background cloud services. | Pure local processing; no outbound network calls initiated by default runtime. |
-| 2 | **Non-Elevation (RunAsInvoker)** | Module runs strictly in unprivileged user space; never requests administrative or root elevation. | Operates in user space; uses standard platform APIs and user-level audio bindings. |
-| 3 | **Explicit Model Download Consent** | No implicit network connections or silent downloads for Whisper models. | Mandatory `allow_model_download=True` opt-in flag; offline local model file required otherwise. |
-| 4 | **Deterministic Microphone Lifecycle** | Audio capture hardware is accessed solely during active synchronous `WakeWordListener.listen()` calls. | Audio streams terminated deterministically in `finally` blocks; pre-set stop events exit immediately. |
-| 5 | **Caller-Owned Audio Retention** | System never stores recordings, transcripts, or syntheses in hidden caches or internal databases. | Audio files read from and written to caller-specified paths only; zero telemetry persistence. |
-| 6 | **Lazy Engine Isolation** | Heavy optional dependencies (Whisper, Vosk, pyttsx3, Piper, openWakeWord) load lazily on demand. | Deferred imports inside engine wrappers; unrequested engines never allocate process memory. |
-| 7 | **Read-Only Inspection CLI** | `ellmos-voice-io status` outputs structured availability JSON without opening hardware or downloading files. | Pure environment introspection with `importlib.util.find_spec` and zero hardware side effects. |
-| 8 | **Cross-Platform Operating Parity** | Consistent runtime behavior across Windows, Linux, and macOS environments. | Multi-OS GitHub Actions CI matrix with Python 3.10, 3.11, and 3.12 validation. |
-| 9 | **Cloud-Sync & Multi-Agent Defense** | Hardened against file locks and synchronization conflicts across distributed hosts. | `.gitignore` filters `LOCK.*`, `*.lock`, `*.sync-conflict-*`, `*.conflict`, and temporary files. |
-| 10 | **48h Security SLA & Coordinated Disclosure** | Rapid vulnerability response with guaranteed acknowledgment and triage SLA. | Documented in `SECURITY.md` with 48h response, 5-day triage, and multi-inbox contact chain. |
+| 1 | **INV-LOCAL-01: 100% Local-First & Zero-Egress** | No remote telemetry, analytics, background uploads, or external endpoints. | Zero-egress codebase; no networking dependencies in core library. |
+| 2 | **INV-SEC-02: Non-Elevation (RunAsInvoker)** | Operates in unprivileged user space without requiring root or administrator elevation. | Pure user-space Python runtime; strictly rejects root privilege escalation. |
+| 3 | **INV-CONSENT-03: Explicit Model Download Consent** | No implicit network calls or silent downloads of multi-gigabyte models. | Mandatory `allow_model_download=True` flag for Whisper models. Local path default. |
+| 4 | **INV-MIC-04: Deterministic Microphone Hardware Lifecycle** | Audio capture stream is active only during synchronous `WakeWordListener.listen()`. | Hardware stream opened and closed in deterministic `try...finally` block. |
+| 5 | **INV-DATA-05: Caller-Owned Audio Retention** | Zero internal caching or database persistence of spoken audio or transcripts. | Audio buffers processed in memory; output saved only to caller-specified paths. |
+| 6 | **INV-LAZY-06: Lazy Engine & Copyleft Isolation** | Heavy dependencies load only when explicitly invoked; zero overhead when uncalled. | Dynamic import inside engine dispatchers (`importlib.util.find_spec`). |
+| 7 | **INV-CLI-07: Read-Only Inspection CLI** | `ellmos-voice-io status` outputs structured availability JSON without opening hardware or downloading files. | Pure environment introspection with `importlib.util.find_spec` and zero hardware side effects. |
+| 8 | **INV-PORT-08: Cross-Platform Operating Parity** | Consistent runtime behavior across Windows, Linux, and macOS environments. | Multi-OS GitHub Actions CI matrix with Python 3.10, 3.11, 3.12, and 3.13 validation. |
+| 9 | **INV-SYNC-09: Cloud-Sync & Multi-Agent Defense** | Hardened against file locks and synchronization conflicts across distributed hosts. | `.gitignore` filters `LOCK.*`, `*.lock`, `*.sync-conflict-*`, `*.conflict`, and temporary files. |
+| 10 | **INV-SLA-10: 48h Security SLA & Coordinated Disclosure** | Rapid vulnerability response with guaranteed acknowledgment and triage SLA. | Documented in `SECURITY.md` with 48h response, 5-day triage, and multi-inbox contact chain. |
 
 ---
 
-## 5. Scope & Supported Engines
+## <a id="comparative-matrix-vs-alternatives"></a><a id="5-comparative-matrix-vs-alternatives"></a>5. Comparative Matrix vs. Alternatives
+
+The following matrix highlights how `ellmos-voice-io` compares against typical speech integration choices across 10 core architectural and operational dimensions (`INV-LOCAL-01` to `INV-SLA-10`):
+
+| Dimension / Capability | ellmos-voice-io | Cloud Speech APIs (OpenAI / ElevenLabs) | SpeechRecognition (Legacy) | WhisperX / Heavy Frameworks | Ad-hoc PyAudio Scripts |
+|:---|:---|:---|:---|:---|:---|
+| **Local-First & Zero-Egress** (`INV-LOCAL-01`) | **100% Local-First** (Zero network egress) | ❌ Cloud streaming required | ⚠️ Defaults to remote Google API | Local neural models | Local script |
+| **Unprivileged Execution** (`INV-SEC-02`) | **RunAsInvoker** (Standard user space) | User space (HTTP) | User space | ⚠️ Often requires CUDA / root | Standard user space |
+| **Model Download Policy** (`INV-CONSENT-03`) | **Explicit Consent** (No silent downloads) | Hosted by vendor | Hosted by vendor | ⚠️ Implicit multi-GB pulls | Manual setup |
+| **Hardware Lifecycle** (`INV-MIC-04`) | **Deterministic Cleanup** in `finally` | N/A (Cloud HTTP) | ⚠️ PyAudio streams often leak | ⚠️ GPU / VRAM retention | ❌ Prone to audio device lockups |
+| **Caller-Owned Data** (`INV-DATA-05`) | **Zero Persistence** (No cache/telemetry) | ❌ Vendor retention / logging | Variable per engine | Local disk cache | Caller memory |
+| **Lazy Engine Isolation** (`INV-LAZY-06`) | **Zero Base Dependencies** (`dependencies = []`) | Cloud SDK + HTTP client tree | Medium dependency tree | Heavy (PyTorch, TorchAudio, CUDA) | Raw C bindings |
+| **Read-Only CLI** (`INV-CLI-07`) | **Status CLI** via `find_spec` (No mic open) | CLI requires API credentials | None | None | None |
+| **Operating Parity** (`INV-PORT-08`) | **Windows, Linux, macOS** (Py 3.10-3.13) | Platform agnostic (HTTP) | Platform variable | Linux / CUDA optimized | Prone to OS driver drift |
+| **Multi-Agent Defense** (`INV-SYNC-09`) | **Lock & Conflict Hardened** (`.gitignore`) | Not applicable | None | None | None |
+| **Security Response SLA** (`INV-SLA-10`) | **48h Response / 5-Day Triage SLA** | Standard commercial support | Community best effort | Community best effort | None |
+
+---
+
+## <a id="marketing--target-personas"></a><a id="target-personas--high-intent-seo-queries"></a><a id="10-target-personas--discoverability"></a>6. Target Personas & High-Intent SEO Queries
+
+`ellmos-voice-io` is purpose-built for four primary developer, operator, and security personas:
+
+- **[PERSONA-01] Autonomous Local AI Agent Developers & Multi-Agent Swarm Operators:** Add lightweight, zero-overhead speech transcription, audio synthesis, and hands-free wake-word detection to agent frameworks (Claude Code, Antigravity, Codex, Kimi, n8n) without deploying bloated background daemons or incurring recurring cloud API token fees.
+- **[PERSONA-02] Privacy-Conscious Desktop Application Engineers:** Build desktop applications with PySide6, PyQt, Tkinter, or Electron local bridges requiring offline dictation or system voice synthesis that operates 100% locally and complies with stringent privacy regulations (GDPR, HIPAA).
+- **[PERSONA-03] Edge & Embedded AI Engineers:** Deploy local wake-word detection and speech synthesis on Raspberry Pi, mini-PCs, or air-gapped industrial kiosks with deterministic microphone lifecycle and immediate resource cleanup.
+- **[PERSONA-04] Enterprise Security, Governance & Compliance Officers:** Enforce air-gapped audio isolation, zero external network egress (`INV-LOCAL-01`), unprivileged user-mode execution (`INV-SEC-02`), and complete transparency over third-party licenses and model acquisition.
+
+### High-Intent Search Queries
+- `ellmos-voice-io` | `local speech to text python` | `offline TTS python agent`
+- `zero-egress voice io python` | `local wake word listener python` | `openWakeWord python agent integration`
+- `vosk whisper offline transcription python` | `pyttsx3 piper local tts facade` | `privacy-first voice runtime for LLM agents` | `open-bricks local voice stack`
+
+For detailed search queries, bilingual discoverability matrices, and competitive breakdowns, consult [`MARKETING-LOG.txt`](MARKETING-LOG.txt).
+
+---
+
+## <a id="scope--supported-engines"></a><a id="5-scope--supported-engines"></a>7. Scope & Supported Audio Engines
 
 - **File-based STT**: Speech-to-Text through optional Whisper or Vosk.
 - **File & Speaker TTS**: Text-to-Speech to speakers or files through optional pyttsx3 or Piper.
@@ -202,7 +245,7 @@ It intentionally does not replace audio workstations such as KlangpultLight or U
 
 ---
 
-## 6. Installation & Environment Setup
+## <a id="installation--environment-setup"></a><a id="6-installation--environment-setup"></a>8. Installation & Environment Setup
 
 The package is not published to PyPI yet. Until an owner-approved release exists,
 install it only from a trusted local checkout:
@@ -224,7 +267,7 @@ and the licenses of any selected voice/model files before redistribution.
 
 ---
 
-## 7. Read-Only CLI Operations
+## <a id="read-only-cli-operations"></a><a id="7-read-only-cli-operations"></a>9. Read-Only CLI Operations
 
 Inspect engine status safely without starting hardware or querying external endpoints:
 
@@ -246,7 +289,7 @@ Output:
 
 ---
 
-## 8. Python API Integration
+## <a id="python-api"></a><a id="8-python-api-integration"></a>10. Python API Integration & Quickstart
 
 ### Speech-to-Text (STT)
 
@@ -302,7 +345,7 @@ listener.listen(on_wake=on_wake, stop_event=stop_event)
 
 ---
 
-## 9. Privacy and Hardware Boundaries
+## <a id="privacy-and-hardware-boundaries"></a><a id="9-privacy-and-hardware-boundaries"></a>11. Privacy, Hardware Boundaries & Mic Contract
 
 - **Audio, transcripts, and generated files stay where the caller puts them.**
 - **No telemetry, database, account requirement, background service, or implicit upload.**
@@ -320,20 +363,7 @@ listener.listen(on_wake=on_wake, stop_event=stop_event)
 
 ---
 
-## 10. Target Personas & Discoverability
-
-`ellmos-voice-io` is purpose-built for four primary developer and operational personas:
-
-1. **Autonomous Local AI Agent Developers & Swarm Operators:** Add lightweight, zero-overhead speech transcription, audio synthesis, and hands-free wake-word detection to agent frameworks (Claude Code, Antigravity, Codex, Kimi, n8n) without deploying bloated background daemons or incurring recurring cloud API token fees.
-2. **Privacy-Conscious Desktop Application Engineers:** Build desktop applications with PySide6, PyQt, Tkinter, or Electron local bridges requiring offline dictation or system voice synthesis that operates 100% locally and complies with stringent privacy regulations.
-3. **Edge & Embedded AI Engineers:** Deploy local wake-word detection and speech synthesis on Raspberry Pi, mini-PCs, or air-gapped industrial kiosks with deterministic microphone lifecycle and immediate resource cleanup.
-4. **Enterprise Security & Compliance Officers:** Enforce air-gapped audio isolation, zero external network egress (`INV-LOCAL-01`), unprivileged user-mode execution (`INV-PRIV-02`), and complete transparency over third-party licenses and model acquisition.
-
-For detailed search queries, bilingual discoverability matrices, and competitive breakdowns, consult [`MARKETING-LOG.txt`](MARKETING-LOG.txt).
-
----
-
-## 11. Third-Party Licenses & Dependency Audits
+## <a id="third-party-licenses--transparency"></a><a id="11-third-party-licenses--dependency-audits"></a>12. Third-Party Licenses & Level 1 SBOM
 
 The base wheel of `ellmos-voice-io` contains **zero external runtime dependencies** (`dependencies = []`), eliminating third-party supply-chain attack vectors.
 
@@ -346,11 +376,11 @@ Optional speech and wake-word engines are decoupled into explicit extras:
 - **PyAudio & NumPy (`wakeword`):** MIT / BSD-3-Clause.
 - **Piper TTS (`tts-piper`):** **GPL-3.0-or-later** (isolated copyleft engine; optional and never bundled in the base distribution).
 
-For comprehensive dependency audits, system tool boundaries (FFmpeg), and model weights licenses, review [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md).
+For comprehensive Level 1 SBOM audits, system tool boundaries (FFmpeg), and model weights licenses, review [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSES.md).
 
 ---
 
-## 12. Ecosystem & Sibling Tools
+## <a id="ecosystem--sibling-tools"></a><a id="12-ecosystem--sibling-tools"></a>13. Ecosystem & Sibling Multi-Agent Tools
 
 Part of the [ellmos-ai](https://github.com/ellmos-ai) multi-agent infrastructure and the overarching [open-bricks](https://github.com/open-bricks) open-source software ecosystem:
 
@@ -384,7 +414,7 @@ Part of the [ellmos-ai](https://github.com/ellmos-ai) multi-agent infrastructure
 
 ---
 
-## 13. Development Status & Roadmap
+## <a id="development-status--roadmap"></a><a id="13-development-status--roadmap"></a>14. Development Status, Roadmap & Release Gates
 
 The current development gates, task plans, and next verifiable milestones are documented in [`ROADMAP.md`](ROADMAP.md).
 The repository is public on GitHub and the package is not on PyPI. A visibility,
@@ -393,28 +423,49 @@ tag, release, or registry upload requires a separate owner decision; see
 
 ---
 
-## 14. Provenance & History Boundary
+## <a id="provenance--history-boundary"></a><a id="14-provenance--history-boundary"></a>15. Provenance, History & AI-Act Boundary
 
 This module preserves the generic, MIT-licensed core of an earlier internal
 voice service: file STT, TTS file export, and wake-word integration. It is
 rewritten as an independent, user-neutral package with explicit dependencies
-and no legacy database or bridge bindings.
+and no legacy database or bridge bindings. Responsible-use considerations are
+documented in [`docs/ai-act-note.md`](docs/ai-act-note.md).
 
 ---
 
-## 15. Security & Vulnerability Reporting
+## <a id="security-policy"></a><a id="15-security--vulnerability-reporting"></a>16. Security Policy, Contacts & Vulnerability SLA
 
-Security and privacy invariants are strictly maintained. For details on coordinated disclosure, supported versions, and our 48h response SLA, see [`SECURITY.md`](SECURITY.md).
+Security and privacy invariants are strictly maintained:
+- **48-Hour Response SLA:** Initial acknowledgment of reported vulnerabilities within 48 hours.
+- **5 Business Days Triage:** Assessment and reproduction timeframe.
+- **Coordinated Disclosure:** Security advisories via GitHub Security Advisories or direct notification to `security@open-bricks.org` and `security@ellmos.ai`.
+- For full disclosure guidelines and supported versions, see [`SECURITY.md`](SECURITY.md).
 
 ---
 
-## 16. License, Attribution & German Documentation
+## <a id="testing-verification--quality-gates"></a>17. Testing, Verification & Quality Gates
 
-The repository's code and documentation are MIT licensed; see [LICENSE](LICENSE).
-Optional engines, system tools, and voice/model files retain their own licenses;
-see [THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md). Responsible-use and
-deployment boundaries are documented in [SECURITY.md](SECURITY.md) and
-[docs/ai-act-note.md](docs/ai-act-note.md). Contributions follow
-[CONTRIBUTING.md](CONTRIBUTING.md) and [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
+The test suite validates local processing, mock hardware stream lifecycle, lazy import boundaries, and contract integrity across all supported platforms:
+
+```bash
+# Run complete test suite
+pytest -v
+
+# Run bytecode compilation verification
+python -m compileall -q src tests
+
+# Run ruff lint check
+ruff check .
+```
+
+---
+
+## <a id="license"></a><a id="16-license-attribution--german-documentation"></a><a id="18-license"></a>18. Statutory Notice, Liability Limitation & License (§ 521 BGB)
+
+### Statutory Notice & Limitation of Liability (§ 521 BGB)
+The provision of this software is made free of charge as a statutory courtesy (*Gefälligkeit* / *unentgeltliche Schenkung* pursuant to **§ 521 BGB** of the German Civil Code). Under German statutory law, liability of the author and contributors is strictly limited to intent and gross negligence (*Vorsatz und grobe Fahrlässigkeit*).
+
+### License & Ecosystem Attribution
+This project is licensed under the terms of the **MIT License**. See [LICENSE](LICENSE) and [NOTICE](NOTICE) for complete copyright attribution. Optional engines, system tools, and voice/model files retain their own licenses; see [THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md). Responsible-use and deployment boundaries are documented in [SECURITY.md](SECURITY.md) and [docs/ai-act-note.md](docs/ai-act-note.md). Contributions follow [CONTRIBUTING.md](CONTRIBUTING.md) and [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
 
 For the German edition of this documentation, please consult **[README_de.md](README_de.md)**.

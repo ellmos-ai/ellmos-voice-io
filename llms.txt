@@ -2,8 +2,8 @@
 
 > Local-first speech input, speech output, and wake-word helpers for LLM systems.
 
-Last-checked: 2026-09-13
-Test-suite: 59/59 passed (pytest, Python 3.12)
+Last-checked: 2026-09-20
+Test-suite: 66/66 passed (pytest, Python 3.12)
 Version: 0.2.1
 Release-state: public repository; not published to PyPI
 
@@ -27,6 +27,19 @@ dependencies, background service, storage, telemetry, or implicit network use.
 - Audio files, transcripts, model licenses, consent, retention, and transport
   remain caller responsibilities.
 
+## Governance Invariants
+
+- INV-LOCAL-01: 100% Local-First & Zero-Egress
+- INV-SEC-02: Non-Elevation & Unprivileged User Mode (RunAsInvoker)
+- INV-CONSENT-03: Explicit Model Download Consent
+- INV-MIC-04: Deterministic Microphone Hardware Lifecycle
+- INV-DATA-05: Caller-Owned Audio Retention & Zero Persistence
+- INV-LAZY-06: Lazy Engine & Copyleft Isolation
+- INV-CLI-07: Read-Only Inspection CLI (status)
+- INV-PORT-08: Cross-Platform Operating Parity (Windows, Linux, macOS)
+- INV-SYNC-09: Cloud-Sync & Multi-Agent Defense
+- INV-SLA-10: 48h Security SLA & Coordinated Disclosure
+
 ## Capability matrix
 
 | Primitive | Optional engine | Boundary |
@@ -39,13 +52,14 @@ dependencies, background service, storage, telemetry, or implicit network use.
 
 ## Primary files
 
-- `README.md` — English overview, install, API, privacy, and ecosystem.
-- `README_de.md` — German overview with the same technical contract.
-- `SECURITY.md` — bilingual vulnerability and privacy boundaries.
+- `README.md` — English overview, install, API, privacy, Level 1 SBOM, and ecosystem.
+- `README_de.md` — German overview with the same technical contract and 18-point quick nav.
+- `NOTICE` — formal root attribution and copyright notice.
+- `SECURITY.md` — bilingual vulnerability and privacy boundaries (48h response SLA).
 - `ROADMAP.md` — verified gates and remaining external decisions.
 - `RELEASE_GATE.md` — private/public/PyPI release boundary and evidence.
 - `MARKETING-LOG.txt` — discoverability, dual Mermaid diagrams, and 10 invariants log.
-- `THIRD_PARTY_LICENSES.md` — direct optional dependency and model-license notes.
+- `THIRD_PARTY_LICENSES.md` — Level 1 SBOM, direct optional dependency, and model-license notes.
 - `docs/ai-act-note.md` — technical deployment and transparency boundary.
 - `SKILL.md` — agent-facing usage and safety rules.
 - `ellmos-module.v2.json` — machine-readable capability manifest.
