@@ -1,7 +1,7 @@
 # Third-Party Licenses & Transparency Notice
 
 > **Project:** `ellmos-ai/ellmos-voice-io`<br>
-> **Audited:** 2026-09-20<br>
+> **Audited:** 2026-09-23<br>
 > **Repository License:** [MIT License](LICENSE)<br>
 > **Architecture & Privacy:** 100% Local-First, Zero-Egress, Unprivileged User-Mode (`RunAsInvoker`), Deterministic Audio Hardware Lifecycle
 

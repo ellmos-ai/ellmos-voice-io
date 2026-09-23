@@ -23,7 +23,7 @@
 **[English](README.md)** | **[Deutsch](README_de.md)**
 
 > [!TIP]
-> **Machine-Readable Documentation:** An [`llms.txt`](llms.txt) index is provided for AI agents, LLMs, and automated RAG pipelines. Last checked: **2026-09-20**.
+> **Machine-Readable Documentation:** An [`llms.txt`](llms.txt) index is provided for AI agents, LLMs, and automated RAG pipelines. Last checked: **2026-09-23**.
 
 ### 🧭 Quick Navigation
 

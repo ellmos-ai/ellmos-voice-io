@@ -58,6 +58,7 @@ Source = "https://github.com/ellmos-ai/ellmos-voice-io"
 "Third-Party Licenses" = "https://github.com/ellmos-ai/ellmos-voice-io/blob/main/THIRD_PARTY_LICENSES.md"
 "Marketing-Log" = "https://github.com/ellmos-ai/ellmos-voice-io/blob/main/MARKETING-LOG.txt"
 "LLM-Ready" = "https://github.com/ellmos-ai/ellmos-voice-io/blob/main/llms.txt"
+Notice = "https://github.com/ellmos-ai/ellmos-voice-io/blob/main/NOTICE"
 Changelog = "https://github.com/ellmos-ai/ellmos-voice-io/blob/main/CHANGELOG.md"
 
 [project.scripts]
@@ -69,7 +70,8 @@ where = ["src"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["src", "."]
-addopts = "-ra -v"
+addopts = "-ra -v --basetemp=.pytest_temp"
+norecursedirs = [".git", ".pytest_cache", ".pytest_temp", "__pycache__", "build", "dist", ".venv"]
 
 [tool.ruff]
 line-length = 120

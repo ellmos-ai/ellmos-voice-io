@@ -1,8 +1,8 @@
 # ================================================================================
 # MARKETING & DISCOVERABILITY LOG: ellmos-voice-io
 # ================================================================================
-Date: 2026-09-20
-Operator: Antigravity / Gemini (via GITHUBBOT Pfad B)
+Date: 2026-09-23
+Operator: Antigravity / Gemini (via GITHUBBOT Pfad A)
 Target Repo: ellmos-ai/ellmos-voice-io
 Canonical Path: C:\_Local_DEV\repos\ellmos-voice-io
 Version: 0.2.1
@@ -15,6 +15,8 @@ Umbrella Collective: open-bricks
 # [2026-09-12 03:50:00 CEST] [GITHUBBOT_ONE_REPO_MARKETING_AND_DESIGN] ACTION: PFAD_B_UPGRADE | REPO: ellmos-ai/ellmos-voice-io | SCOPE: Upgraded to 16-point quick navigation standard with 100% reciprocal anchor parity, enriched PEP 621 URLs (Third-Party Licenses, Marketing-Log, LLM-Ready), comprehensive THIRD_PARTY_LICENSES.md audit with copyleft isolation disclosure, enriched MARKETING-LOG.txt (4 personas, bilingual search phrases, 5-way competitive matrix across 10 dimensions, 10 governance invariants, 25 partner tools), version bump to 0.2.1, and contract test expansion.
 # [2026-09-13 12:30:00 CEST] [GITHUBBOT_ONE_REPO_CLEANER] ACTION: PFAD_A_HYGIENE | REPO: ellmos-ai/ellmos-voice-io | SCOPE: CI workflow hardening with timeout-minutes: 15, automated Stale Issues & PRs workflow (.github/workflows/stale.yml with timeout-minutes: 10), multi-host cloud-sync and lock defense hardening in .gitignore (*conflicted copy*, *-LAPTOP.*, uv.lock, poetry.lock), and contract test expansion to 59/59 passed tests.
 # [2026-09-20 10:00:00 CEST] [GITHUBBOT_ONE_REPO_MARKETING_AND_DESIGN] ACTION: PFAD_B_OVERHAUL | REPO: ellmos-ai/ellmos-voice-io | SCOPE: 18-point quick navigation standard with 100% reciprocal anchor parity, Level 1 SBOM Third-Party Licenses update with Invariant Cross-Reference Matrix and RunAsInvoker non-elevation certification, Section 5 comparative matrix (INV-LOCAL-01..INV-SLA-10 vs 4 alternatives), Section 6 target personas ([PERSONA-01]..[PERSONA-04]) and high-intent bilingual queries, root NOTICE attribution file, Section 18 German statutory disclaimer (§ 521 BGB Gefälligkeitsrecht), and expanded test metadata contract suite.
+# [2026-09-23 22:20:00 CEST] [GITHUBBOT_ONE_REPO_CLEANER] ACTION: PFAD_A_HYGIENE | REPO: ellmos-ai/ellmos-voice-io | SCOPE: CI lifecycle hardening (welcome.yml, stale.yml concurrency), multi-host cloud-sync and lock defense hardening (* (Kopie)*, *-Mac Studio*, LOCK.user.*, .automation-lock), pyproject pytest basetemp hardening (--basetemp=.pytest_temp), re-audited Level 1 SBOM, and expanded contract test suite.
+
 
 ================================================================================
 1. REPOSITORY AUDIT & DISCOVERABILITY BASELINE
@@ -152,7 +154,25 @@ The repository maintains 100% deterministic automated test coverage in `tests/te
 - `test_license_files_metadata_contract`: Validates `LICENSE`, `NOTICE`, and `THIRD_PARTY_LICENSES.md` structure.
 
 ================================================================================
-8. STRATEGIC ACTION ITEMS
+8. REPOSITORY HYGIENE, CI LIFECYCLE & MULTI-HOST LOCK DEFENSE (PFAD A AUDIT 2026-09-23)
+================================================================================
+- CI Lifecycle Hardening:
+  - Added `.github/workflows/welcome.yml` welcoming first-time contributors with `actions/first-interaction@v3`, least-privilege tokens (`issues: write`, `pull-requests: write`), `timeout-minutes: 5`, and concurrency cancellation (`cancel-in-progress: true`).
+  - Hardened `.github/workflows/stale.yml` with explicit concurrency cancellation (`cancel-in-progress: true`) preventing overlapping scheduler runs.
+- Multi-Host Cloud-Sync & Canonical Lock Defense:
+  - Extended `.gitignore` to strictly defend against multi-host conflict copies (`* (Kopie)*`, `* (Copy)*`, `*-ASUS*`, `*-LAPTOP*`, `*-Mac Studio*`, `*-MacBook*`).
+  - Added canonical lock patterns (`LOCK.user.*`, `LOCK.until.*`, `LOCK.condition.*`, `.automation-lock`) per fail-closed lock system protocol.
+  - Added test isolation directories (`.pytest_temp/`, `.pytest_tmp*/`, `.hypothesis/`, `.turbo/`, `.nyc_output/`).
+- Pyproject & Packaging Hardening:
+  - Added `Notice` URL in `[project.urls]` pointing to the canonical `NOTICE` attribution file.
+  - Added `--basetemp=.pytest_temp` and `.pytest_temp` in `norecursedirs` under `[tool.pytest.ini_options]`.
+- Statutory & SBOM Transparency:
+  - Re-audited `THIRD_PARTY_LICENSES.md` to 2026-09-23 standard with 0 runtime dependencies and Level 1 SBOM.
+- Automated Contract Test Expansion:
+  - Expanded contract test suite in `tests/test_metadata.py` to assert welcome/stale workflows, concurrency, lock defense, pytest temporary directory isolation, and metadata parity.
+
+================================================================================
+9. STRATEGIC ACTION ITEMS
 ================================================================================
 1. Maintain zero runtime dependencies in the base wheel (`dependencies = []`).
 2. Keep Level 1 SBOM and Invariant Cross-Reference Matrix synchronized on every release.

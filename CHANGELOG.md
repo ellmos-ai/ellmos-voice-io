@@ -1,5 +1,15 @@
 # Changelog
 
+## [Unreleased]
+
+- Repository Hygiene, CI Lifecycle & Multi-Host Lock Defense (Pfad A - 2026-09-23):
+  - Added GitHub Actions welcome workflow (`.github/workflows/welcome.yml`) using `actions/first-interaction@v3` with `timeout-minutes: 5`, concurrency cancel-in-progress, and least-privilege `issues: write` / `pull-requests: write` permissions.
+  - Hardened GitHub Actions stale workflow (`.github/workflows/stale.yml`) with explicit concurrency cancellation (`cancel-in-progress: true`) to prevent overlapping scheduled runs.
+  - Strengthened `.gitignore` with multi-host cloud-sync patterns (`* (Kopie)*`, `* (Copy)*`, `*-ASUS*`, `*-LAPTOP*`, `*-Mac Studio*`, `*-MacBook*`), canonical lock patterns (`LOCK.user.*`, `LOCK.until.*`, `LOCK.condition.*`, `.automation-lock`), and test isolation directories (`.pytest_temp/`, `.pytest_tmp*/`, `.hypothesis/`, `.turbo/`, `.nyc_output/`).
+  - Hardened `pyproject.toml` pytest configuration by introducing `--basetemp=.pytest_temp` in `addopts` and adding `.pytest_temp` to `norecursedirs` for clean isolated test executions, alongside PEP 621 `Notice` URL metadata.
+  - Re-audited `THIRD_PARTY_LICENSES.md` to 2026-09-23 standard with 0 runtime dependencies and Level 1 SBOM.
+  - Expanded automated contract test suite in `tests/test_metadata.py` with new contract tests covering lifecycle workflows, concurrency, lock defense, pytest temporary directory hardening, and documentation parity.
+
 ## [0.2.1] - 2026-09-20
 
 - Marketing, Discoverability, 18-Point Quick Nav & Contract Test Expansion (Pfad B):

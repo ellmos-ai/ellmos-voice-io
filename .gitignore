@@ -39,7 +39,13 @@ _reports/internal-business/
 *-LAPTOP-*
 * (kopie)*
 * (copy)*
+* (Kopie)*
+* (Copy)*
 *conflicted copy*
+*-ASUS*
+*-LAPTOP*
+*-Mac Studio*
+*-MacBook*
 Thumbs.db
 desktop.ini
 *.tmp
@@ -52,3 +58,16 @@ desktop.ini
 uv.lock
 poetry.lock
 !package-lock.json
+
+# Canonical Lock Patterns
+LOCK.user.*
+LOCK.until.*
+LOCK.condition.*
+.automation-lock
+
+# Test and Cache Isolation
+.pytest_temp/
+.pytest_tmp*/
+.hypothesis/
+.turbo/
+.nyc_output/

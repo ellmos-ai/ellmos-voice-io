@@ -23,7 +23,7 @@
 **[English](README.md)** | **[Deutsch](README_de.md)**
 
 > [!TIP]
-> **Maschinenlesbare Dokumentation:** Ein [`llms.txt`](llms.txt)-Index steht für KI-Agenten, LLMs und automatisierte RAG-Pipelines bereit. Letzte Prüfung: **2026-09-20**.
+> **Maschinenlesbare Dokumentation:** Ein [`llms.txt`](llms.txt)-Index steht für KI-Agenten, LLMs und automatisierte RAG-Pipelines bereit. Letzte Prüfung: **2026-09-23**.
 
 ### 🧭 Schnellnavigation
 

@@ -134,7 +134,7 @@ def test_llms_txt_integrity():
     assert llms_file.is_file()
 
     content = llms_file.read_text(encoding="utf-8")
-    assert "Last-checked: 2026-09-20" in content
+    assert "Last-checked: 2026-09-23" in content
     assert re.search(r"Test-suite:\s*\d+/\d+\s*passed", content) is not None
     assert "NOTICE" in content
     assert "SECURITY.md" in content
@@ -633,3 +633,89 @@ def test_gitignore_cloud_sync_and_lock_defense():
     ]
     for pattern in required_patterns:
         assert pattern in gitignore_text, f"Missing pattern {pattern} in .gitignore"
+
+
+def test_welcome_workflow_contract():
+    root = Path(__file__).resolve().parent.parent
+    welcome_path = root / ".github" / "workflows" / "welcome.yml"
+    assert welcome_path.is_file(), "Missing .github/workflows/welcome.yml"
+    content = welcome_path.read_text(encoding="utf-8")
+    assert "actions/first-interaction@v3" in content
+    assert "timeout-minutes: 5" in content
+    assert "issues: write" in content
+    assert "pull-requests: write" in content
+    assert "cancel-in-progress: true" in content
+
+
+def test_stale_workflow_concurrency_hardened():
+    root = Path(__file__).resolve().parent.parent
+    stale_path = root / ".github" / "workflows" / "stale.yml"
+    assert stale_path.is_file()
+    content = stale_path.read_text(encoding="utf-8")
+    assert "cancel-in-progress: true" in content
+    assert "group: stale-" in content
+
+
+def test_extended_multihost_and_lock_defense():
+    root = Path(__file__).resolve().parent.parent
+    gitignore_text = (root / ".gitignore").read_text(encoding="utf-8")
+    patterns = [
+        "* (Kopie)*",
+        "* (Copy)*",
+        "*-ASUS*",
+        "*-LAPTOP*",
+        "*-Mac Studio*",
+        "*-MacBook*",
+        "LOCK.user.*",
+        "LOCK.until.*",
+        "LOCK.condition.*",
+        ".automation-lock",
+        ".pytest_temp/",
+        ".pytest_tmp*/",
+        ".hypothesis/",
+        ".turbo/",
+        ".nyc_output/",
+    ]
+    for pattern in patterns:
+        assert pattern in gitignore_text, f"Missing pattern {pattern} in .gitignore"
+
+
+def test_pytest_basetemp_and_norecursedirs_hardening():
+    root = Path(__file__).resolve().parent.parent
+    with (root / "pyproject.toml").open("rb") as f:
+        data = tomllib.load(f)
+    pytest_opts = data.get("tool", {}).get("pytest", {}).get("ini_options", {})
+    addopts = pytest_opts.get("addopts", "")
+    assert "--basetemp=.pytest_temp" in addopts
+    norecurse = pytest_opts.get("norecursedirs", [])
+    assert ".pytest_temp" in norecurse
+
+
+def test_pep621_notice_url():
+    root = Path(__file__).resolve().parent.parent
+    with (root / "pyproject.toml").open("rb") as f:
+        data = tomllib.load(f)
+    urls = data.get("project", {}).get("urls", {})
+    assert "Notice" in urls
+    assert urls["Notice"] == "https://github.com/ellmos-ai/ellmos-voice-io/blob/main/NOTICE"
+
+
+def test_changelog_unreleased_pfad_a_entry():
+    root = Path(__file__).resolve().parent.parent
+    changelog_text = (root / "CHANGELOG.md").read_text(encoding="utf-8")
+    assert "## [Unreleased]" in changelog_text
+    assert "Pfad A - 2026-09-23" in changelog_text
+    assert "welcome.yml" in changelog_text
+    assert "stale.yml" in changelog_text
+    assert "Multi-Host" in changelog_text
+    assert "basetemp" in changelog_text
+
+
+def test_marketing_log_recent_pfad_a_entry():
+    root = Path(__file__).resolve().parent.parent
+    mkt_text = (root / "MARKETING-LOG.txt").read_text(encoding="utf-8")
+    assert "Date: 2026-09-23" in mkt_text
+    assert "PFAD A AUDIT 2026-09-23" in mkt_text
+    assert "welcome.yml" in mkt_text
+    assert "LOCK.user.*" in mkt_text
+    assert "--basetemp=.pytest_temp" in mkt_text
