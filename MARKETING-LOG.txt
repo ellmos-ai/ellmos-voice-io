@@ -1,8 +1,8 @@
 # ================================================================================
 # MARKETING & DISCOVERABILITY LOG: ellmos-voice-io
 # ================================================================================
-Date: 2026-09-23
-Operator: Antigravity / Gemini (via GITHUBBOT Pfad A)
+Date: 2026-09-29 (Prior Date: 2026-09-23)
+Operator: Antigravity / Gemini (via GITHUBBOT Pfad B)
 Target Repo: ellmos-ai/ellmos-voice-io
 Canonical Path: C:\_Local_DEV\repos\ellmos-voice-io
 Version: 0.2.1
@@ -16,6 +16,7 @@ Umbrella Collective: open-bricks
 # [2026-09-13 12:30:00 CEST] [GITHUBBOT_ONE_REPO_CLEANER] ACTION: PFAD_A_HYGIENE | REPO: ellmos-ai/ellmos-voice-io | SCOPE: CI workflow hardening with timeout-minutes: 15, automated Stale Issues & PRs workflow (.github/workflows/stale.yml with timeout-minutes: 10), multi-host cloud-sync and lock defense hardening in .gitignore (*conflicted copy*, *-LAPTOP.*, uv.lock, poetry.lock), and contract test expansion to 59/59 passed tests.
 # [2026-09-20 10:00:00 CEST] [GITHUBBOT_ONE_REPO_MARKETING_AND_DESIGN] ACTION: PFAD_B_OVERHAUL | REPO: ellmos-ai/ellmos-voice-io | SCOPE: 18-point quick navigation standard with 100% reciprocal anchor parity, Level 1 SBOM Third-Party Licenses update with Invariant Cross-Reference Matrix and RunAsInvoker non-elevation certification, Section 5 comparative matrix (INV-LOCAL-01..INV-SLA-10 vs 4 alternatives), Section 6 target personas ([PERSONA-01]..[PERSONA-04]) and high-intent bilingual queries, root NOTICE attribution file, Section 18 German statutory disclaimer (§ 521 BGB Gefälligkeitsrecht), and expanded test metadata contract suite.
 # [2026-09-23 22:20:00 CEST] [GITHUBBOT_ONE_REPO_CLEANER] ACTION: PFAD_A_HYGIENE | REPO: ellmos-ai/ellmos-voice-io | SCOPE: CI lifecycle hardening (welcome.yml, stale.yml concurrency), multi-host cloud-sync and lock defense hardening (* (Kopie)*, *-Mac Studio*, LOCK.user.*, .automation-lock), pyproject pytest basetemp hardening (--basetemp=.pytest_temp), re-audited Level 1 SBOM, and expanded contract test suite.
+# [2026-09-29 01:15:00 CEST] [GITHUBBOT_ONE_REPO_MARKETING_AND_DESIGN] ACTION: PFAD_B_UPGRADE | REPO: ellmos-ai/ellmos-voice-io | SCOPE: 18-point dual HTML anchors (sec-01..sec-18), ASCII Four-View Architectural Topology, Level 1 SBOM plain-text companion (THIRD_PARTY_LICENSES.txt), PEP 621 SBOM URLs & 20 topics saturation, llms.txt & badge synchronization (2026-09-29), and contract test expansion.
 
 
 ================================================================================
@@ -172,7 +173,27 @@ The repository maintains 100% deterministic automated test coverage in `tests/te
   - Expanded contract test suite in `tests/test_metadata.py` to assert welcome/stale workflows, concurrency, lock defense, pytest temporary directory isolation, and metadata parity.
 
 ================================================================================
-9. STRATEGIC ACTION ITEMS
+9. DISCOVERABILITY, VISUAL ARCHITECTURE & LEVEL 1 SBOM AUDIT (PFAD B 2026-09-29)
+================================================================================
+- 18-Point Quick Navigation Parity:
+  - Synchronized dual reciprocal HTML anchors (`<a id="sec-01"></a>` through `<a id="sec-18"></a>`) across `README.md` and `README_de.md` for deterministic deep links.
+- Visual Architecture & ASCII Topology:
+  - Added ASCII Four-View Architectural Topology projection in Section 2 across `README.md` ([VIEW 1: CALLER RUNTIMES] through [VIEW 4: GOVERNANCE & SECURITY]) and `README_de.md` ([SICHT 1] through [SICHT 4]).
+- Level 1 SBOM Plain-Text Companion:
+  - Created canonical plain-text companion `THIRD_PARTY_LICENSES.txt` with runtime stdlib inventory, decoupled optional extras, zero-copyleft core guarantee, and mapping all 10 governance invariants `INV-LOCAL-01` through `INV-SLA-10`.
+  - Re-audited `THIRD_PARTY_LICENSES.md` to 2026-09-29 standard.
+- PEP 621 Standard Packaging & Metadata:
+  - Registered `license-files = ["LICENSE", "NOTICE", "THIRD_PARTY_LICENSES.md", "THIRD_PARTY_LICENSES.txt"]` in `pyproject.toml`.
+  - Added `"Third-Party Licenses (Text)"` and `"Level 1 SBOM"` URLs under `[project.urls]`.
+  - Saturated `keywords` to 20 high-intent discoverability topics.
+- Shields.io Badges & RAG Readiness:
+  - Synchronized `Verified: 2026-09-29` and `Level 1 SBOM: Text Companion` badges across English and German READMEs.
+  - Updated `llms.txt` Last-checked date to 2026-09-29 with `THIRD_PARTY_LICENSES.txt` companion reference.
+- Automated Contract Test Expansion:
+  - Added contract tests in `tests/test_metadata.py` verifying sec-01..sec-18 anchors, ASCII topology projection, `THIRD_PARTY_LICENSES.txt` integrity, PEP 621 text license URLs, and marketing log recency.
+
+================================================================================
+10. STRATEGIC ACTION ITEMS
 ================================================================================
 1. Maintain zero runtime dependencies in the base wheel (`dependencies = []`).
 2. Keep Level 1 SBOM and Invariant Cross-Reference Matrix synchronized on every release.

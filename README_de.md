@@ -13,7 +13,9 @@
 [![Datenschutz: Zero-Egress](https://img.shields.io/badge/Datenschutz-100%25%20Offline%20%7C%20Zero--Egress-success)](#datenschutz-und-hardware-grenzen)
 [![Sicherheit: Local-First](https://img.shields.io/badge/Sicherheit-Local--First%20%7C%20RunAsInvoker-blue)](SECURITY.md)
 [![Sicherheits-SLA](https://img.shields.io/badge/Sicherheits--SLA-48h%20Antwort-blue.svg)](SECURITY.md)
-[![Level 1 SBOM](https://img.shields.io/badge/SBOM-Level%201%20Auditiert-green.svg)](THIRD_PARTY_LICENSES.md)
+[![Geprüft: 2026-09-29](https://img.shields.io/badge/Gepr%C3%BCft-2026--09--29-blue.svg)](CHANGELOG.md)
+[![Level 1 SBOM](https://img.shields.io/badge/Level%201%20SBOM-Text%20Companion-brightgreen.svg)](THIRD_PARTY_LICENSES.txt)
+[![Level 1 SBOM Audit](https://img.shields.io/badge/SBOM-Level%201%20Auditiert-green.svg)](THIRD_PARTY_LICENSES.md)
 [![Attribution: NOTICE](https://img.shields.io/badge/Attribution-NOTICE-blue.svg)](NOTICE)
 [![Lizenz: MIT](https://img.shields.io/badge/Lizenz-MIT-green.svg)](LICENSE)
 [![Org](https://img.shields.io/badge/Org-ellmos--ai-8A2BE2)](https://github.com/ellmos-ai)
@@ -23,32 +25,34 @@
 **[English](README.md)** | **[Deutsch](README_de.md)**
 
 > [!TIP]
-> **Maschinenlesbare Dokumentation:** Ein [`llms.txt`](llms.txt)-Index steht für KI-Agenten, LLMs und automatisierte RAG-Pipelines bereit. Letzte Prüfung: **2026-09-23**.
+> **Maschinenlesbare Dokumentation:** Ein [`llms.txt`](llms.txt)-Index steht für KI-Agenten, LLMs und automatisierte RAG-Pipelines bereit. Letzte Prüfung: **2026-09-29**.
 
 ### 🧭 Schnellnavigation
 
-1. [Kurzfassung & Kernidentität](#management-zusammenfassung--kernidentitaet)
-2. [Visuelle Architektur-Topologie & Entkoppelte Schichten](#visuelle-architektur-topologie)
-3. [Audio-Lebenszyklus & Ereignisfluss](#audio-lebenszyklus--ereignisfluss)
-4. [Sicherheitsmodell & Governance-Invarianten](#sicherheitsmodell--governance-invarianten)
-5. [Vergleichsmatrix gegenüber Alternativen](#vergleichsmatrix-gegenueber-alternativen)
-6. [Zielgruppen & Suchbegriffe](#marketing--zielgruppen)
-7. [Umfang & Unterstützte Audio-Engines](#umfang--unterstuetzte-engines)
-8. [Installation & Umgebungseinrichtung](#installation--umgebungseinrichtung)
-9. [Rein lesende CLI-Bedienung](#rein-lesende-cli-bedienung)
-10. [Python-API-Integration & Schnellstart](#python-api)
-11. [Datenschutz, Hardware-Grenzen & Mikrofon-Vertrag](#datenschutz-und-hardware-grenzen)
-12. [Drittanbieter-Lizenzen & Level-1-SBOM-Audit](#drittanbieter-lizenzen--transparenz)
-13. [Ökosystem & Geschwister-Werkzeuge](#oekosystem--geschwisterwerkzeuge)
-14. [Entwicklungsstatus, Roadmap & Freigabe-Tore](#entwicklungsstatus--roadmap)
-15. [Provenienz, Historien-Grenze & AI-Act-Hinweis](#provenienz--historien-grenze)
-16. [Sicherheitsrichtlinie, Kontakte & Schwachstellen-SLA](#sicherheitsrichtlinie)
-17. [Tests, Verifikation & Qualitätstore](#tests-ausfuehren)
-18. [Gesetzlicher Hinweis, Haftungsbeschränkung & Lizenz (§ 521 BGB)](#lizenz)
+| # | Abschnitt | Nav-Anker | Thema & Geltungsbereich |
+|---|---|---|---|
+| 01 | [1. Kurzfassung & Kernidentität](#management-zusammenfassung--kernidentitaet) | [`#sec-01`](#sec-01) | Leichtgewichtiges LLM-neutrales Sprach- & Wake-Word-Laufzeitmodul |
+| 02 | [2. Visuelle Architektur-Topologie & Entkoppelte Schichten](#visuelle-architektur-topologie) | [`#sec-02`](#sec-02) | Mermaid-Diagramm & ASCII-Vier-Sichten-Architekturprojektion |
+| 03 | [3. Audio-Lebenszyklus & Ereignisfluss](#audio-lebenszyklus--ereignisfluss) | [`#sec-03`](#sec-03) | Synchrones Chunk-Lesen, Lazy-Engines & aufrufergesteuerte Stop-Events |
+| 04 | [4. Sicherheitsmodell & Governance-Invarianten](#sicherheitsmodell--governance-invarianten) | [`#sec-04`](#sec-04) | Zehn verbindliche Governance- & Laufzeit-Invarianten (INV-LOCAL-01..INV-SLA-10) |
+| 05 | [5. Vergleichsmatrix gegenüber Alternativen](#vergleichsmatrix-gegenueber-alternativen) | [`#sec-05`](#sec-05) | 10-Dimensionen-Benchmark gegenüber Cloud-APIs, SpeechRecognition, WhisperX & PyAudio |
+| 06 | [6. Zielgruppen & Suchbegriffe](#marketing--zielgruppen) | [`#sec-06`](#sec-06) | Vier Entwickler-Personas ([PERSONA-01]..[PERSONA-04]) & zweisprachige Suchbegriffe |
+| 07 | [7. Umfang & Unterstützte Audio-Engines](#umfang--unterstuetzte-engines) | [`#sec-07`](#sec-07) | Offline-STT (Vosk, Whisper), lokales TTS (pyttsx3, Piper) und Wake-Word |
+| 08 | [8. Installation & Umgebungseinrichtung](#installation--umgebungseinrichtung) | [`#sec-08`](#sec-08) | Abhängigkeitsfreie Basisinstallation und isolierte optionale Extras |
+| 09 | [9. Rein lesende CLI-Bedienung](#rein-lesende-cli-bedienung) | [`#sec-09`](#sec-09) | `ellmos-voice-io status` strukturierte Introspektion ohne Hardwarezugriff |
+| 10 | [10. Python-API-Integration & Schnellstart](#python-api) | [`#sec-10`](#sec-10) | Python-Codebeispiele für STT, TTS-Dateiexport und Wake-Word-Listener |
+| 11 | [11. Datenschutz, Hardware-Grenzen & Mikrofon-Vertrag](#datenschutz-und-hardware-grenzen) | [`#sec-11`](#sec-11) | Hardware-Lebenszyklus in deterministischem try..finally & Null-Persistenz |
+| 12 | [12. Drittanbieter-Lizenzen & Level-1-SBOM-Audit](#drittanbieter-lizenzen--transparenz) | [`#sec-12`](#sec-12) | 100% Permissives Basis-Wheel, GPL-Copyleft-Isolation & Plain-Text-SBOM |
+| 13 | [13. Ökosystem & Geschwister-Werkzeuge](#oekosystem--geschwisterwerkzeuge) | [`#sec-13`](#sec-13) | Verlinkungsmatrix im ellmos-ai-Ökosystem und open-bricks-Dachverband |
+| 14 | [14. Entwicklungsstatus, Roadmap & Freigabe-Tore](#entwicklungsstatus--roadmap) | [`#sec-14`](#sec-14) | Meilensteine, Testabdeckung und Freigabe-Governance-Grenzen |
+| 15 | [15. Provenienz, Historien-Grenze & AI-Act-Hinweis](#provenienz--historien-grenze) | [`#sec-15`](#sec-15) | Provenienz, nutzerneutrale Unabhängigkeit und verantwortungsvolle AI-Act-Hinweise |
+| 16 | [16. Sicherheitsrichtlinie, Kontakte & Schwachstellen-SLA](#sicherheitsrichtlinie) | [`#sec-16`](#sec-16) | 48h Antwort-SLA, 5-Tage-Triage und Multi-Postfach-Kontaktkette |
+| 17 | [17. Tests, Verifikation & Qualitätstore](#tests-ausfuehren) | [`#sec-17`](#sec-17) | Pytest, Vertragstests, Bytecode-Kompilierung und Ruff-Prüfung |
+| 18 | [18. Gesetzlicher Hinweis, Haftungsbeschränkung & Lizenz (§ 521 BGB)](#lizenz) | [`#sec-18`](#sec-18) | § 521 BGB Haftungsprivileg, MIT-Urheberrecht und englische Originaldokumentation |
 
 ---
 
-## <a id="management-zusammenfassung--kernidentitaet"></a><a id="1-kurzfassung"></a>1. Kurzfassung & Kernidentität
+## <a id="sec-01"></a><a id="management-zusammenfassung--kernidentitaet"></a><a id="1-kurzfassung"></a>1. Kurzfassung & Kernidentität
 
 `ellmos-voice-io` stellt lokale Speech-to-Text-, Text-to-Speech- und Wake-Word-Hilfen für LLM-Systeme, Agenten-Laufzeiten und Desktop-Anwendungen bereit.
 
@@ -72,7 +76,7 @@
 
 ---
 
-## <a id="visuelle-architektur-topologie"></a><a id="2-systemarchitektur--komponentenfluss"></a>2. Visuelle Architektur-Topologie & Entkoppelte Schichten
+## <a id="sec-02"></a><a id="visuelle-architektur-topologie"></a><a id="2-systemarchitektur--komponentenfluss"></a>2. Visuelle Architektur-Topologie & Entkoppelte Schichten
 
 ```mermaid
 flowchart TD
@@ -122,9 +126,43 @@ flowchart TD
     style FacadeLayer fill:#f0f4f8,stroke:#2196F3,stroke-width:2px
 ```
 
+### ASCII-Vier-Sichten-Architekturprojektion
+
+```text
++--------------------------------------------------------------------------------------------------+
+|             VIEW 1 / SICHT 1: CALLER RUNTIMES & AGENT ADAPTERS / AUFRUFER-LAUFZEITEN             |
+|  [Claude Code / Antigravity / Codex]   [PySide6 / PyQt Desktop Apps]   [CLI: ellmos-voice-io]    |
++--------------------------------------------------------------------------------------------------+
+                                                 │
+                                                 ▼
++--------------------------------------------------------------------------------------------------+
+|             VIEW 2 / SICHT 2: VOICE-IO CORE ENGINE & FACADE PRIMITIVES                           |
+|       VoiceIO Facade  ◄──►  SpeechToText (STT)  ◄──►  TextToSpeech (TTS)  ◄──►  WakeWordListener  |
+|       (Unified API)         (File Transcription)      (Audio Synthesis)         (Mic Detection)  |
++--------------------------------------------------------------------------------------------------+
+                                                 │
+                                                 ▼
++--------------------------------------------------------------------------------------------------+
+|         VIEW 3 / SICHT 3: DECOUPLED AUDIO HARDWARE & LAZY ENGINES (STT / TTS / WAKE)             |
+|  [STT Engines]          [TTS Engines]                [Wake-Word Engine]   [Audio Hardware]       |
+|  • Vosk (Offline)       • pyttsx3 (System SAPI/NSS)  • openWakeWord       • Mic (Active Stream)  |
+|  • Whisper (Neural)     • Piper (ONNX Neural TTS)    • PortAudio/PyAudio  • WAV/MP3/OGG (Disk)   |
++--------------------------------------------------------------------------------------------------+
+                                                 │
+                                                 ▼
++--------------------------------------------------------------------------------------------------+
+|             VIEW 4 / SICHT 4: GOVERNANCE, ZERO-EGRESS & SECURITY PERIMETER                       |
+|  • INV-LOCAL-01 (100% Local-First / Zero Telemetry)  • INV-SEC-02 (RunAsInvoker User Mode)       |
+|  • INV-CONSENT-03 (Explicit Model Consent)           • INV-MIC-04 (Deterministic Stream Cleanup) |
+|  • INV-DATA-05 (Caller Audio Retention)             • INV-LAZY-06 (Copyleft/GPL Extra Isolation)|
+|  • INV-CLI-07 (Read-Only Status Introspection)       • INV-PORT-08 (Windows / Linux / macOS)     |
+|  • INV-SYNC-09 (Multi-Host Lock Defense)             • INV-SLA-10 (48h Security Response SLA)    |
++--------------------------------------------------------------------------------------------------+
+```
+
 ---
 
-## <a id="audio-lebenszyklus--ereignisfluss"></a><a id="3-audio-lebenszyklus--ereignisfluss"></a>3. Audio-Lebenszyklus & Ereignisfluss
+## <a id="sec-03"></a><a id="audio-lebenszyklus--ereignisfluss"></a><a id="3-audio-lebenszyklus--ereignisfluss"></a>3. Audio-Lebenszyklus & Ereignisfluss
 
 ```mermaid
 sequenceDiagram
@@ -172,7 +210,7 @@ sequenceDiagram
 
 ---
 
-## <a id="sicherheitsmodell--governance-invarianten"></a><a id="4-sicherheitsmodell--governance-invarianten"></a>4. Sicherheitsmodell & Governance-Invarianten
+## <a id="sec-04"></a><a id="sicherheitsmodell--governance-invarianten"></a><a id="4-sicherheitsmodell--governance-invarianten"></a>4. Sicherheitsmodell & Governance-Invarianten
 
 Die Architektur befolgt strikt 10 fundamentale Invarianten:
 
@@ -191,7 +229,7 @@ Die Architektur befolgt strikt 10 fundamentale Invarianten:
 
 ---
 
-## <a id="vergleichsmatrix-gegenueber-alternativen"></a><a id="5-vergleichsmatrix-gegenueber-alternativen"></a>5. Vergleichsmatrix gegenüber Alternativen
+## <a id="sec-05"></a><a id="vergleichsmatrix-gegenueber-alternativen"></a><a id="5-vergleichsmatrix-gegenueber-alternativen"></a>5. Vergleichsmatrix gegenüber Alternativen
 
 Die folgende Matrix zeigt, wie sich `ellmos-voice-io` im Vergleich zu typischen Sprachintegrationsansätzen entlang von 10 zentralen Architektur- und Betriebsdimensionen (`INV-LOCAL-01` bis `INV-SLA-10`) positioniert:
 
@@ -210,7 +248,7 @@ Die folgende Matrix zeigt, wie sich `ellmos-voice-io` im Vergleich zu typischen 
 
 ---
 
-## <a id="marketing--zielgruppen"></a><a id="10-zielgruppen--auffindbarkeit"></a>6. Zielgruppen & Suchbegriffe
+## <a id="sec-06"></a><a id="marketing--zielgruppen"></a><a id="10-zielgruppen--auffindbarkeit"></a>6. Zielgruppen & Suchbegriffe
 
 `ellmos-voice-io` wurde gezielt für vier Entwickler-, Betreiber- und Sicherheits-Zielgruppen konzipiert:
 
@@ -228,7 +266,7 @@ Ausführliche zweisprachige Suchmatrizen und Audit-Protokolle finden Sie in [`MA
 
 ---
 
-## <a id="umfang--unterstuetzte-engines"></a><a id="5-umfang--unterstuetzte-engines"></a>7. Umfang & Unterstützte Audio-Engines
+## <a id="sec-07"></a><a id="umfang--unterstuetzte-engines"></a><a id="5-umfang--unterstuetzte-engines"></a>7. Umfang & Unterstützte Audio-Engines
 
 - **Dateibasierte Spracherkennung (STT)**: Speech-to-Text über optionales Whisper oder Vosk.
 - **Datei- & Lautsprecher-Sprachausgabe (TTS)**: Text-to-Speech auf Lautsprecher oder in Dateien über pyttsx3 oder Piper.
@@ -245,7 +283,7 @@ Es ersetzt ausdrücklich keine Audio-Workstations wie KlangpultLight oder USBPod
 
 ---
 
-## <a id="installation--umgebungseinrichtung"></a><a id="6-installation--umgebungseinrichtung"></a>8. Installation & Umgebungseinrichtung
+## <a id="sec-08"></a><a id="installation--umgebungseinrichtung"></a><a id="6-installation--umgebungseinrichtung"></a>8. Installation & Umgebungseinrichtung
 
 Das Paket ist noch nicht auf PyPI veröffentlicht. Bis eine vom Eigentümer freigegebene Veröffentlichung vorliegt,
 installieren Sie es ausschließlich aus einem vertrauenswürdigen lokalen Klon:
@@ -266,7 +304,7 @@ Prüfen Sie vor einer Weitergabe [`THIRD_PARTY_LICENSES.md`](THIRD_PARTY_LICENSE
 
 ---
 
-## <a id="rein-lesende-cli-bedienung"></a><a id="7-rein-lesende-cli-bedienung"></a>9. Rein lesende CLI-Bedienung
+## <a id="sec-09"></a><a id="rein-lesende-cli-bedienung"></a><a id="7-rein-lesende-cli-bedienung"></a>9. Rein lesende CLI-Bedienung
 
 Prüfen Sie den Engine-Status sicher, ohne Hardware zu aktivieren oder externe Endpunkte abzufragen:
 
@@ -288,7 +326,7 @@ Ausgabe:
 
 ---
 
-## <a id="python-api"></a><a id="8-python-api-integration"></a>10. Python-API-Integration & Schnellstart
+## <a id="sec-10"></a><a id="python-api"></a><a id="8-python-api-integration"></a>10. Python-API-Integration & Schnellstart
 
 ### Speech-to-Text (STT)
 
@@ -344,7 +382,7 @@ listener.listen(on_wake=on_wake, stop_event=stop_event)
 
 ---
 
-## <a id="datenschutz-und-hardware-grenzen"></a><a id="9-datenschutz-und-hardware-grenzen"></a>11. Datenschutz, Hardware-Grenzen & Mikrofon-Vertrag
+## <a id="sec-11"></a><a id="datenschutz-und-hardware-grenzen"></a><a id="9-datenschutz-und-hardware-grenzen"></a>11. Datenschutz, Hardware-Grenzen & Mikrofon-Vertrag
 
 - **Audio, Transkripte und generierte Dateien verbleiben dort, wo der Aufrufer sie ablegt.**
 - **Keine Telemetrie, keine Datenbank, keine Kontopflicht, kein Hintergrunddienst und kein impliziter Upload.**
@@ -361,7 +399,7 @@ listener.listen(on_wake=on_wake, stop_event=stop_event)
 
 ---
 
-## <a id="drittanbieter-lizenzen--transparenz"></a><a id="11-drittanbieter-lizenzen--abhaengigkeits-audits"></a>12. Drittanbieter-Lizenzen & Level-1-SBOM-Audit
+## <a id="sec-12"></a><a id="drittanbieter-lizenzen--transparenz"></a><a id="11-drittanbieter-lizenzen--abhaengigkeits-audits"></a>12. Drittanbieter-Lizenzen & Level-1-SBOM-Audit
 
 Das Basis-Wheel von `ellmos-voice-io` enthält **keine externen Laufzeit-Abhängigkeiten** (`dependencies = []`), was Angriffsvektoren in der Lieferkette ausschließt.
 
@@ -378,7 +416,7 @@ Detaillierte Level-1-SBOM-Audits, Systemgrenzen (FFmpeg) und Lizenzen der Modell
 
 ---
 
-## <a id="oekosystem--geschwisterwerkzeuge"></a><a id="12-oekosystem--geschwister-werkzeuge"></a>13. Ökosystem & Geschwister-Werkzeuge
+## <a id="sec-13"></a><a id="oekosystem--geschwisterwerkzeuge"></a><a id="12-oekosystem--geschwister-werkzeuge"></a>13. Ökosystem & Geschwister-Werkzeuge
 
 Teil der [ellmos-ai](https://github.com/ellmos-ai) Multi-Agenten-Infrastruktur und des übergeordneten [open-bricks](https://github.com/open-bricks) Open-Source-Software-Ökosystems:
 
@@ -412,7 +450,7 @@ Teil der [ellmos-ai](https://github.com/ellmos-ai) Multi-Agenten-Infrastruktur u
 
 ---
 
-## <a id="entwicklungsstatus--roadmap"></a><a id="13-entwicklungsstatus--roadmap"></a>14. Entwicklungsstatus, Roadmap & Freigabe-Tore
+## <a id="sec-14"></a><a id="entwicklungsstatus--roadmap"></a><a id="13-entwicklungsstatus--roadmap"></a>14. Entwicklungsstatus, Roadmap & Freigabe-Tore
 
 Aktuelle Entwicklungsstufen, Aufgabenpläne und die nächsten überprüfbaren Meilensteine sind in [`ROADMAP.md`](ROADMAP.md) dokumentiert.
 Das Repository ist auf GitHub öffentlich und das Paket ist nicht auf PyPI. Eine Veröffentlichung,
@@ -421,7 +459,7 @@ ein Tag, Release oder Registry-Upload bedarf einer gesonderten Eigentümerentsch
 
 ---
 
-## <a id="provenienz--historien-grenze"></a><a id="14-provenienz--historien-grenze"></a>15. Provenienz, Historien-Grenze & AI-Act-Hinweis
+## <a id="sec-15"></a><a id="provenienz--historien-grenze"></a><a id="14-provenienz--historien-grenze"></a>15. Provenienz, Historien-Grenze & AI-Act-Hinweis
 
 Dieses Modul bewahrt den generischen, MIT-lizenzierten Kern eines früheren internen
 Sprachdienstes: Datei-STT, TTS-Dateiexport und Wake-Word-Integration. Es wurde als
@@ -431,7 +469,7 @@ Einsatz sind in [`docs/ai-act-note.md`](docs/ai-act-note.md) dokumentiert.
 
 ---
 
-## <a id="sicherheitsrichtlinie"></a><a id="15-sicherheitsrichtlinie--meldewege"></a>16. Sicherheitsrichtlinie, Kontakte & Schwachstellen-SLA
+## <a id="sec-16"></a><a id="sicherheitsrichtlinie"></a><a id="15-sicherheitsrichtlinie--meldewege"></a>16. Sicherheitsrichtlinie, Kontakte & Schwachstellen-SLA
 
 Sicherheits- und Datenschutz-Invarianten werden strikt eingehalten:
 - **48-Stunden-Reaktions-SLA:** Erste Rückmeldung zu gemeldeten Sicherheitslücken innerhalb von 48 Stunden.
@@ -441,7 +479,7 @@ Sicherheits- und Datenschutz-Invarianten werden strikt eingehalten:
 
 ---
 
-## <a id="tests-ausfuehren"></a>17. Tests, Verifikation & Qualitätstore
+## <a id="sec-17"></a><a id="tests-ausfuehren"></a>17. Tests, Verifikation & Qualitätstore
 
 Die Testsuite validiert lokale Verarbeitung, Mock-Hardware-Stream-Lebenszyklen, Lazy-Import-Grenzen und Vertragsintegrität auf allen unterstützten Plattformen:
 
@@ -458,7 +496,7 @@ ruff check .
 
 ---
 
-## <a id="lizenz"></a><a id="16-lizenz-urheberrecht--englische-dokumentation"></a><a id="18-lizenz"></a>18. Gesetzlicher Hinweis, Haftungsbeschränkung & Lizenz (§ 521 BGB)
+## <a id="sec-18"></a><a id="lizenz"></a><a id="16-lizenz-urheberrecht--englische-dokumentation"></a><a id="18-lizenz"></a>18. Gesetzlicher Hinweis, Haftungsbeschränkung & Lizenz (§ 521 BGB)
 
 ### Gesetzlicher Hinweis & Haftungsbeschränkung (§ 521 BGB)
 Die Bereitstellung dieser Software erfolgt unentgeltlich im Rahmen eines Gefälligkeitsverhältnisses (*Gefälligkeit* / *unentgeltliche Schenkung* gemäß **§ 521 BGB** des Bürgerlichen Gesetzbuches). Die Haftung des Autors und der Mitwirkenden ist demgemäß auf Vorsatz und grobe Fahrlässigkeit (*Vorsatz und grobe Fahrlässigkeit*) beschränkt.

@@ -1,0 +1,105 @@
+# Third-Party Licenses & Software Inventory
+# Project: ellmos-ai/ellmos-voice-io
+# Audited: 2026-09-29 against Level 1 SBOM, zero-copyleft core, and runtime invariants
+# License: MIT License (see LICENSE and NOTICE)
+# Repository: https://github.com/ellmos-ai/ellmos-voice-io
+# Umbrella Collective: open-bricks (https://github.com/open-bricks)
+
+================================================================================
+1. PROJECT LICENSE & ATTRIBUTION
+================================================================================
+ellmos-voice-io is licensed under the MIT License.
+Copyright (c) 2026 Lukas Geiger, ellmos-ai, and open-bricks.
+See `LICENSE` and `NOTICE` in the repository root for full legal texts.
+
+================================================================================
+2. CORE RUNTIME DISTRIBUTION (100% PERMISSIVE & ZERO-DEPENDENCY)
+================================================================================
+The base distribution wheel of ellmos-voice-io declares zero external runtime
+dependencies (`dependencies = []` in pyproject.toml).
+The entire core runtime execution relies strictly on the official Python
+Standard Library.
+
+| Component / Module      | Scope   | License  | Upstream Reference                    |
+|-------------------------|---------|----------|---------------------------------------|
+| Python Standard Library | Runtime | PSFL-2.0 | https://docs.python.org/3/license.html|
+  Modules utilized: argparse, dataclasses, importlib, os, pathlib, re,
+                    subprocess, sys, threading
+
+All status introspection, process management, stop-event lifecycle controls, and
+CLI commands execute purely using standard library modules.
+Zero third-party telemetry, analytics, cloud storage, or remote networking
+services are bundled, contacted, or initiated by the core package.
+
+================================================================================
+3. OPTIONAL SPEECH & WAKE-WORD EXTRAS (DECOUPLED & LAZY-LOADED)
+================================================================================
+All external speech and audio engine integrations are strictly optional and
+decoupled into isolated package extras. They are loaded lazily on demand only
+when an engine is explicitly instantiated.
+
+| Extra / Component | Upstream Package | Declared License | Copyleft Classification | Role & Purpose |
+|---|---|---|---|---|
+| stt-whisper       | openai-whisper   | MIT              | Permissive (No copyleft)| Neural speech-to-text transcription engine |
+| stt-vosk          | vosk             | Apache-2.0       | Permissive (No copyleft)| Lightweight local offline speech-to-text |
+| tts-pyttsx3       | pyttsx3          | MPL-2.0          | Weak Copyleft (File)    | System voice synthesis (SAPI5/NSSpeech/espeak) |
+| tts-piper         | piper-tts        | GPL-3.0-or-later | Strong Copyleft         | Local neural ONNX voice synthesis (isolated) |
+| wakeword          | openwakeword     | Apache-2.0       | Permissive (No copyleft)| Local wake-word classification engine |
+| wakeword          | PyAudio          | MIT              | Permissive (No copyleft)| PortAudio bindings for microphone capture |
+| wakeword          | NumPy            | BSD-3-Clause     | Permissive (No copyleft)| Numerical audio frame processing |
+
+================================================================================
+4. DIRECT BUILD & DEVELOPMENT DEPENDENCIES
+================================================================================
+The following tools are utilized exclusively for offline automated testing, code
+quality auditing, packaging, and linting in isolated environments:
+
+| Package    | Declared Use           | Constraint | License          | Source |
+|------------|------------------------|------------|------------------|--------|
+| pytest     | Development test runner| >=8.0      | MIT              | https://pytest.org/ |
+| ruff       | Development linter     | >=0.8      | MIT / Apache-2.0 | https://github.com/astral-sh/ruff |
+| setuptools | Build backend          | >=77.0     | MIT              | https://github.com/pypa/setuptools |
+| tomli      | Python 3.10 fallback   | >=2.0      | MIT              | https://github.com/hukkin/tomli |
+| build      | Packaging builder      | >=1.2      | MIT              | https://github.com/pypa/build |
+| twine      | Artifact verification  | >=5.0      | Apache-2.0       | https://github.com/pypa/twine |
+
+================================================================================
+5. ZERO-COPYLEFT BASE WHEEL & UNPRIVILEGED EXECUTION GUARANTEES
+================================================================================
+- Zero-Copyleft Core Guarantee: The core runtime package is 100% MIT-licensed
+  with zero copyleft dependencies. The optional ONNX neural TTS engine `piper-tts`
+  is governed by GPL-3.0-or-later; consuming environments requiring strictly
+  permissive licensing can simply use `tts-pyttsx3` (MPL-2.0) or omit TTS extras.
+  Installing `tts-piper` or `all` is purely optional and strictly isolated.
+- Unprivileged User-Mode Operation (RunAsInvoker): All CLI commands, status
+  introspection, audio dispatching, and wake-word listeners execute purely
+  within unprivileged user space. No administrative rights, root elevation,
+  sudo, or UAC prompts are ever required or requested.
+- Zero Model Redistribution: No acoustic models, neural weights, or voice files
+  are packaged in this repository or distribution wheel.
+
+================================================================================
+6. GOVERNANCE & RUNTIME INVARIANTS MATRIX
+================================================================================
+ellmos-voice-io strictly enforces ten foundational governance and runtime invariants:
+
+- INV-LOCAL-01: 100% Local-First & Zero-Egress
+  No remote telemetry, analytics, background uploads, or external endpoints.
+- INV-SEC-02: Non-Elevation (RunAsInvoker)
+  Operates in unprivileged user space without requiring root or admin elevation.
+- INV-CONSENT-03: Explicit Model Download Consent
+  No implicit network calls or silent downloads of multi-gigabyte models.
+- INV-MIC-04: Deterministic Microphone Hardware Lifecycle
+  Audio capture stream is active only during synchronous WakeWordListener.listen().
+- INV-DATA-05: Caller-Owned Audio Retention
+  Zero internal caching or database persistence of spoken audio or transcripts.
+- INV-LAZY-06: Lazy Engine & Copyleft Isolation
+  Heavy dependencies load only when explicitly invoked; zero overhead when uncalled.
+- INV-CLI-07: Read-Only Inspection CLI
+  `ellmos-voice-io status` outputs structured availability JSON without opening hardware.
+- INV-PORT-08: Cross-Platform Operating Parity
+  Consistent runtime behavior across Windows, Linux, and macOS environments.
+- INV-SYNC-09: Cloud-Sync & Multi-Agent Defense
+  Hardened against file locks and synchronization conflicts across distributed hosts.
+- INV-SLA-10: 48h Security SLA & Coordinated Disclosure
+  Rapid vulnerability response with guaranteed 48h acknowledgment and triage SLA.

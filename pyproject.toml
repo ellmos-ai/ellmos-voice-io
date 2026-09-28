@@ -9,9 +9,30 @@ description = "Local-first speech input, speech output, and wake-word helpers fo
 readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"
-license-files = ["LICENSE", "NOTICE", "THIRD_PARTY_LICENSES.md"]
+license-files = ["LICENSE", "NOTICE", "THIRD_PARTY_LICENSES.md", "THIRD_PARTY_LICENSES.txt"]
 authors = [{ name = "ELLMOS AI" }]
-keywords = ["speech-to-text", "text-to-speech", "wake-word", "local-first", "audio", "zero-egress", "offline", "audio-pipeline", "ellmos-ai", "open-bricks"]
+keywords = [
+  "speech-to-text",
+  "text-to-speech",
+  "wake-word",
+  "local-first",
+  "audio",
+  "zero-egress",
+  "offline",
+  "audio-pipeline",
+  "ellmos-ai",
+  "open-bricks",
+  "stt",
+  "tts",
+  "vosk",
+  "whisper",
+  "pyttsx3",
+  "piper-tts",
+  "openwakeword",
+  "voice-io",
+  "ai-agents",
+  "speech-synthesis",
+]
 classifiers = [
   "Development Status :: 3 - Alpha",
   "Operating System :: OS Independent",
@@ -56,6 +77,8 @@ Source = "https://github.com/ellmos-ai/ellmos-voice-io"
 "Parent Organization" = "https://github.com/ellmos-ai"
 "Umbrella Ecosystem" = "https://github.com/open-bricks"
 "Third-Party Licenses" = "https://github.com/ellmos-ai/ellmos-voice-io/blob/main/THIRD_PARTY_LICENSES.md"
+"Third-Party Licenses (Text)" = "https://github.com/ellmos-ai/ellmos-voice-io/blob/main/THIRD_PARTY_LICENSES.txt"
+"Level 1 SBOM" = "https://github.com/ellmos-ai/ellmos-voice-io/blob/main/THIRD_PARTY_LICENSES.txt"
 "Marketing-Log" = "https://github.com/ellmos-ai/ellmos-voice-io/blob/main/MARKETING-LOG.txt"
 "LLM-Ready" = "https://github.com/ellmos-ai/ellmos-voice-io/blob/main/llms.txt"
 Notice = "https://github.com/ellmos-ai/ellmos-voice-io/blob/main/NOTICE"

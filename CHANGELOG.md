@@ -2,6 +2,17 @@
 
 ## [Unreleased]
 
+- Discoverability, Visual Architecture, 18-Point Navigation Parity & Level 1 SBOM Text Companion (Pfad B - 2026-09-29):
+  - Upgraded bilingual documentation navigation to full 18-point Quick Navigation in `README.md` and `README_de.md` with reciprocal dual HTML anchors (`<a id="sec-01"></a>` through `<a id="sec-18"></a>`) enabling seamless deep linking across both languages.
+  - Added ASCII Four-View Architectural Topology projection in Section 2 across `README.md` ([VIEW 1: CALLER RUNTIMES & AGENT ADAPTERS] .. [VIEW 4: GOVERNANCE, ZERO-EGRESS & SECURITY PERIMETER]) and `README_de.md` ([SICHT 1] .. [SICHT 4]).
+  - Created canonical Level 1 SBOM plain-text companion `THIRD_PARTY_LICENSES.txt` (audited 2026-09-29, 0 direct runtime dependencies, unprivileged user-mode `RunAsInvoker`, zero-copyleft core guarantee, and mapping all 10 governance invariants `INV-LOCAL-01` through `INV-SLA-10`).
+  - Re-audited `THIRD_PARTY_LICENSES.md` to 2026-09-29 standard with cross-reference to `THIRD_PARTY_LICENSES.txt`.
+  - Enriched `pyproject.toml` with `license-files = ["LICENSE", "NOTICE", "THIRD_PARTY_LICENSES.md", "THIRD_PARTY_LICENSES.txt"]`, added `"Third-Party Licenses (Text)"` and `"Level 1 SBOM"` URLs under `[project.urls]`, and saturated keywords to 20 topics.
+  - Synchronized Shields.io badges in `README.md` and `README_de.md` (Verified: 2026-09-29, Level 1 SBOM Text Companion, test count).
+  - Updated `llms.txt` Last-checked date to 2026-09-29 with `THIRD_PARTY_LICENSES.txt` companion reference.
+  - Appended Pfad B audit log entry in `MARKETING-LOG.txt` for 2026-09-29.
+  - Added contract tests in `tests/test_metadata.py` verifying sec-01..sec-18 dual anchors, ASCII topology projection, `THIRD_PARTY_LICENSES.txt` integrity, PEP 621 text license URLs, and marketing log recency.
+
 - Repository Hygiene, CI Lifecycle & Multi-Host Lock Defense (Pfad A - 2026-09-23):
   - Added GitHub Actions welcome workflow (`.github/workflows/welcome.yml`) using `actions/first-interaction@v3` with `timeout-minutes: 5`, concurrency cancel-in-progress, and least-privilege `issues: write` / `pull-requests: write` permissions.
   - Hardened GitHub Actions stale workflow (`.github/workflows/stale.yml`) with explicit concurrency cancellation (`cancel-in-progress: true`) to prevent overlapping scheduled runs.

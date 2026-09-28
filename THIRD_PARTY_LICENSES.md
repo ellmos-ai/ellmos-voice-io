@@ -1,7 +1,7 @@
 # Third-Party Licenses & Transparency Notice
 
 > **Project:** `ellmos-ai/ellmos-voice-io`<br>
-> **Audited:** 2026-09-23<br>
+> **Audited:** 2026-09-29 (Level 1 SBOM plain-text companion: [`THIRD_PARTY_LICENSES.txt`](THIRD_PARTY_LICENSES.txt))<br>
 > **Repository License:** [MIT License](LICENSE)<br>
 > **Architecture & Privacy:** 100% Local-First, Zero-Egress, Unprivileged User-Mode (`RunAsInvoker`), Deterministic Audio Hardware Lifecycle
 
@@ -127,7 +127,7 @@ This engine is strictly optional and isolated within the `tts-piper` extra. Cons
 
 ## Verification & Audit Metadata
 
-- **Audit Date:** 2026-09-20
-- **Auditor:** ELLMOS AI Quality & Governance Pipeline
+- **Audit Date:** 2026-09-29
+- **Auditor:** ELLMOS AI Quality & Governance Pipeline (Pfad B Discoverability & SBOM)
 - **Methodology:** AST import analysis, PEP 621 manifest verification, transitive dependency inspection, and automated license-file contract test suites.
-- **Fail-Closed Verification:** Automated tests in `tests/test_metadata.py` and `tests/test_public_readiness.py`.
+- **Fail-Closed Verification:** Automated tests in `tests/test_metadata.py` and `tests/test_public_readiness.py`. Plain-text companion verified at `THIRD_PARTY_LICENSES.txt`.

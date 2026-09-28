@@ -134,13 +134,14 @@ def test_llms_txt_integrity():
     assert llms_file.is_file()
 
     content = llms_file.read_text(encoding="utf-8")
-    assert "Last-checked: 2026-09-23" in content
+    assert "Last-checked: 2026-09-29" in content
     assert re.search(r"Test-suite:\s*\d+/\d+\s*passed", content) is not None
     assert "NOTICE" in content
     assert "SECURITY.md" in content
     assert "README.md" in content
     assert "README_de.md" in content
     assert "MARKETING-LOG.txt" in content
+    assert "THIRD_PARTY_LICENSES.txt" in content
 
 
 def test_documentation_hygiene():
@@ -427,6 +428,7 @@ def test_license_files_metadata_contract():
     assert "LICENSE" in license_files
     assert "NOTICE" in license_files
     assert "THIRD_PARTY_LICENSES.md" in license_files
+    assert "THIRD_PARTY_LICENSES.txt" in license_files
     for lf in license_files:
         p = root / lf
         assert p.is_file(), f"Missing license file {lf}"
@@ -719,3 +721,86 @@ def test_marketing_log_recent_pfad_a_entry():
     assert "welcome.yml" in mkt_text
     assert "LOCK.user.*" in mkt_text
     assert "--basetemp=.pytest_temp" in mkt_text
+
+
+def test_reciprocal_sec_anchors_parity():
+    """Verify that both README.md and README_de.md provide reciprocal <a id="sec-01"></a> through <a id="sec-18"></a> anchors."""
+    root = Path(__file__).resolve().parent.parent
+    readme_en = (root / "README.md").read_text(encoding="utf-8")
+    readme_de = (root / "README_de.md").read_text(encoding="utf-8")
+
+    for i in range(1, 19):
+        sec_tag = f'id="sec-{i:02d}"'
+        sec_href = f"#sec-{i:02d}"
+        assert sec_tag in readme_en, f"Missing {sec_tag} in README.md"
+        assert sec_tag in readme_de, f"Missing {sec_tag} in README_de.md"
+        assert sec_href in readme_en, f"Missing {sec_href} in README.md quick navigation"
+        assert sec_href in readme_de, f"Missing {sec_href} in README_de.md schnellnavigation"
+
+
+def test_ascii_architecture_topology_projection():
+    """Verify that both README.md and README_de.md include the four-view architectural topology projection."""
+    root = Path(__file__).resolve().parent.parent
+    readme_en = (root / "README.md").read_text(encoding="utf-8")
+    readme_de = (root / "README_de.md").read_text(encoding="utf-8")
+
+    for view_idx in range(1, 5):
+        assert f"VIEW {view_idx}" in readme_en, f"Missing VIEW {view_idx} in README.md"
+        assert f"SICHT {view_idx}" in readme_de, f"Missing SICHT {view_idx} in README_de.md"
+
+
+def test_level1_sbom_text_companion():
+    """Verify that THIRD_PARTY_LICENSES.txt exists, contains Level 1 SBOM, and maps all 10 governance invariants."""
+    root = Path(__file__).resolve().parent.parent
+    sbom_txt = root / "THIRD_PARTY_LICENSES.txt"
+    assert sbom_txt.is_file(), "THIRD_PARTY_LICENSES.txt must exist"
+    content = sbom_txt.read_text(encoding="utf-8")
+    assert "Level 1 SBOM" in content
+    assert "Zero-Copyleft" in content
+    assert "RunAsInvoker" in content
+    for inv_tag in (
+        "INV-LOCAL-01",
+        "INV-SEC-02",
+        "INV-CONSENT-03",
+        "INV-MIC-04",
+        "INV-DATA-05",
+        "INV-LAZY-06",
+        "INV-CLI-07",
+        "INV-PORT-08",
+        "INV-SYNC-09",
+        "INV-SLA-10",
+    ):
+        assert inv_tag in content
+
+
+def test_pep621_sbom_and_text_license_urls():
+    """Verify that pyproject.toml registers the Level 1 SBOM and Third-Party Licenses (Text) companion URLs."""
+    root = Path(__file__).resolve().parent.parent
+    with (root / "pyproject.toml").open("rb") as f:
+        data = tomllib.load(f)
+    urls = data.get("project", {}).get("urls", {})
+    assert "Third-Party Licenses (Text)" in urls
+    assert urls["Third-Party Licenses (Text)"].endswith("THIRD_PARTY_LICENSES.txt")
+    assert "Level 1 SBOM" in urls
+    assert urls["Level 1 SBOM"].endswith("THIRD_PARTY_LICENSES.txt")
+
+
+def test_keywords_saturation_count():
+    """Verify that pyproject.toml saturates the keywords metadata to the maximum 20 topics standard."""
+    root = Path(__file__).resolve().parent.parent
+    with (root / "pyproject.toml").open("rb") as f:
+        data = tomllib.load(f)
+    keywords = data.get("project", {}).get("keywords", [])
+    assert len(keywords) == 20, f"Expected 20 keywords, got {len(keywords)}: {keywords}"
+    assert "speech-to-text" in keywords
+    assert "zero-egress" in keywords
+    assert "local-first" in keywords
+
+
+def test_marketing_log_recent_pfad_b_entry():
+    """Verify that MARKETING-LOG.txt contains the recent Pfad B 2026-09-29 audit entry."""
+    root = Path(__file__).resolve().parent.parent
+    mkt_text = (root / "MARKETING-LOG.txt").read_text(encoding="utf-8")
+    assert "Date: 2026-09-29" in mkt_text
+    assert "PFAD B 2026-09-29" in mkt_text
+    assert "THIRD_PARTY_LICENSES.txt" in mkt_text
