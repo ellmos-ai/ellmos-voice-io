@@ -33,8 +33,13 @@ _reports/internal-business/
 *-conflict-*
 *-WORKSTATION-LG.*
 *-WORKSTATION-LG-*
+*_WORKSTATION*
+*_WORKSTATION-LG*
+*-WORKSTATION.*
 *-ASUS-GEI.*
 *-ASUS-GEI-*
+*-IDEAPAD*
+*-IDEAPAD-GEI*
 *-LAPTOP.*
 *-LAPTOP-*
 * (kopie)*
@@ -48,6 +53,10 @@ _reports/internal-business/
 *-MacBook*
 Thumbs.db
 desktop.ini
+Desktop.ini
+ehthumbs.db
+*.swo
+TASKPLAN_*.md
 *.tmp
 *.bak
 *.swp
@@ -63,6 +72,9 @@ poetry.lock
 LOCK.user.*
 LOCK.until.*
 LOCK.condition.*
+LOCK.dev.*
+LOCK.antigravity.*
+LOCK.bugsearch.*
 .automation-lock
 
 # Test and Cache Isolation

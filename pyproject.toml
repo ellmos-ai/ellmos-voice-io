@@ -74,8 +74,10 @@ Documentation = "https://github.com/ellmos-ai/ellmos-voice-io#readme"
 Issues = "https://github.com/ellmos-ai/ellmos-voice-io/issues"
 Security = "https://github.com/ellmos-ai/ellmos-voice-io/security/advisories/new"
 Source = "https://github.com/ellmos-ai/ellmos-voice-io"
+Contributing = "https://github.com/ellmos-ai/ellmos-voice-io/blob/main/CONTRIBUTING.md"
 "Parent Organization" = "https://github.com/ellmos-ai"
 "Umbrella Ecosystem" = "https://github.com/open-bricks"
+"Plain-Text License" = "https://github.com/ellmos-ai/ellmos-voice-io/blob/main/LICENSE"
 "Third-Party Licenses" = "https://github.com/ellmos-ai/ellmos-voice-io/blob/main/THIRD_PARTY_LICENSES.md"
 "Third-Party Licenses (Text)" = "https://github.com/ellmos-ai/ellmos-voice-io/blob/main/THIRD_PARTY_LICENSES.txt"
 "Level 1 SBOM" = "https://github.com/ellmos-ai/ellmos-voice-io/blob/main/THIRD_PARTY_LICENSES.txt"
@@ -91,10 +93,11 @@ ellmos-voice-io = "ellmos_voice_io.cli:main"
 where = ["src"]
 
 [tool.pytest.ini_options]
+minversion = "7.0"
 testpaths = ["tests"]
 pythonpath = ["src", "."]
 addopts = "-ra -v --basetemp=.pytest_temp"
-norecursedirs = [".git", ".pytest_cache", ".pytest_temp", "__pycache__", "build", "dist", ".venv"]
+norecursedirs = [".git", ".pytest_cache", ".pytest_temp", "__pycache__", "build", "dist", ".venv", ".hypothesis", ".turbo", ".nyc_output", ".tox"]
 
 [tool.ruff]
 line-length = 120

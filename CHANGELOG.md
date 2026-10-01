@@ -2,6 +2,18 @@
 
 ## [Unreleased]
 
+- CI Lifecycle Workflows, Multi-Host Guarding, PEP 621 Standard & Contract Test Expansion (Pfad A - 2026-10-01):
+  - Added GitHub Actions auto-assign PRs workflow (`.github/workflows/auto-assign.yml`) with `actions/github-script@v7`, `timeout-minutes: 5`, concurrency cancel-in-progress, and least-privilege `pull-requests: write` / `issues: write` permissions.
+  - Added GitHub Actions label synchronization workflow (`.github/workflows/label-sync.yml`) using `EndBug/label-sync@v2` with `timeout-minutes: 5`, concurrency cancel-in-progress, and least-privilege `issues: write` permissions.
+  - Provided canonical `.github/labels.yml` defining standard repository labels according to GOVERNANCE §4.2.
+  - Upgraded bilingual `CONTRIBUTING.md` in English and German detailing local development workflow, quality gates, unprivileged user-mode execution (`RunAsInvoker`), all 10 governance invariants (`INV-LOCAL-01` to `INV-SLA-10`), and strict version freeze discipline per T-20260920-167562623 (version 0.2.1).
+  - Hardened `.gitignore` against multi-host artifacts (`*-IDEAPAD*`, `*-IDEAPAD-GEI*`, `*_WORKSTATION*`, `*_WORKSTATION-LG*`, `*-WORKSTATION.*`), canonical locks (`LOCK.dev.*`, `LOCK.antigravity.*`, `LOCK.bugsearch.*`), and Windows shell metadata (`Desktop.ini`, `ehthumbs.db`, `*.swo`, `TASKPLAN_*.md`).
+  - Standardized PEP 621 metadata in `pyproject.toml` with `Contributing` and `Plain-Text License` URLs under `[project.urls]`, and hardened `[tool.pytest.ini_options]` with `minversion = "7.0"` and extended `norecursedirs` (`.hypothesis`, `.turbo`, `.nyc_output`, `.tox`).
+  - Re-audited Level 1 SBOM in `THIRD_PARTY_LICENSES.txt` and `THIRD_PARTY_LICENSES.md` to 2026-10-01 standard, confirming zero direct runtime dependencies, unprivileged execution, and all 10 governance invariants.
+  - Synchronized documentation badges in `README.md` and `README_de.md` (`Verified: 2026-10-01` / `Geprüft: 2026-10-01`), and refreshed `llms.txt`.
+  - Appended Section 10 in `MARKETING-LOG.txt` for 2026-10-01 Pfad A audit.
+  - Expanded automated contract test suite in `tests/test_metadata.py` with 7 new contract tests.
+
 - Discoverability, Visual Architecture, 18-Point Navigation Parity & Level 1 SBOM Text Companion (Pfad B - 2026-09-29):
   - Upgraded bilingual documentation navigation to full 18-point Quick Navigation in `README.md` and `README_de.md` with reciprocal dual HTML anchors (`<a id="sec-01"></a>` through `<a id="sec-18"></a>`) enabling seamless deep linking across both languages.
   - Added ASCII Four-View Architectural Topology projection in Section 2 across `README.md` ([VIEW 1: CALLER RUNTIMES & AGENT ADAPTERS] .. [VIEW 4: GOVERNANCE, ZERO-EGRESS & SECURITY PERIMETER]) and `README_de.md` ([SICHT 1] .. [SICHT 4]).

@@ -193,9 +193,38 @@ The repository maintains 100% deterministic automated test coverage in `tests/te
   - Added contract tests in `tests/test_metadata.py` verifying sec-01..sec-18 anchors, ASCII topology projection, `THIRD_PARTY_LICENSES.txt` integrity, PEP 621 text license URLs, and marketing log recency.
 
 ================================================================================
-10. STRATEGIC ACTION ITEMS
+10. CI LIFECYCLE WORKFLOWS, MULTI-HOST GUARDING & CONTRACT TESTS (PFAD A 2026-10-01)
+================================================================================
+Date: 2026-10-01
+Scope: Pfad A Repository Hygiene, CI Matrix Hardening, PEP 621 Metadata, Level 1 SBOM & Multi-Host Defense
+Auditor: agy@WORKSTATION-LG (Gemini 3.8 Flash High)
+Audit: PFAD A AUDIT 2026-10-01
+
+- CI Lifecycle Workflows:
+  - Added `.github/workflows/auto-assign.yml` using `actions/github-script@v7`, `timeout-minutes: 5`, concurrency cancel-in-progress, least-privilege `pull-requests: write` / `issues: write` permissions.
+  - Added `.github/workflows/label-sync.yml` using `EndBug/label-sync@v2`, `timeout-minutes: 5`, concurrency cancel-in-progress, least-privilege `issues: write` permissions.
+  - Provided `.github/labels.yml` with 13 standard labels per GOVERNANCE §4.2.
+- Contributing Standards & Quality Gates:
+  - Upgraded bilingual `CONTRIBUTING.md` (EN/DE) with local development commands, quality gates, unprivileged user-mode `RunAsInvoker` non-elevation (INV-SEC-02), all 10 governance invariants (`INV-LOCAL-01` to `INV-SLA-10`), and strict version freeze discipline per T-20260920-167562623 (version 0.2.1).
+- Multi-Host Cloud-Sync & Lock Defense:
+  - Strengthened `.gitignore` with `*-IDEAPAD*`, `*-IDEAPAD-GEI*`, `*_WORKSTATION*`, `*_WORKSTATION-LG*`, `*-WORKSTATION.*`, `LOCK.dev.*`, `LOCK.antigravity.*`, `LOCK.bugsearch.*`, `Desktop.ini`, `ehthumbs.db`, `*.swo`, `TASKPLAN_*.md`.
+- PEP 621 Standard Packaging & Metadata:
+  - Registered `Contributing` and `Plain-Text License` in `[project.urls]` in `pyproject.toml`.
+  - Set `minversion = "7.0"` and extended `norecursedirs` (`.hypothesis`, `.turbo`, `.nyc_output`, `.tox`) in `[tool.pytest.ini_options]`.
+  - Preserved strict version freeze discipline per T-20260920-167562623: `version = "0.2.1"` strictly unchanged.
+- Level 1 SBOM Transparency & Attribution:
+  - Re-audited `THIRD_PARTY_LICENSES.txt` and `THIRD_PARTY_LICENSES.md` to 2026-10-01 standard with zero direct runtime dependencies, unprivileged execution, and all 10 governance invariants.
+  - Updated `NOTICE` with cross-reference to `THIRD_PARTY_LICENSES.md` and `THIRD_PARTY_LICENSES.txt`.
+- Badges & RAG Documentation:
+  - Updated `Verified: 2026-10-01` / `Geprüft: 2026-10-01` in READMEs and refreshed `llms.txt`.
+- Automated Contract Test Expansion:
+  - Added 7 contract tests in `tests/test_metadata.py` asserting auto-assign workflow, label-sync workflow, labels.yml, CONTRIBUTING.md, PEP 621 URLs, .gitignore guards, and Pfad A recency.
+
+================================================================================
+11. STRATEGIC ACTION ITEMS
 ================================================================================
 1. Maintain zero runtime dependencies in the base wheel (`dependencies = []`).
 2. Keep Level 1 SBOM and Invariant Cross-Reference Matrix synchronized on every release.
 3. Validate 18-point bilingual navigation and reciprocal anchor parity on every documentation edit.
 4. Uphold strict unprivileged execution (`RunAsInvoker`) and zero-egress guarantees across all audio primitives.
+

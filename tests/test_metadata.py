@@ -134,7 +134,7 @@ def test_llms_txt_integrity():
     assert llms_file.is_file()
 
     content = llms_file.read_text(encoding="utf-8")
-    assert "Last-checked: 2026-09-29" in content
+    assert ("Last-checked: 2026-09-29" in content or "Last-checked: 2026-10-01" in content)
     assert re.search(r"Test-suite:\s*\d+/\d+\s*passed", content) is not None
     assert "NOTICE" in content
     assert "SECURITY.md" in content
@@ -804,3 +804,113 @@ def test_marketing_log_recent_pfad_b_entry():
     assert "Date: 2026-09-29" in mkt_text
     assert "PFAD B 2026-09-29" in mkt_text
     assert "THIRD_PARTY_LICENSES.txt" in mkt_text
+
+
+def test_auto_assign_workflow_contract():
+    """Verify that .github/workflows/auto-assign.yml exists with least privilege and concurrency."""
+    root = Path(__file__).resolve().parent.parent
+    wf_path = root / ".github" / "workflows" / "auto-assign.yml"
+    assert wf_path.is_file(), "auto-assign.yml must exist"
+    content = wf_path.read_text(encoding="utf-8")
+    assert "pull_request_target:" in content
+    assert "pull-requests: write" in content
+    assert "issues: write" in content
+    assert "cancel-in-progress: true" in content
+    assert "timeout-minutes: 5" in content
+    assert "actions/github-script@v7" in content
+
+
+def test_label_sync_workflow_and_labels_yml():
+    """Verify that label-sync.yml and labels.yml exist with governance standard labels."""
+    root = Path(__file__).resolve().parent.parent
+    wf_path = root / ".github" / "workflows" / "label-sync.yml"
+    labels_path = root / ".github" / "labels.yml"
+    assert wf_path.is_file(), "label-sync.yml must exist"
+    assert labels_path.is_file(), "labels.yml must exist"
+
+    wf_content = wf_path.read_text(encoding="utf-8")
+    assert "workflow_dispatch:" in wf_content
+    assert "issues: write" in wf_content
+    assert "cancel-in-progress: true" in wf_content
+    assert "EndBug/label-sync@v2" in wf_content
+
+    labels_content = labels_path.read_text(encoding="utf-8")
+    for standard_label in ("bug", "enhancement", "good first issue", "help wanted", "documentation", "security"):
+        assert standard_label in labels_content
+
+
+def test_contributing_file_and_urls():
+    """Verify that CONTRIBUTING.md exists, is bilingual, includes invariants and version freeze."""
+    root = Path(__file__).resolve().parent.parent
+    contrib_path = root / "CONTRIBUTING.md"
+    assert contrib_path.is_file(), "CONTRIBUTING.md must exist"
+    content = contrib_path.read_text(encoding="utf-8")
+    assert "English" in content
+    assert "Deutsch" in content
+    assert "INV-LOCAL-01" in content
+    assert "INV-SEC-02" in content
+    assert "RunAsInvoker" in content
+    assert "INV-SLA-10" in content
+    assert "T-20260920-167562623" in content
+    assert "0.2.1" in content
+
+    with (root / "pyproject.toml").open("rb") as f:
+        data = tomllib.load(f)
+    urls = data.get("project", {}).get("urls", {})
+    assert "Contributing" in urls
+    assert urls["Contributing"].endswith("CONTRIBUTING.md")
+
+
+def test_gitignore_cloud_sync_and_lock_guards_20261001():
+    """Verify that .gitignore defends against multi-host artifacts, Desktop.ini, and lock patterns."""
+    root = Path(__file__).resolve().parent.parent
+    gitignore_text = (root / ".gitignore").read_text(encoding="utf-8")
+    for pattern in (
+        "*-IDEAPAD*",
+        "*-IDEAPAD-GEI*",
+        "*_WORKSTATION*",
+        "*_WORKSTATION-LG*",
+        "*-WORKSTATION.*",
+        "LOCK.dev.*",
+        "LOCK.antigravity.*",
+        "LOCK.bugsearch.*",
+        "Desktop.ini",
+        "ehthumbs.db",
+        "*.swo",
+        "TASKPLAN_*.md",
+    ):
+        assert pattern in gitignore_text, f"Missing {pattern} in .gitignore"
+
+
+def test_pep621_plain_text_license_and_contributing_urls():
+    """Verify that pyproject.toml registers Plain-Text License and Contributing URLs."""
+    root = Path(__file__).resolve().parent.parent
+    with (root / "pyproject.toml").open("rb") as f:
+        data = tomllib.load(f)
+    urls = data.get("project", {}).get("urls", {})
+    assert "Plain-Text License" in urls
+    assert urls["Plain-Text License"].endswith("LICENSE")
+    assert "Contributing" in urls
+    assert urls["Contributing"].endswith("CONTRIBUTING.md")
+
+
+def test_changelog_unreleased_pfad_a_20261001():
+    """Verify that CHANGELOG.md contains the Pfad A 2026-10-01 entry."""
+    root = Path(__file__).resolve().parent.parent
+    changelog_text = (root / "CHANGELOG.md").read_text(encoding="utf-8")
+    assert "Pfad A - 2026-10-01" in changelog_text
+    assert "auto-assign.yml" in changelog_text
+    assert "label-sync.yml" in changelog_text
+    assert "labels.yml" in changelog_text
+    assert "CONTRIBUTING.md" in changelog_text
+
+
+def test_marketing_log_recent_pfad_a_20261001():
+    """Verify that MARKETING-LOG.txt contains the recent Pfad A 2026-10-01 audit entry."""
+    root = Path(__file__).resolve().parent.parent
+    mkt_text = (root / "MARKETING-LOG.txt").read_text(encoding="utf-8")
+    assert "Date: 2026-10-01" in mkt_text
+    assert "PFAD A AUDIT 2026-10-01" in mkt_text
+    assert "auto-assign.yml" in mkt_text
+    assert "label-sync.yml" in mkt_text
+
