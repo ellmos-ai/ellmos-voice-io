@@ -9,7 +9,7 @@ description = "Local-first speech input, speech output, and wake-word helpers fo
 readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"
-license-files = ["LICENSE", "NOTICE", "THIRD_PARTY_LICENSES.md", "THIRD_PARTY_LICENSES.txt"]
+license-files = ["LICENSE", "NOTICE", "CONTRIBUTING.md", "THIRD_PARTY_LICENSES.md", "THIRD_PARTY_LICENSES.txt"]
 authors = [{ name = "ELLMOS AI" }]
 keywords = [
   "speech-to-text",
@@ -97,7 +97,7 @@ minversion = "7.0"
 testpaths = ["tests"]
 pythonpath = ["src", "."]
 addopts = "-ra -v --basetemp=.pytest_temp"
-norecursedirs = [".git", ".pytest_cache", ".pytest_temp", "__pycache__", "build", "dist", ".venv", ".hypothesis", ".turbo", ".nyc_output", ".tox"]
+norecursedirs = [".git", ".pytest_cache", ".pytest_temp", ".pytest_tmp*", "__pycache__", "build", "dist", ".venv", ".hypothesis", ".turbo", ".nyc_output", ".tox"]
 
 [tool.ruff]
 line-length = 120

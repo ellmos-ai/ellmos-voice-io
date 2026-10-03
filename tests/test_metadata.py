@@ -134,7 +134,11 @@ def test_llms_txt_integrity():
     assert llms_file.is_file()
 
     content = llms_file.read_text(encoding="utf-8")
-    assert ("Last-checked: 2026-09-29" in content or "Last-checked: 2026-10-01" in content)
+    assert (
+        "Last-checked: 2026-09-29" in content
+        or "Last-checked: 2026-10-01" in content
+        or "Last-checked: 2026-10-03" in content
+    )
     assert re.search(r"Test-suite:\s*\d+/\d+\s*passed", content) is not None
     assert "NOTICE" in content
     assert "SECURITY.md" in content
@@ -914,3 +918,75 @@ def test_marketing_log_recent_pfad_a_20261001():
     assert "auto-assign.yml" in mkt_text
     assert "label-sync.yml" in mkt_text
 
+
+def test_license_files_includes_contributing_whitelist():
+    """Verify that pyproject.toml includes CONTRIBUTING.md in license-files whitelist."""
+    root = Path(__file__).resolve().parent.parent
+    with (root / "pyproject.toml").open("rb") as f:
+        data = tomllib.load(f)
+    license_files = data.get("project", {}).get("license-files", [])
+    assert "CONTRIBUTING.md" in license_files
+    assert "LICENSE" in license_files
+    assert "NOTICE" in license_files
+    assert "THIRD_PARTY_LICENSES.md" in license_files
+    assert "THIRD_PARTY_LICENSES.txt" in license_files
+
+
+def test_gitignore_multihost_taskplan_and_ideapad_tokens():
+    """Verify that .gitignore defends against *-IDEAPAD-GEI.* and *-TASKPLAN*."""
+    root = Path(__file__).resolve().parent.parent
+    gitignore_text = (root / ".gitignore").read_text(encoding="utf-8")
+    assert "*-IDEAPAD-GEI.*" in gitignore_text
+    assert "*-TASKPLAN*" in gitignore_text
+
+
+def test_third_party_licenses_audit_currency_20261003():
+    """Verify that THIRD_PARTY_LICENSES.md and THIRD_PARTY_LICENSES.txt are audited to 2026-10-03 standard."""
+    root = Path(__file__).resolve().parent.parent
+    md_content = (root / "THIRD_PARTY_LICENSES.md").read_text(encoding="utf-8")
+    txt_content = (root / "THIRD_PARTY_LICENSES.txt").read_text(encoding="utf-8")
+    assert "Audited:** 2026-10-03" in md_content
+    assert "Audit Date:** 2026-10-03" in md_content
+    assert "Audited: 2026-10-03" in txt_content
+    assert "CONTRIBUTING.md" in md_content
+    assert "CONTRIBUTING.md" in txt_content
+    assert "§ 521 BGB" in md_content
+    assert "§ 521 BGB" in txt_content
+
+
+def test_verified_badge_and_llms_txt_currency_20261003():
+    """Verify that README badges and llms.txt reflect Verified: 2026-10-03 currency."""
+    root = Path(__file__).resolve().parent.parent
+    readme_en = (root / "README.md").read_text(encoding="utf-8")
+    readme_de = (root / "README_de.md").read_text(encoding="utf-8")
+    llms_text = (root / "llms.txt").read_text(encoding="utf-8")
+
+    assert "Verified-2026--10--03" in readme_en
+    assert "Gepr%C3%BCft-2026--10--03" in readme_de
+    assert "Contributing-Guidelines" in readme_en
+    assert "Mitwirken-Leitfaden" in readme_de
+    assert "Last checked: **2026-10-03**" in readme_en
+    assert "Letzte Prüfung: **2026-10-03**" in readme_de
+    assert "Last-checked: 2026-10-03" in llms_text
+
+
+def test_changelog_unreleased_pfad_a_20261003():
+    """Verify that CHANGELOG.md contains the Pfad A 2026-10-03 entry under [Unreleased]."""
+    root = Path(__file__).resolve().parent.parent
+    changelog_text = (root / "CHANGELOG.md").read_text(encoding="utf-8")
+    assert "Pfad A - 2026-10-03" in changelog_text
+    assert "license-files" in changelog_text
+    assert "*-IDEAPAD-GEI.*" in changelog_text
+    assert "*-TASKPLAN*" in changelog_text
+    assert "RunAsInvoker" in changelog_text
+
+
+def test_marketing_log_recent_pfad_a_20261003():
+    """Verify that MARKETING-LOG.txt contains the recent Pfad A 2026-10-03 audit entry."""
+    root = Path(__file__).resolve().parent.parent
+    mkt_text = (root / "MARKETING-LOG.txt").read_text(encoding="utf-8")
+    assert "Date: 2026-10-03" in mkt_text
+    assert "PFAD A AUDIT 2026-10-03" in mkt_text
+    assert "license-files" in mkt_text
+    assert "*-IDEAPAD-GEI.*" in mkt_text
+    assert "*-TASKPLAN*" in mkt_text

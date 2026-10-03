@@ -16,11 +16,13 @@ Welcome! We welcome contributions to `ellmos-voice-io`. To maintain stability, d
 7. **Read-Only Inspection CLI (`INV-CLI-07`)**: `ellmos-voice-io status` outputs structured availability JSON without opening hardware or writing state.
 8. **Cross-Platform Operating Parity (`INV-PORT-08`)**: Consistent behavior across Windows, Linux, and macOS across Python 3.10-3.13.
 9. **Multi-Host & Lock Defense (`INV-SYNC-09`)**: Hardened against file locks, temporary artifacts, and synchronization conflicts across distributed hosts.
-10. **48h Security SLA (`INV-SLA-10`)**: 48h response SLA, 5-business-day triage, and 30-day remediation.
+10. **48h Security SLA (`INV-SLA-10`)**: 48h response SLA, 5-business-day triage, and 30-day remediation via canonical inboxes (`security@ellmos.ai`, `security@open-bricks.org`, `support@lukasgeiger.com`, `lukas@open-bricks.org`).
 11. **Version Freeze Discipline (`T-20260920-167562623`)**: Version 0.2.1 is strictly frozen across all manifests. Do not bump the version string. Document all advancements under `## [Unreleased]` in `CHANGELOG.md`.
-12. **Bilingual Documentation Parity**: Maintain synchronized structural and navigational parity across `README.md` and `README_de.md` (18-point dual anchors `sec-01` through `sec-18`).
+12. **Statutory Notice (§ 521 BGB Gefälligkeitsrecht)**: For gratuitous software provision, statutory liability is limited to intent and gross negligence pursuant to § 521 BGB of the German Civil Code.
+13. **Bilingual Documentation Parity**: Maintain synchronized structural and navigational parity across `README.md` and `README_de.md` (18-point dual anchors `sec-01` through `sec-18`).
 
-### 2. Local Development Workflow
+### 2. Local Development Workflow (Plan D)
+Canonical development repository (Source of Truth): `C:\_Local_DEV\repos\ellmos-voice-io`.
 ```bash
 # Install package with development dependencies
 python -m pip install -e ".[dev]"
@@ -57,11 +59,13 @@ git diff --check
 7. **Rein lesende CLI-Introspektion (`INV-CLI-07`)**: `ellmos-voice-io status` liefert strukturierte JSON-Ausgaben ohne Hardware- oder Netzwerkzugriff.
 8. **Plattformübergreifende Laufzeitparität (`INV-PORT-08`)**: Einheitliches Verhalten unter Windows, Linux und macOS über Python 3.10-3.13.
 9. **Multi-Host- & Lock-Schutz (`INV-SYNC-09`)**: Gehärtet gegen Lock-Dateien und Synchronisationskonflikte.
-10. **48h Sicherheits-SLA (`INV-SLA-10`)**: 48h Reaktions-SLA und koordinierte Offenlegung.
+10. **48h Sicherheits-SLA (`INV-SLA-10`)**: 48h Reaktions-SLA, 5-Werktage-Triage und koordinierte Offenlegung über kanonische Postfächer (`security@ellmos.ai`, `security@open-bricks.org`, `support@lukasgeiger.com`, `lukas@open-bricks.org`).
 11. **Strikte Versions-Freeze-Disziplin (`T-20260920-167562623`)**: Version 0.2.1 bleibt in allen Manifesten eingefroren. Keine Versionserhöhung vornehmen; alle Änderungen unter `## [Unreleased]` in `CHANGELOG.md` festhalten.
-12. **Zweisprachige Dokumentationsparität**: `README.md` und `README_de.md` müssen strukturgleich und mit synchronen 18-Punkte-HTML-Ankern (`sec-01` bis `sec-18`) gepflegt werden.
+12. **Gesetzlicher Hinweis (§ 521 BGB Gefälligkeitsrecht)**: Für die unentgeltliche Überlassung von Open-Source-Software ist die gesetzliche Haftung gemäß § 521 BGB auf Vorsatz und grobe Fahrlässigkeit beschränkt.
+13. **Zweisprachige Dokumentationsparität**: `README.md` und `README_de.md` müssen strukturgleich und mit synchronen 18-Punkte-HTML-Ankern (`sec-01` bis `sec-18`) gepflegt werden.
 
-### 2. Lokaler Entwicklungsablauf
+### 2. Lokaler Entwicklungsablauf (Plan D)
+Kanonischer Entwicklungsort (Source of Truth): `C:\_Local_DEV\repos\ellmos-voice-io`.
 ```bash
 # Entwicklungsumgebung einrichten
 python -m pip install -e ".[dev]"

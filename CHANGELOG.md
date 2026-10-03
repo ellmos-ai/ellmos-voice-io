@@ -2,6 +2,15 @@
 
 ## [Unreleased]
 
+- Repository Hygiene, Multi-Host Lock Defense, Level 1 SBOM Re-Audit & Contract Test Expansion (Pfad A - 2026-10-03):
+  - Enriched PEP 621 packaging metadata in `pyproject.toml` by registering `CONTRIBUTING.md` in `license-files` whitelist and hardening `[tool.pytest.ini_options]` `norecursedirs` with `.pytest_tmp*`.
+  - Strengthened `.gitignore` against multi-host conflict tokens (`*-IDEAPAD-GEI.*`) and task planning artifacts (`*-TASKPLAN*`).
+  - Re-audited Level 1 SBOM in `THIRD_PARTY_LICENSES.txt` and `THIRD_PARTY_LICENSES.md` to 2026-10-03 standard, verifying 100% zero direct runtime dependencies, unprivileged user-mode `RunAsInvoker` non-elevation, statutory liability limitation (§ 521 BGB Gefälligkeitsrecht), 48h Security Response SLA, and all 10 governance invariants (`INV-LOCAL-01` to `INV-SLA-10`).
+  - Harmonized bilingual `CONTRIBUTING.md` (EN/DE) with explicit Plan D source of truth location (`C:\_Local_DEV\repos\ellmos-voice-io`), canonical security contact channels (`security@ellmos.ai`, `security@open-bricks.org`, `support@lukasgeiger.com`, `lukas@open-bricks.org`), and statutory liability waiver.
+  - Synchronized documentation badges in `README.md` and `README_de.md` (`Verified: 2026-10-03` / `Geprüft: 2026-10-03`, Contributing Guidelines badge) while preserving all 18 reciprocal quick navigation anchors (`sec-01` to `sec-18`), and refreshed `llms.txt` to 2026-10-03 standard.
+  - Appended Section 12 in `MARKETING-LOG.txt` documenting the 2026-10-03 Pfad A technical hygiene audit.
+  - Expanded automated contract test suite in `tests/test_metadata.py` with 6 new contract tests asserting `license-files` whitelist, multi-host taskplan/ideapad gitignore patterns, Level 1 SBOM audit currency, badge currency, and Pfad A changelog/marketing log recency.
+
 - CI Lifecycle Workflows, Multi-Host Guarding, PEP 621 Standard & Contract Test Expansion (Pfad A - 2026-10-01):
   - Added GitHub Actions auto-assign PRs workflow (`.github/workflows/auto-assign.yml`) with `actions/github-script@v7`, `timeout-minutes: 5`, concurrency cancel-in-progress, and least-privilege `pull-requests: write` / `issues: write` permissions.
   - Added GitHub Actions label synchronization workflow (`.github/workflows/label-sync.yml`) using `EndBug/label-sync@v2` with `timeout-minutes: 5`, concurrency cancel-in-progress, and least-privilege `issues: write` permissions.

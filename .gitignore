@@ -40,6 +40,7 @@ _reports/internal-business/
 *-ASUS-GEI-*
 *-IDEAPAD*
 *-IDEAPAD-GEI*
+*-IDEAPAD-GEI.*
 *-LAPTOP.*
 *-LAPTOP-*
 * (kopie)*
@@ -57,6 +58,7 @@ Desktop.ini
 ehthumbs.db
 *.swo
 TASKPLAN_*.md
+*-TASKPLAN*
 *.tmp
 *.bak
 *.swp

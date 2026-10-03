@@ -1,16 +1,18 @@
 # Third-Party Licenses & Software Inventory
 # Project: ellmos-ai/ellmos-voice-io
-# Audited: 2026-10-01 against Level 1 SBOM, zero-copyleft core, and runtime invariants
-# License: MIT License (see LICENSE and NOTICE)
+# Audited: 2026-10-03 against Level 1 SBOM, zero-copyleft core, and runtime invariants
+# License: MIT License (see LICENSE, NOTICE, and CONTRIBUTING.md)
 # Repository: https://github.com/ellmos-ai/ellmos-voice-io
 # Umbrella Collective: open-bricks (https://github.com/open-bricks)
+# Statutory Notice: § 521 BGB Gefälligkeitsrecht (Liability limited to intent and gross negligence)
 
 ================================================================================
 1. PROJECT LICENSE & ATTRIBUTION
 ================================================================================
 ellmos-voice-io is licensed under the MIT License.
 Copyright (c) 2026 Lukas Geiger, ellmos-ai, and open-bricks.
-See `LICENSE` and `NOTICE` in the repository root for full legal texts.
+See `LICENSE`, `NOTICE`, and `CONTRIBUTING.md` in the repository root for full legal texts.
+Statutory liability for gratuitous provision is governed by § 521 BGB (German Civil Code).
 
 ================================================================================
 2. CORE RUNTIME DISTRIBUTION (100% PERMISSIVE & ZERO-DEPENDENCY)
