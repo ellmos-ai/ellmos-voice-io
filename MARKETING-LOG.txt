@@ -1,8 +1,8 @@
 # ================================================================================
 # MARKETING & DISCOVERABILITY LOG: ellmos-voice-io
 # ================================================================================
-Date: 2026-10-03 (Prior Date: 2026-10-01)
-Operator: Antigravity / Gemini (via GITHUBBOT Pfad A)
+Date: 2026-10-30 (Prior Date: 2026-10-03)
+Operator: Antigravity / Gemini (via GITHUBBOT Pfad B)
 Target Repo: ellmos-ai/ellmos-voice-io
 Canonical Path: C:\_Local_DEV\repos\ellmos-voice-io
 Version: 0.2.1
@@ -19,6 +19,7 @@ Umbrella Collective: open-bricks
 # [2026-09-29 01:15:00 CEST] [GITHUBBOT_ONE_REPO_MARKETING_AND_DESIGN] ACTION: PFAD_B_UPGRADE | REPO: ellmos-ai/ellmos-voice-io | SCOPE: 18-point dual HTML anchors (sec-01..sec-18), ASCII Four-View Architectural Topology, Level 1 SBOM plain-text companion (THIRD_PARTY_LICENSES.txt), PEP 621 SBOM URLs & 20 topics saturation, llms.txt & badge synchronization (2026-09-29), and contract test expansion.
 # [2026-10-01 08:25:00 CEST] [GITHUBBOT_ONE_REPO_CLEANER] ACTION: PFAD_A_HYGIENE | REPO: ellmos-ai/ellmos-voice-io | SCOPE: CI lifecycle workflows (auto-assign.yml, label-sync.yml, labels.yml), bilingual CONTRIBUTING.md guidelines, PEP 621 URLs, Level 1 SBOM companion re-audit, and contract test expansion to 86/86 passed tests.
 # [2026-10-03 23:25:00 CEST] [GITHUBBOT_ONE_REPO_CLEANER] ACTION: PFAD_A_HYGIENE | REPO: ellmos-ai/ellmos-voice-io | SCOPE: Turnusgemäßer Pfad-A-Hygiene-, bilingualer CONTRIBUTING.md Guidelines-, Multi-Host-Lock-Defense-, PEP-621-Standardisierungs-, Level-1-SBOM-Re-Audit- und Vertragstest-Lauf.
+# [2026-10-30 08:00:00 CET] [GITHUBBOT_ONE_REPO_MARKETING_AND_DESIGN] ACTION: PFAD_B_DISCOVERABILITY | REPO: ellmos-ai/ellmos-voice-io | SCOPE: Turnusgemäßer Pfad-B-Discoverability-, 20-Topic-Sättigungs-, Canonical-Homepage-, Level-1-SBOM-Re-Audit-, Badge-Paritäts- und Vertragstest-Lauf (v0.2.1 frozen per T-20260920-167562623).
 
 
 ================================================================================
@@ -253,10 +254,32 @@ Audit: PFAD A AUDIT 2026-10-03
   - Expanded `tests/test_metadata.py` with 6 new contract tests asserting `license-files` whitelist, multi-host taskplan/ideapad gitignore patterns, Level 1 SBOM audit currency, badge currency, and Pfad A changelog/marketing log recency.
 
 ================================================================================
-12. STRATEGIC ACTION ITEMS
+12. DISCOVERABILITY, GITHUB METADATA & 20-TOPIC SATURATION (PFAD B 2026-10-30)
+================================================================================
+Date: 2026-10-30
+Scope: Pfad B Discoverability, GitHub Remote Metadata & Topics, Canonical Homepage, Level 1 SBOM Re-Audit & Contract Tests
+Auditor: agy@WORKSTATION-LG (Gemini 3.8 Flash High)
+Audit: PFAD B AUDIT 2026-10-30
+
+- GitHub Remote Discoverability & Topics Saturation:
+  - Introspected GitHub repository metadata: homepage URL was empty, only 7 repository topics were present.
+  - Saturated GitHub topics to exactly 20 keywords matching `pyproject.toml`:
+    `audio`, `local-first`, `privacy`, `python`, `speech-to-text`, `text-to-speech`, `wake-word`, `ai-agents`, `audio-pipeline`, `offline`, `open-bricks`, `openwakeword`, `piper-tts`, `pyttsx3`, `stt`, `tts`, `voice-io`, `vosk`, `whisper`, `zero-egress`.
+  - Configured canonical repository Homepage URL: `https://github.com/ellmos-ai/ellmos-voice-io#readme`.
+- Strict Version Freeze Discipline:
+  - Version 0.2.1 strictly preserved across all manifests per T-20260920-167562623 (0 version bumps).
+- Level 1 SBOM Transparency & Re-Audit Stand 2026-10-30:
+  - Re-audited `THIRD_PARTY_LICENSES.txt` and `THIRD_PARTY_LICENSES.md` to Stand 2026-10-30 with 0 runtime dependencies (`dependencies = []`), unprivileged `RunAsInvoker` non-elevation mode (INV-SEC-02), statutory liability limitation (§ 521 BGB Gefälligkeitsrecht), and verified all 10 governance invariants `INV-LOCAL-01` through `INV-SLA-10`.
+- Documentation & Badge Parity:
+  - Synchronized `Verified: 2026-10-30` / `Geprüft: 2026-10-30` across `README.md` and `README_de.md` while maintaining 100% reciprocal 18-point dual HTML anchors (`sec-01` through `sec-18`).
+  - Refreshed `llms.txt` Last-checked timestamp to 2026-10-30 with verified test suite baseline.
+- Automated Contract Test Expansion:
+  - Expanded `tests/test_metadata.py` with `test_pfad_b_discoverability_20261030` asserting 2026-10-30 currency across badges, llms.txt, changelog, and marketing log.
+
+================================================================================
+13. STRATEGIC ACTION ITEMS
 ================================================================================
 1. Maintain zero runtime dependencies in the base wheel (`dependencies = []`).
 2. Keep Level 1 SBOM and Invariant Cross-Reference Matrix synchronized on every release.
 3. Validate 18-point bilingual navigation and reciprocal anchor parity on every documentation edit.
 4. Uphold strict unprivileged execution (`RunAsInvoker`) and zero-egress guarantees across all audio primitives.
-

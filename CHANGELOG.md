@@ -2,6 +2,15 @@
 
 ## [Unreleased]
 
+- Discoverability, GitHub Metadata & 20-Topic Saturation (Pfad B - 2026-10-30):
+  - Saturated GitHub repository topics to 20 keywords aligning with `pyproject.toml` and search intent: `audio`, `local-first`, `privacy`, `python`, `speech-to-text`, `text-to-speech`, `wake-word`, `ai-agents`, `audio-pipeline`, `offline`, `open-bricks`, `openwakeword`, `piper-tts`, `pyttsx3`, `stt`, `tts`, `voice-io`, `vosk`, `whisper`, `zero-egress`.
+  - Configured canonical repository Homepage URL on GitHub (`https://github.com/ellmos-ai/ellmos-voice-io#readme`).
+  - Refreshed currency across documentation badges in `README.md` and `README_de.md` (`Verified: 2026-10-30` / `Geprüft: 2026-10-30`), and refreshed `llms.txt` to 2026-10-30 standard.
+  - Re-audited Level 1 SBOM in `THIRD_PARTY_LICENSES.txt` and `THIRD_PARTY_LICENSES.md` to 2026-10-30 standard, reaffirming 100% zero runtime dependencies, unprivileged user-mode `RunAsInvoker` non-elevation, statutory liability limitation (§ 521 BGB Gefälligkeitsrecht), and all 10 governance invariants (`INV-LOCAL-01` to `INV-SLA-10`).
+  - Appended Section 12 in `MARKETING-LOG.txt` documenting the 2026-10-30 Pfad B discoverability audit, remote metadata saturation, and action recommendations.
+  - Expanded automated contract test suite in `tests/test_metadata.py` with `test_pfad_b_discoverability_20261030` asserting badge currency, GitHub topic alignment, and changelog/marketing log recency.
+
+
 - Repository Hygiene, Multi-Host Lock Defense, Level 1 SBOM Re-Audit & Contract Test Expansion (Pfad A - 2026-10-03):
   - Enriched PEP 621 packaging metadata in `pyproject.toml` by registering `CONTRIBUTING.md` in `license-files` whitelist and hardening `[tool.pytest.ini_options]` `norecursedirs` with `.pytest_tmp*`.
   - Strengthened `.gitignore` against multi-host conflict tokens (`*-IDEAPAD-GEI.*`) and task planning artifacts (`*-TASKPLAN*`).

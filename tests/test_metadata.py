@@ -138,6 +138,7 @@ def test_llms_txt_integrity():
         "Last-checked: 2026-09-29" in content
         or "Last-checked: 2026-10-01" in content
         or "Last-checked: 2026-10-03" in content
+        or "Last-checked: 2026-10-30" in content
     )
     assert re.search(r"Test-suite:\s*\d+/\d+\s*passed", content) is not None
     assert "NOTICE" in content
@@ -945,9 +946,9 @@ def test_third_party_licenses_audit_currency_20261003():
     root = Path(__file__).resolve().parent.parent
     md_content = (root / "THIRD_PARTY_LICENSES.md").read_text(encoding="utf-8")
     txt_content = (root / "THIRD_PARTY_LICENSES.txt").read_text(encoding="utf-8")
-    assert "Audited:** 2026-10-03" in md_content
-    assert "Audit Date:** 2026-10-03" in md_content
-    assert "Audited: 2026-10-03" in txt_content
+    assert "Audited:** 2026-10-03" in md_content or "Audited:** 2026-10-30" in md_content
+    assert "Audit Date:** 2026-10-03" in md_content or "Audit Date:** 2026-10-30" in md_content
+    assert "Audited: 2026-10-03" in txt_content or "Audited: 2026-10-30" in txt_content
     assert "CONTRIBUTING.md" in md_content
     assert "CONTRIBUTING.md" in txt_content
     assert "§ 521 BGB" in md_content
@@ -961,13 +962,13 @@ def test_verified_badge_and_llms_txt_currency_20261003():
     readme_de = (root / "README_de.md").read_text(encoding="utf-8")
     llms_text = (root / "llms.txt").read_text(encoding="utf-8")
 
-    assert "Verified-2026--10--03" in readme_en
-    assert "Gepr%C3%BCft-2026--10--03" in readme_de
+    assert "Verified-2026--10--03" in readme_en or "Verified-2026--10--30" in readme_en
+    assert "Gepr%C3%BCft-2026--10--03" in readme_de or "Gepr%C3%BCft-2026--10--30" in readme_de
     assert "Contributing-Guidelines" in readme_en
     assert "Mitwirken-Leitfaden" in readme_de
-    assert "Last checked: **2026-10-03**" in readme_en
-    assert "Letzte Prüfung: **2026-10-03**" in readme_de
-    assert "Last-checked: 2026-10-03" in llms_text
+    assert "Last checked: **2026-10-03**" in readme_en or "Last checked: **2026-10-30**" in readme_en
+    assert "Letzte Prüfung: **2026-10-03**" in readme_de or "Letzte Prüfung: **2026-10-30**" in readme_de
+    assert "Last-checked: 2026-10-03" in llms_text or "Last-checked: 2026-10-30" in llms_text
 
 
 def test_changelog_unreleased_pfad_a_20261003():
@@ -990,3 +991,31 @@ def test_marketing_log_recent_pfad_a_20261003():
     assert "license-files" in mkt_text
     assert "*-IDEAPAD-GEI.*" in mkt_text
     assert "*-TASKPLAN*" in mkt_text
+
+
+def test_pfad_b_discoverability_20261030():
+    """Verify that Pfad B 2026-10-30 discoverability standards, badge currency, and changelog/marketing log recency are met."""
+    root = Path(__file__).resolve().parent.parent
+    readme_en = (root / "README.md").read_text(encoding="utf-8")
+    readme_de = (root / "README_de.md").read_text(encoding="utf-8")
+    llms_text = (root / "llms.txt").read_text(encoding="utf-8")
+    changelog_text = (root / "CHANGELOG.md").read_text(encoding="utf-8")
+    mkt_text = (root / "MARKETING-LOG.txt").read_text(encoding="utf-8")
+    pyproject_path = root / "pyproject.toml"
+
+    with pyproject_path.open("rb") as f:
+        pyproject_data = tomllib.load(f)
+
+    keywords = pyproject_data["project"]["keywords"]
+    assert len(keywords) == 20, f"Expected 20 keywords in pyproject.toml, found {len(keywords)}"
+
+    assert "Verified-2026--10--30" in readme_en
+    assert "Gepr%C3%BCft-2026--10--30" in readme_de
+    assert "Last checked: **2026-10-30**" in readme_en
+    assert "Letzte Prüfung: **2026-10-30**" in readme_de
+    assert "Last-checked: 2026-10-30" in llms_text
+
+    assert "Pfad B - 2026-10-30" in changelog_text
+    assert "Date: 2026-10-30" in mkt_text
+    assert "PFAD B AUDIT 2026-10-30" in mkt_text
+    assert "20-Topic" in mkt_text
