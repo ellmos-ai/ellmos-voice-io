@@ -22,6 +22,6 @@ jobs:
       - name: Welcome first-time contributors
         uses: actions/first-interaction@v3
         with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          issue-message: 'Welcome to **ellmos-voice-io**! Thank you for opening your first issue. Our maintainers review incoming issues within the documented 48h SLA.'
-          pr-message: 'Welcome to **ellmos-voice-io**! Thank you for opening your first pull request. Please ensure all tests pass and your changes adhere to local-first privacy invariants.'
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          issue_message: 'Welcome to **ellmos-voice-io**! Thank you for opening your first issue. Our maintainers review incoming issues within the documented 48h SLA.'
+          pr_message: 'Welcome to **ellmos-voice-io**! Thank you for opening your first pull request. Please ensure all tests pass and your changes adhere to local-first privacy invariants.'
