@@ -425,3 +425,24 @@ def test_wakeword_open_exception_still_terminates_audio(monkeypatch):
         WakeWordListener().listen(lambda: None)
 
     assert audio.terminated == 1
+
+
+def test_voice_io_transcribe_and_synthesize_bytes(monkeypatch):
+    class StubSTT(SpeechToText):
+        def transcribe_file(self, audio_path, language="de"):
+            assert Path(audio_path).read_bytes() == b"RIFF-test"
+            return f"heard:{language}"
+
+    class StubTTS(TextToSpeech):
+        def speak_to_file(self, text, output_path):
+            p = Path(output_path)
+            p.write_bytes(f"AUDIO:{text}".encode("utf-8"))
+            return p
+
+    voice = VoiceIO(stt=StubSTT(), tts=StubTTS())
+    assert voice.transcribe_bytes(b"RIFF-test", language="de") == "heard:de"
+    assert voice.synthesize_bytes("Hallo Welt") == b"AUDIO:Hallo Welt"
+    with pytest.raises(ValueError, match="audio_bytes"):
+        voice.transcribe_bytes(b"")
+    with pytest.raises(ValueError, match="text"):
+        voice.synthesize_bytes("   ")

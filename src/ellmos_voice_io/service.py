@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass
+from pathlib import Path
+import tempfile
 
 from .stt import SpeechToText
 from .tts import TextToSpeech
@@ -35,3 +37,23 @@ class VoiceIO:
         tts_ok, tts_engine = self.tts.available()
         wake_ok, wake_engine = self.wakeword.available()
         return VoiceStatus(stt_ok, stt_engine, tts_ok, tts_engine, wake_ok, wake_engine)
+
+    def transcribe_bytes(self, audio_bytes: bytes, *, suffix: str = ".wav", language: str | None = "de") -> str:
+        """Transcribe raw audio bytes via a short-lived temporary file."""
+        if not audio_bytes:
+            raise ValueError("audio_bytes must not be empty")
+        ext = suffix if suffix.startswith(".") else f".{suffix}"
+        with tempfile.TemporaryDirectory(prefix="ellmos-voice-stt-") as tmp_dir:
+            audio_path = Path(tmp_dir) / f"input{ext}"
+            audio_path.write_bytes(audio_bytes)
+            return self.stt.transcribe_file(audio_path, language=language)
+
+    def synthesize_bytes(self, text: str, *, suffix: str = ".wav") -> bytes:
+        """Synthesize text to audio bytes via a short-lived temporary file."""
+        if not text.strip():
+            raise ValueError("text must not be blank")
+        ext = suffix if suffix.startswith(".") else f".{suffix}"
+        with tempfile.TemporaryDirectory(prefix="ellmos-voice-tts-") as tmp_dir:
+            out_path = Path(tmp_dir) / f"output{ext}"
+            self.tts.speak_to_file(text, out_path)
+            return out_path.read_bytes()
