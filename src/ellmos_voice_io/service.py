@@ -2,9 +2,9 @@
 
 from __future__ import annotations
 
+import tempfile
 from dataclasses import asdict, dataclass
 from pathlib import Path
-import tempfile
 
 from .stt import SpeechToText
 from .tts import TextToSpeech
@@ -38,7 +38,7 @@ class VoiceIO:
         wake_ok, wake_engine = self.wakeword.available()
         return VoiceStatus(stt_ok, stt_engine, tts_ok, tts_engine, wake_ok, wake_engine)
 
-    def transcribe_bytes(self, audio_bytes: bytes, *, suffix: str = ".wav", language: str | None = "de") -> str:
+    def transcribe_bytes(self, audio_bytes: bytes, suffix: str = ".wav", language: str | None = "de") -> str:
         """Transcribe raw audio bytes via a short-lived temporary file."""
         if not audio_bytes:
             raise ValueError("audio_bytes must not be empty")
@@ -48,7 +48,7 @@ class VoiceIO:
             audio_path.write_bytes(audio_bytes)
             return self.stt.transcribe_file(audio_path, language=language)
 
-    def synthesize_bytes(self, text: str, *, suffix: str = ".wav") -> bytes:
+    def synthesize_bytes(self, text: str, suffix: str = ".wav") -> bytes:
         """Synthesize text to audio bytes via a short-lived temporary file."""
         if not text.strip():
             raise ValueError("text must not be blank")
